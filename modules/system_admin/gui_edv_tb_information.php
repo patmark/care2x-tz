@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
 <HTML>
     <HEAD>
-        <TITLE>CTC Facility Information</TITLE>
+        <TITLE>TB Facility Information</TITLE>
         <meta name="Description" content="Hospital and Healthcare Integrated Information System - CARE2x">
-        <meta name="Author" content="Dorothea Reichert">
+        <meta name="Author" content="Patrick Mark">
         <meta name="Generator" content="various: Quanta, AceHTML 4 Freeware, NuSphere, PHP Coder">
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
@@ -54,7 +54,7 @@
                         <table cellspacing="0"  class="titlebar" border=0>
                             <tr valign=top  class="titlebar" >
                                 <td bgcolor="#99ccff" >
-                                    &nbsp;&nbsp;<font color="#330066">CTC Facility Information</font>
+                                    &nbsp;&nbsp;<font color="#330066">TB Facility Information</font>
                                 </td>
                                 <td bgcolor="#99ccff" align=right><a
                                         <a
@@ -82,18 +82,18 @@
                                 <table border=0 cellspacing=1 cellpadding=5>
                                     <tr>
                                         <td class="adm_item" align="right"><FONT  color="#0000cc"><b>Facility Name</b> </FONT></td>
-                                        <td class="adm_input"><input type="text" name="main_info_facility_name" size=40 maxlength=40 value="<?php echo $GLOBAL_CONFIG['main_info_facility_name'] ?>">
+                                        <td class="adm_input"><input type="text" name="main_info_tb_facility_name" size=40 maxlength=40 value="<?php echo $GLOBAL_CONFIG['main_info_tb_facility_name'] ?>">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="adm_item" align="right"><FONT  color="#0000cc"><b>Code</b> </FONT></td>
+                                        <td class="adm_item" align="right"><FONT  color="#0000cc"><b>TB Facility Code</b> </FONT></td>
 
-                                        <td class="adm_input"><input type="text" name="main_info_facility_code" size=40 maxlength=40 value="<?php echo $GLOBAL_CONFIG['main_info_facility_code'] ?>">
+                                        <td class="adm_input"><input type="text" name="main_info_tb_facility_code" size=40 maxlength=40 value="<?php echo $GLOBAL_CONFIG['main_info_tb_facility_code'] ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="adm_item" align="right"><FONT  color="#0000cc"><b>District</b> </FONT></td>
-                                        <td class="adm_input"><input type="text" name="main_info_facility_district" size=40 maxlength=40 value="<?php echo $GLOBAL_CONFIG['main_info_facility_district'] ?>">
+                                        <td class="adm_input"><input type="text" name="main_info_tb_facility_district" size=40 maxlength=40 value="<?php echo $GLOBAL_CONFIG['main_info_tb_facility_district'] ?>">
                                         </td>
                                     </tr>
                                 </table>
@@ -129,7 +129,7 @@
                                                     </script>
 
 
-                                                    <a href="http://www.luico.co.tz" target=_new>CARE2X 3rd Generation pre-deployment 3.3</a> :: <a href="../../legal_gnu_gpl.htm" target=_new> License</a> ::
+                                                    <a href="http://www.luico.co.tz" target=_new>CARE2X 3rd Generation pre-deployment 3.5</a> :: <a href="../../legal_gnu_gpl.htm" target=_new> License</a> ::
                                                     <a href=mailto:care2x@luico.co.tz>Contact</a>  :: <a href="../../language/en/en_privacy.htm" target="pp"> Our Privacy Policy </a> ::
                                                     <a href="../../docs/show_legal.php?lang=en" target="lgl"> Legal </a> ::
                                                     <a href="javascript:openCreditsWindow()"> Credits </a> ::.<br>

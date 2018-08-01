@@ -38,73 +38,54 @@ if (empty($_REQUEST['pid']) OR empty($_REQUEST['encounter_nr'])) {
     die();
 }
 
-if (!$o_tb_patient = &new TB_patient($_REQUEST['pid'], $_REQUEST['registration_id'])) {
+if (!$o_tb_patient = new TB_patient($_REQUEST['pid'], $_REQUEST['district_regno'])) {
     require ("gui/gui_tb_registration.php");
     die();
 }
 
-$facility_info = $o_tb_patient->getFacilityInfo();
+$facility_info = $o_tb_patient->getTBFacilityInfo();
 $registration_data = $o_tb_patient->getRegistrationData();
 
+$yesno = array('' => '--Select--', '1' => 'Yes', '0' => 'No');
 //print_r($facility_info);
 
 if (isset($_POST['submit'])) {
-    $o_val = &new TBValidator($o_tb_patient->getDefaultData(), $_REQUEST);
-    $o_val->set_rule('district_reg_no', 'rule_required');
-//    $o_val->set_rule('ctc_id', 'rule_numeric');
-//    $o_val->set_rule('ctc_id', 'rule_min_chars', 14);
+    $o_val = new TBValidator($o_tb_patient->getDefaultData(), $_REQUEST);
+    $o_val->set_rule('district_regno', 'rule_required');
+    $o_val->set_rule('placeofwork_id', 'rule_select_required');
+    $o_val->set_rule('placeofwork_id', 'rule_numeric');
     if ($mode == 'new') {
-        $o_val->set_rule('ctc_id', 'unique_ctc_id');
+        $o_val->set_rule('district_regno', 'unique_district_regno');
     }
+    $o_val->set_rule('area_leader', 'rule_required');
+    $o_val->set_rule('referrer_id', 'rule_select_required');
+    $o_val->set_rule('dotoption_id', 'rule_select_required');
+    $o_val->set_rule('treatment_supporter_name', 'rule_required');
+    $o_val->set_rule('treatment_supporter_address', 'rule_required');
+    $o_val->set_rule('treatment_supporter_phone', 'rule_required');
+    $o_val->set_rule('classification_bysiteid', 'rule_select_required');
+    $o_val->set_rule('classification_byhistoryid', 'rule_select_required');
+    $o_val->set_rule('hiv_status', 'rule_select_required');
+    $o_val->set_rule('on_cpt', 'rule_select_required');
+    $o_val->set_rule('on_art', 'rule_select_required');
+
+
     $o_val->set_rule('signature', 'rule_required');
 
-//    $o_val->set_rule('joined_supporter_org', 'rule_required');
-
-    $o_val->set_rule('status_cd4', 'rule_numeric');
-    $o_val->set_rule('eligible_reason_cd4', 'rule_numeric');
-    $o_val->set_rule('eligible_reason_tlc', 'rule_numeric');
-
-//    $o_val->set_rule('ctc_id', 'rule_min_chars', 3);
-    $o_val->set_rule('chairman_vname', 'rule_min_chars', 2);
-//    $o_val->set_rule('chairman_nname', 'rule_min_chars', 2);
-    $o_val->set_rule('signature', 'rule_min_chars', 2);
-
-    $o_val->set_rule('district_reg_no', 'rule_numeric');
-    $o_val->set_rule('hbc_number', 'rule_numeric');
-    $o_val->set_rule('date_first_hiv_test', 'rule_date');
-    $o_val->set_rule('date_confirmed_hiv', 'rule_date');
-    $o_val->set_rule('date_confirmed_hiv', 'rule_date_greater', $_POST['date_first_hiv_test']);
-    $o_val->set_rule('date_enrolled', 'rule_date');
-    $o_val->set_rule('date_enrolled', 'rule_date_greater', $_POST['date_confirmed_hiv']);
-    $o_val->set_rule('date_eligible', 'rule_date');
-//    $o_val->set_rule('date_eligible', 'rule_date_greater', $_POST['date_first_hiv_test']);
-//    $o_val->set_rule('date_eligible', 'rule_date_greater', $_POST['date_confirmed_hiv']);
-    $o_val->set_rule('date_eligible', 'rule_date_greater', $_POST['date_enrolled']);
-    $o_val->set_rule('date_ready', 'rule_date');
-//    $o_val->set_rule('date_ready', 'rule_date_greater', $_POST['date_first_hiv_test']);
-//    $o_val->set_rule('date_ready', 'rule_date_greater', $_POST['date_confirmed_hiv']);
-//    $o_val->set_rule('date_ready', 'rule_date_greater', $_POST['date_enrolled']);
-    $o_val->set_rule('date_ready', 'rule_date_greater', $_POST['date_eligible']);
-    $o_val->set_rule('date_start_art', 'rule_date');
-//    $o_val->set_rule('date_start_art', 'rule_date_greater', $_POST['date_confirmed_hiv']);
-//    $o_val->set_rule('date_start_art', 'rule_date_greater', $_POST['date_eligible']);
-    $o_val->set_rule('date_start_art', 'rule_date_greater', $_POST['date_ready']);
-    $o_val->set_rule('age_start_art', 'rule_numeric');
-    $o_val->set_rule('age_start_art', 'rule_numeric');
-
-    $o_val->set_rule('status_weight', 'rule_decimal');
     $o_val->applyRules();
 
     if (($o_val->getErrors()) == 0) {
         if ($_REQUEST['mode'] == 'edit') {
-
             if ($o_tb_patient->updateTBPatient($o_val->getValues())) {
-                header("location: http://$host$uri/$filename" . URL_REDIRECT_APPEND . "$add_breakfile");
+//                header("Location: http://$host$uri/$filename" . URL_APPEND . "$add_breakfile");
+                header('Location: ' . $root_path . 'modules/tb/' . $filename . URL_APPEND . $add_breakfile);
                 exit;
             }
         } else if ($_REQUEST['mode'] == 'new') {
             if ($o_tb_patient->insertTBPatient($o_val->getValues())) {
-                header("location: http://$host$uri/$filename" . URL_REDIRECT_APPEND . "$add_breakfile");
+//                $filename = 'modules/tb/tb_registered.php';
+//                header("Location: http://$host$uri/$filename" . URL_APPEND . "$add_breakfile");
+                header('Location: ' . $root_path . 'modules/tb/' . $filename . URL_APPEND . $add_breakfile);
                 exit;
             }
         }
@@ -113,7 +94,6 @@ if (isset($_POST['submit'])) {
         $values = $o_tb_patient->getFormData($o_val->getValues());
     }
 } else {
-
     if ($_REQUEST['mode'] == "new") {
         $values = $o_tb_patient->getDefaultData();
         if ($debug) {
@@ -128,11 +108,11 @@ if (isset($_POST['submit'])) {
 $errors = $o_tb_patient->getErrors();
 $error_messages = $o_tb_patient->getErrorMessages();
 if ($errors != 0) {
-    $errorString.="<div class=\"errorMessages\">";
+    $errorString .= "<div class=\"errorMessages\">";
     foreach ($error_messages as $msg) {
         echo $msg;
     }
-    $errorString.="</div>";
+    $errorString .= "</div>";
 }
 require ("gui/gui_tb_registration.php");
 ?>

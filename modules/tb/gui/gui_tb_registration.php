@@ -5,14 +5,89 @@
         <meta name="Description" content="Hospital and Healthcare Integrated Information System - CARE2x">
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
         <meta name="Author" content="Patrick Mark">
-        <?php
-        echo '<script language="JavaScript">';
-        require($root_path . 'include/inc_checkdate_lang.php');
-        echo '</script>';
-        echo '<script language="javascript" src="' . $root_path . 'js/setdatetime.js"></script>';
-        echo '<script language="javascript" src="' . $root_path . 'js/checkdate.js"></script>';
-        echo '<script language="javascript" src="' . $root_path . 'js/dtpick_care2x.js"></script>';
-        ?>
+
+        <style>
+            .wrapper{
+                line-height: 150%;
+                /*width: 277mm;*/ 
+                background-color: #59f7f2;
+            }
+            .center{
+                text-align: center;
+            }
+            .left{text-align: left;}
+            .right{
+                text-align: right;
+            }
+            .logo{
+                width: 24mm;
+            }
+            .title1{
+                font-size: 20px;
+                font-weight: bold;
+            }
+            .title2{
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .undeline_sapn{
+                border-bottom: 2px dotted;
+                padding-right: 10px;
+                padding-left: 10px;
+                width: 100%;
+            }
+            .shade-light{
+                height: 10mm;
+                background-color:  lightgray;
+            }
+            table {
+                table-layout: auto;
+                border-collapse: collapse;
+                width: 98%;
+            }
+            .table-lebel{
+                padding-right: 10mm;
+            }
+            .table-lebel td{
+                white-space: nowrap;  /** added **/
+            }
+            .table-lebel td:last-child{
+                width:100%;
+                padding-left: 5mm;
+                border-bottom: 2px dotted;
+            }
+
+        </style>
+        <link rel="stylesheet" href="<?php echo $root_path; ?>assets/bootstrap/css/bootstrap.min.css" >
+        <script src="<?php echo $root_path; ?>assets/bootstrap/js/jquery-3.2.1.slim.min.js" ></script>
+        <script src="<?php echo $root_path; ?>assets/bootstrap/js/popper.min.js" ></script>
+        <script src="<?php echo $root_path; ?>assets/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Bootstrap Date-Picker Plugin -->
+        <link href="<?php echo $root_path; ?>assets/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet" type="text/css"/>
+        <script src="<?php echo $root_path; ?>assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+
+        <script>
+            $(document).ready(function () {
+                var date_start_cpt = $('input[name="date_start_cpt"]'); //our date input has the name "date"
+                var date_start_art = $('input[name="date_start_art"]'); //our date input has the name "date"
+                var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+                var options = {
+                    format: 'yyyy-mm-dd',
+                    container: container,
+                    todayHighlight: true,
+                    autoclose: true,
+                    showDropdowns: true,
+                };
+                date_start_cpt.datepicker(options);
+                date_start_art.datepicker(options);
+            })
+        </script>
+        <script type="text/javascript"><?php require($root_path . 'include/inc_checkdate_lang.php'); ?>
+        </script>
+        <script language="javascript" src="<?php echo $root_path; ?>js/setdatetime.js"></script>
+        <script language="javascript" src="<?php echo $root_path; ?>js/checkdate.js"></script>
+        <script language="javascript" src="<?php echo $root_path; ?>js/dtpick_care2x.js"></script>
 
         <script language="javascript" type="text/javascript">
             function toggle(element) {
@@ -22,11 +97,11 @@
                 if (content.style.display === 'none') {
                     // wenn es nicht sichtbar ist
                     content.style.display = 'block'; // sichtbar machen
-                    image.src = '<?php echo $root_path ?>gui/img/common/default/minus_menu.gif';
+                    image.src = '<?php echo $root_path ?>gui/img/common/default/minus.gif';
                 } else {
                     // wenn es bereits sichtbar ist
                     content.style.display = 'none'; // unsichtbar machen
-                    image.src = '<?php echo $root_path ?>gui/img/common/default/plus_menu.gif';
+                    image.src = '<?php echo $root_path ?>gui/img/common/default/plus.gif';
                 }
             }
             //-------------------------
@@ -64,8 +139,7 @@
                 if (check_existance(destination_obj, item_text)) {
                     alert("You have it in the list");
                     return false;
-                }
-                else {
+                } else {
                     new_item_obj = new Option(item_text);
                     destination_obj.options[destination_obj.options.length] = new_item_obj;
                     source_obj.value = "";
@@ -91,8 +165,7 @@
                     destination_obj.options[destination_obj.selectedIndex].text = null;
                     destination_obj.options[destination_obj.selectedIndex] = null;
                     return true;
-                }
-                else {
+                } else {
                     alert("Please select one item on the right side if you have to remove it");
                     return false;
                 }
@@ -107,14 +180,14 @@
                 return false;
             }
 
-            var arr_elements = ["referred_from_other", "transfer_in_other", "supporter_organisation", "supporter_organisation_td", "transfer_in_div"];
+            var arr_elements = ["referrer_other", "placeofwork_other", "eptb_site", "classification_byhistory_other", "hiv_details", "date_start_cpt", "date_start_art"];
 
             function hide_element() {
                 i = 0;
                 while (arr_elements) {
 
                     var e = document.getElementById(arr_elements[i]);
-                    if (arr_elements[i] === 'transfer_in_div') {
+                    if (arr_elements[i] === 'hiv_details') {
                         e.style.display = 'none';
                     }
                     var isfilled = e.value;
@@ -130,7 +203,49 @@
                 var e = document.getElementById(id);
                 var label = document.getElementById(id2);
                 val = e.options[e.selectedIndex].text;
-                if (val === 'OTHER (Specify)') {
+                if (val === 'Other (Specify)' || val === 'Others (Specify)') {
+                    //alert(val);
+                    label.style.display = '';
+                } else {  //Hide element and erase/reset the content
+                    label.style.display = 'none';
+                    label.value = '';
+                }
+            }
+
+            function check_eptb(id, id2) {
+                var e = document.getElementById(id);
+                var label = document.getElementById(id2);
+                val = e.options[e.selectedIndex].text;
+
+                if (val === 'Extra-pulmonary (EPTB)') {
+                    //alert(val);
+                    label.style.display = '';
+                } else {  //Hide element and erase/reset the content
+                    label.style.display = 'none';
+                    label.value = '';
+                }
+            }
+
+            function check_hiv_status(id, id2) {
+                var e = document.getElementById(id);
+                var label = document.getElementById(id2);
+                val = e.options[e.selectedIndex].text;
+
+                if (val === 'Positive') {
+                    //alert(val);
+                    label.style.display = '';
+                } else {  //Hide element and erase/reset the content
+                    label.style.display = 'none';
+                    label.value = '';
+                }
+            }
+
+            function check_on_cpt(id, id2) {
+                var e = document.getElementById(id);
+                var label = document.getElementById(id2);
+                val = e.options[e.selectedIndex].text;
+
+                if (val === 'Yes') {
                     //alert(val);
                     label.style.display = '';
                 } else {  //Hide element and erase/reset the content
@@ -191,27 +306,7 @@
                 }
             }
 
-            function get_facility_name(ctc_no) {
-                if (window.XMLHttpRequest)
-                {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp = new XMLHttpRequest();
-                }
-                else
-                {// code for IE6, IE5
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange = function ()
-                {
-                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
-                    {
-                        document.getElementById("facility_name").innerHTML = xmlhttp.responseText;
-                    }
-                }
-                //alert(ctc_no);
-                urlholder = "<?php echo $root_path; ?>modules/arv_2/arv_get_facility.php?ctc_id=" + ctc_no;
-                xmlhttp.open("POST", urlholder, false);
-                xmlhttp.send();
-            }
+
             function redirect_fn(path) {
                 window.open(path);
             }
@@ -221,6 +316,7 @@
         <style type="text/css">
             body{
                 background: #deeef4;
+                font-size: 15px;
             }
 
             .content{
@@ -260,550 +356,337 @@
     <body onload = "hide_element()">
         <table cellspacing="0"  class="titlebar" border=0>
             <tr valign=top  class="titlebar" >
-                <td bgcolor="#99ccff"><font color="#330066">&nbsp;&nbsp;TB Registration</font></td>
+                <td bgcolor="#99ccff"><font color="#330066">&nbsp;&nbsp;TB Patient Registration</font></td>
                 <td bgcolor="#99ccff" align=right>
-                    <a href="javascript:gethelp('arv_visit.php','<?php echo $src; ?>')"><img src="../../gui/img/control/blue_aqua/en/en_hilfe-r.gif" border=0 width="76" height="21" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>
+                    <a href="javascript:gethelp('tb_registration.php','<?php echo $src; ?>')"><img src="../../gui/img/control/blue_aqua/en/en_hilfe-r.gif" border=0 width="76" height="21" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>
                     &nbsp;
                     <a href="<?php echo $root_path . $breakfile . URL_APPEND . $add_breakfile ?>" ><img src="../../gui/img/control/blue_aqua/en/en_cancel.gif" border=0 width="76" height="21" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>     </td>
             </tr>
         </table>
-        <div class="content">
-            <?php echo $errorMessages ?>
-            <fieldset>
-                <legend onClick="toggle(this)"><img src="<?php echo $root_path ?>gui/img/common/default/plus_menu.gif" width="18" height="18" ><strong>Facility Information</strong></legend>
-                <table width="750" border="0">
-                    <tr>
-                        <td bgcolor="#F0F8FF"><strong>Facility Name:</strong> <?php echo $facility_info['main_info_facility_name']; ?></td>
-                        <td bgcolor="#F0F8FF"><strong>Facility Code:</strong> <?php echo $facility_info['main_info_facility_code']; ?></td>
-                        <td bgcolor="#F0F8FF"><strong>District:</strong> <?php echo $facility_info['main_info_facility_district']; ?></td>
-                    </tr>
-                </table>
-            </fieldset>
-            <fieldset>
-                <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Registration Data</strong></legend>
-                <table width="750" border="0">
-                    <tr>
-                        <td bgcolor="#F0F8FF"><strong>Health Facility File Number: </strong><?php echo $registration_data['facility_file_number']; ?></td>
-                        <td bgcolor="#F0F8FF"><strong>PID: </strong><?php echo $registration_data['pid']; ?></td>
-                        <td bgcolor="#F0F8FF"><strong>Sex: </strong><?php echo $registration_data['sex']; ?></td>
-                        <td bgcolor="#F0F8FF"><strong>Date of Birth: </strong><?php echo formatDate2Local($registration_data['date_of_birth'], $date_format, null, null); ?></td>
-                    </tr>
-                    <tr>
-                        <td bgcolor="#F0F8FF"><strong>Name:</strong> <?php echo $registration_data['name']; ?></td>
-                        <td bgcolor="#F0F8FF"><strong>Marital Status: </strong> <?php echo $registration_data['marital_status']; ?></td>
-                        <td bgcolor="#F0F8FF" colspan="2"><strong>Age:</strong> <?php echo $registration_data['age']; ?></td>
-                    </tr>
-                </table>
-            </fieldset>
-            <form id="arv_registration" name="registration" method="post" action="">
+        <div class="container">
+            <div class="row">
+                <?php echo $errorMessages ?>
                 <fieldset>
-                    <legend onClick="toggle(this)"><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18"><strong>Patient TB Care Registration</strong></legend>
-                    <table width="750" border="0">
+                    <legend onClick="toggle(this)"><img src="<?php echo $root_path ?>gui/img/common/default/plus.gif" width="18" height="18" >
+                        Facility Information</legend>
+                    <table border="0">
+                        <tr>
+                            <td bgcolor="#F0F8FF" width="40%"><strong>Facility Name:</strong> <?php echo $facility_info['main_info_tb_facility_name']; ?></td>
+                            <td bgcolor="#F0F8FF" width="20%"><strong>Facility Code:</strong> <?php echo $facility_info['main_info_tb_facility_code']; ?></td>
+                            <td bgcolor="#F0F8FF" width="40%"><strong>District:</strong> <?php echo $facility_info['main_info_tb_facility_district']; ?></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <legend onClick="toggle(this)"><img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">Registration Data</legend>
+                    <table border="0" class="">
+                        <tr>
+                            <td bgcolor="#F0F8FF"><strong>Patient File Number: </strong><?php echo $registration_data['facility_file_number']; ?></td>
+                            <td bgcolor="#F0F8FF"><strong>PID: </strong><?php echo $registration_data['pid']; ?></td>
+                            <td bgcolor="#F0F8FF"><strong>Sex: </strong><?php echo strtoupper($registration_data['sex']); ?></td>
+                            <td bgcolor="#F0F8FF"><strong>Date of Birth: </strong><?php echo formatDate2Local($registration_data['date_of_birth'], $date_format, null, null); ?></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#F0F8FF"><strong>Name:</strong> <?php echo $registration_data['name']; ?></td>
+                            <td bgcolor="#F0F8FF"><strong>Marital Status: </strong> <?php echo $registration_data['marital_status']; ?></td>
+                            <td></td>
+                            <td bgcolor="#F0F8FF" colspan="2"><strong>Age:</strong> <?php echo $registration_data['age']; ?></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#F0F8FF"><strong>Region: </strong> &nbsp;<?php echo $registration_data['region']; ?></td>
+                            <td bgcolor="#F0F8FF" colspan="2"><strong>District: </strong>&nbsp;<?php echo $registration_data['district']; ?></td>
+                            <td bgcolor="#F0F8FF" colspan="2"><strong>Division: </strong>&nbsp;<?php echo $registration_data['division']; ?></td>
 
-                        <tr>
-                            <td width="206" bgcolor="#F0F8FF"><strong>District Reg Number: </strong></td>
-                            <td width="534" colspan="3" bgcolor="#F0F8FF"><?php echo $messages['district_reg_no'] . "\n" ?>
-                                <input name="district_reg_no" type="text" id="district_reg_no" <?php echo $mode == 'edit' ? 'readonly' : ''; ?> value="<?php // echo $o_tb_patient->format_tb_no($values['district_reg_no']); ?>" size="17" maxlength="17" onblur="get_facility_name(this.value)"/>
-                            </td>
                         </tr>
                         <tr>
-                            <td colspan="4" bgcolor="#F0F8FF">
-                                <div id="facility_name"></div> 
-                            </td>
+                            <td bgcolor="#F0F8FF"><strong>Ward: </strong> &nbsp;<?php echo $registration_data['ward']; ?></td>
+<!--                            <td bgcolor="#F0F8FF"><strong>Village: </strong>  <?php // echo $registration_data['street'];                                                                                                                                                                                                                               ?></td>-->
+                            <td bgcolor="#EAF4FF" colspan="2"><strong>Street/Village: </strong>  <?php echo $registration_data['village']; ?></td>
+                            <td bgcolor="#F0F8FF" colspan="2"><strong>Telephone:</strong>  <?php echo $registration_data['telephone']; ?></td>
                         </tr>
                         <tr>
-                            <td bgcolor="#F0F8FF">&nbsp;</td>
-                            <td colspan="3" bgcolor="#F0F8FF"></td>
+                            <td bgcolor="#F0F8FF" colspan="5">&nbsp;</td>
                         </tr>
-                        <?php if ($mode == 'new') { ?>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Patient Referred by:</strong></td>
-                                <?php echo $messages['referred_from'] . "\n" ?>
-                                <td colspan="1" bgcolor="#F0F8FF">
-                                    <?php echo $o_tb_patient->form_dropdown('referred_from', $o_tb_patient->get_referred_from(), $values['referred_from'], "id = \"referred_from\" onchange=\"check_other('referred_from','referred_from_other')\""); ?>
-                                </td>
-                                <td colspan="3" bgcolor="#F0F8FF"><?php echo $messages['referred_from_other'] . "\n" ?>
-                                    <input name="referred_from_other" id="referred_from_other" type="text" value="<?php echo $values['referred_from_other']; ?>" maxlength="30" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="200" bgcolor="#F0F8FF"><strong>Prior TB Exposure: </strong></td>
-                                <td colspan="3" bgcolor="#F0F8FF">
-                                    <?php echo $messages['exposure'] . "\n" ?>
-                                    <?php echo $o_tb_patient->form_dropdown('exposure', $o_tb_patient->get_prior_exposure(), $values['exposure'], "id = \"exposure\" onchange=\"check_transfer_in('exposure','transfer_in_div')\""); ?>
-                                </td>
-                            </tr>
-                        </table>
-                        <div id="transfer_in_div">
-                            <table width="750" border="0">
-                                <tr>
-                                    <td bgcolor="#F0F8FF"><strong>Transfer In:</strong></td>
-                                    <?php echo $messages['transfer_in'] . "\n" ?>
-                                    <td colspan="2" bgcolor="#F0F8FF">
-                                        <?php echo $o_tb_patient->form_dropdown('transfer_in', $o_tb_patient->get_transfer_in(), $values['transfer_in'], "id = \"transfer_in\" onchange=\"check_transfer_in_data('transfer_in','transfer_in_data');\""); ?>
-                                    </td>
-                                    <td colspan="3" bgcolor="#F0F8FF"><?php echo $messages['transfer_in_other'] . "\n" ?>
-                                        <input name="transfer_in_other" id="transfer_in_other" type="text" value="<?php echo $values['transfer_in_other']; ?>" maxlength="30" />
-                                    </td>
-                                </tr>
-                            </table>
-                            <div id='transfer_in_data'>
-                                <table  width="750" border="0">
-                                    <tr>
-                                        <td bgcolor="#F0F8FF"><strong>Date Start TB Care Another Clinic</strong></td>
-                                        <td bgcolor="#F0F8FF">
-                                            <?php echo $messages['date_start_art'] . "\n" ?>
-                                            <input name="date_start_art" type="text" id="date_start_art" value="<?php echo $values['date_start_art']; ?>" size="10" maxlength="10" 
-                                                   onfocus="this.select()" onkeyup="setDate(this, '<?php echo $date_format; ?>', '<?php echo $lang; ?>')"
-                                                   onClick="show_calendar('arv_registration.date_start_art', '<?php echo $date_format; ?>')"/>
-                                            <a href="javascript:show_calendar('arv_registration.date_start_art','<?php echo $date_format; ?>')">
-                                                <img src="<?php echo $root_path; ?>gui/img/common/default/show-calendar.gif" border=0 align="absmiddle" width="26" height="22"></a>(dd/mm/yy)		  </td>
-                                        <td colspan="2" bgcolor="#F0F8FF"><strong><i>Status at Start TB Care:</i></strong> </td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td width="155" bgcolor="#F0F8FF" >
-                                            <?php echo $messages['age_start_art'] . "\n" ?>
-                                            Age: 
-                                        </td>
-                                        <td width="135" bgcolor="#F0F8FF">
-                                            <input name="age_start_art" type="text" id="age_start_art" value="<?php echo $values['age_start_art']; ?>" size="8" maxlength="8"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td width="155" bgcolor="#F0F8FF" >
-                                            <?php echo $messages['status_clinical_stage'] . "\n" ?>
-                                            Clinical/WHO Stage: 
-                                            <?php $selected[$values['status_clinical_stage']] = "selected"; ?></td>
-                                        <td width="135" bgcolor="#F0F8FF"><select name="status_clinical_stage" size="1" id="status_clinical_stage">
-                                                <option <?php echo $selected[""] ?> ></option>
-                                                <option <?php echo $selected[1] ?> >1</option>
-                                                <option <?php echo $selected[2] ?> >2</option>
-                                                <option <?php echo $selected[3] ?> >3</option>
-                                                <option <?php echo $selected[4] ?> >4</option>
-                                            </select></td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">
-                                            <?php echo $messages['status_cd4'] . "\n" ?>
-                                            CD4:          </td>
-                                        <td bgcolor="#F0F8FF"><input name="status_cd4" type="text" id="status_cd4" value="<?php echo $values['status_cd4']; ?>" size="8" maxlength="8" />
-                                            <input name="status_cd4_code" type="hidden" value="<?php echo $values['status_cd4_code']; ?>" />		  </td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">
-                                            <?php echo $messages['status_function'] . "\n" ?>
-                                            Functional Status:
-                                        </td>
-                                        <td bgcolor="#F0F8FF">
-                                            <?php echo $o_tb_patient->form_dropdown('status_function', $o_tb_patient->get_status_function(), $values['status_function'], "id = \"status_function\""); ?>      
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">&nbsp;</td>
-                                        <td bgcolor="#F0F8FF">
-                                            <?php echo $messages['status_weight'] . "\n" ?>
-                                            Body Weight          </td>
-                                        <td bgcolor="#F0F8FF"><input name="status_weight" type="text" id="status_weight" value="<?php echo $values['status_weight']; ?>" size="8" maxlength="8" /></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </fieldset>
+                    </table>
+                </fieldset>
+                <form id="tb_registration" name="registration" method="post" action="">
                     <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Patient Address</strong></legend>
-
-                        <table width="750" border="0">
+                        <legend onClick="toggle(this)"><img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
+                            Patient TB Care Registration</legend>
+                        <table border="0">
                             <tr>
-                                <td bgcolor="#F0F8FF"><strong>Region: </strong> &nbsp;<?php echo $registration_data['region']; ?></td>
-                                <td bgcolor="#F0F8FF" colspan="2"><strong>District: </strong>&nbsp;<?php echo $registration_data['district']; ?></td>
-                                <td bgcolor="#F0F8FF" colspan="2"><strong>Division: </strong>&nbsp;<?php echo $registration_data['division']; ?></td>
-
+                                <td width="206" bgcolor="#F0F8FF"><strong>District Reg Number: </strong></td>
+                                <td width="550" colspan="3" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="district_regno" type="text" id="district_regno" <?php echo $mode == 'edit' ? 'readonly' : ''; ?> value="<?php echo $o_tb_patient->format_district_regno($values['district_regno']); ?>" size="25" maxlength="17"/>
+                                </td>
                             </tr>
                             <tr>
-                                <td bgcolor="#F0F8FF"><strong>Ward: </strong> &nbsp;<?php echo $registration_data['ward']; ?></td>
-    <!--                            <td bgcolor="#F0F8FF"><strong>Village: </strong>  <?php // echo $registration_data['street'];                                                                                                                                                 ?></td>-->
-                                <td bgcolor="#EAF4FF" colspan="2"><strong>Street/Village: </strong>  <?php echo $registration_data['village']; ?></td>
-                                <td bgcolor="#F0F8FF" colspan="2"><strong>Telephone:</strong>  <?php echo $registration_data['telephone']; ?></td>
+                                <td bgcolor="#F0F8FF"></td>
+                                <td colspan="2" bgcolor="#F0F8FF">
+                                    <?php echo $messages['district_regno'] . "\n" ?>
+                                </td>
                             </tr>
                             <tr>
-                                <td bgcolor="#F0F8FF" colspan="5">&nbsp;</td>
+                                <td bgcolor="#F0F8FF"><strong>Place of Work:</strong></td>
+                                <td bgcolor="#F0F8FF">
+                                    <?php echo $o_tb_patient->form_dropdown('placeofwork_id', $o_tb_patient->get_placeofwork(), $values['placeofwork_id'], "id = \"placeofwork_id\" class=\"form-control\" onchange=\"check_other('placeofwork_id','placeofwork_other')\""); ?>
+                                    <?php echo $messages['placeofwork_id'] . "\n" ?>
+                                </td>
+                                <td colspan="3" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="placeofwork_other" id="placeofwork_other" type="text" value="<?php echo $values['placeofwork_other']; ?>" maxlength="30" />
+                                    <?php echo $messages['placeofwork_other'] . "\n" ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td bgcolor="#F0F8FF"><strong>Area Leader/Neighbor: </strong></td>
                                 <td colspan="4" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="area_leader" type="text" id="area_leader" value="<?php echo $values['area_leader']; ?>" size="25" maxlength="100" />
                                     <?php echo $messages['area_leader'] . "\n" ?>
-                                    <!--                                First Name:          </td>-->
-                                    <!--                            <td bgcolor="#F0F8FF">-->
-                                    <input name="area_leader" type="text" id="area_leader" value="<?php echo $values['area_leader']; ?>" size="20" maxlength="60" /></td>
-    <!--                            <td bgcolor="#F0F8FF"><?php // echo $messages['chairman_nname'] . "\n"                                                     ?> Last Name:          </td>
-                                <td bgcolor="#F0F8FF"><input name="chairman_nname" type="text" id="chairman_nname" value="<?php // echo $values['chairman_nname'];                                                     ?>" size="15" maxlength="60" /></td>-->
+                                </td>
                             </tr>
-
                             <tr>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td colspan="4" bgcolor="#F0F8FF">&nbsp;</td>
-                            </tr>
-                        </table>
-                    </fieldset>
-<!--                    <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Patient Address</strong></legend>
-                        <table width="750" border="0">
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Treatment Supporter: </strong></td>
+                                <td bgcolor="#F0F8FF"><strong>Contact Telephone (if available): </strong></td>
                                 <td colspan="4" bgcolor="#F0F8FF">
-                                    <?php echo $messages['treatment_supporter'] . "\n" ?>
-                                    <input name="treatment_supporter" type="text" id="treatment_supporter" value="<?php echo $values['treatment_supporter']; ?>" size="20" maxlength="60" /></td>
+                                    <input class="form-control" name="contact_telephone" type="text" id="contact_telephone" value="<?php echo $values['contact_telephone']; ?>" size="25" maxlength="60" /></td>
+                                <?php echo $messages['contact_telephone'] . "\n" ?>
                             </tr>
                             <tr>
-                                <td bgcolor="#F0F8FF"><strong>Treatment Supporter Address: </strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF"><?php echo $messages['head_of_household'] . "\n" ?>
-                                    <input name="head_of_household" type="text" id="head_of_household" value="<?php echo $values['head_of_household']; ?>" size="14" maxlength="60" />
+                                <td bgcolor="#F0F8FF"><strong>National ID Number: </strong></td>
+                                <td colspan="4" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="nationalid" type="text" id="nationalid" value="<?php echo $values['nationalid']; ?>" size="25" maxlength="60" /></td>
+                                <?php echo $messages['nationalid'] . "\n" ?>
+                            </tr>
+                            <?php // if ($mode == 'new') { ?>
+                            <tr>
+                                <td bgcolor="#F0F8FF"><strong>Patient Referred By:</strong></td>
+                                <td colspan="1" bgcolor="#F0F8FF">
+                                    <?php echo $o_tb_patient->form_dropdown('referrer_id', $o_tb_patient->get_referrer(), $values['referrer_id'], "id = \"referrer_id\" class=\"form-control\" onchange=\"check_other('referrer_id','referrer_other')\""); ?>
+                                    <?php echo $messages['referrer_id'] . "\n" ?>
                                 </td>
-                                <td bgcolor="#F0F8FF"><strong>Telephone/Mobile Number of Treatment Supporter: </strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF"><?php echo $messages['head_of_household_contact'] . "\n" ?>
-                                    <input name="head_of_household_contact" type="text" id="head_of_household_contact" value="<?php echo $values['head_of_household_contact']; ?>" size="14" maxlength="60" />
+                                <td colspan="3" bgcolor="#F0F8FF"><?php echo $messages['referrer_other'] . "\n" ?>
+                                    <input class="form-control" name="referrer_other" id="referrer_other" type="text" value="<?php echo $values['referrer_other']; ?>" maxlength="100" />
                                 </td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="#F0F8FF"><strong>DOT Option:</strong></td>
+                                <td colspan="1" bgcolor="#F0F8FF">
+                                    <?php echo $o_tb_patient->form_dropdown('dotoption_id', $o_tb_patient->get_DOT_Option(), $values['dotoption_id'], "id = \"dotoption_id\" class=\"form-control\" "); ?>
+                                    <?php echo $messages['dotoption_id'] . "\n" ?>
+                                </td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </table>
-                    </fieldset>-->
+                    </fieldset>
+
                     <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Patient Support</strong></legend>
-                        <table width="750" border="0">
+                        <legend onClick="toggle(this)">
+                            <img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
+                            Treatment Supporter Details
+                        </legend>
+                        <table border="0">
                             <tr>
-                                <td width="316" bgcolor="#F0F8FF"><strong>Treatment Supporter Name:</strong></td>
-                                <td width="424" colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_vname'] . "\n" ?>
-                                    <input name="supporter_vname" type="text" id="supporter_vname" value="<?php echo $values['supporter_vname']; ?>" size="30" maxlength="60" /></td>
+                                <td bgcolor="#F0F8FF"><strong>Name of Treatment Supporter: </strong></td>
+                                <td bgcolor="#F0F8FF">
+                                    <input class="form-control" name="treatment_supporter_name" type="text" id="treatment_supporter_name" value="<?php echo $values['treatment_supporter_name']; ?>" size="25" maxlength="100" />
+                                    <?php echo $messages['treatment_supporter_name'] . "\n" ?></td>
                             </tr>
                             <tr>
-                                <td bgcolor="#F0F8FF"><strong>Street:</strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_street'] . "\n" ?>
-                                    <input name="supporter_street" type="text" id="supporter_street" value="<?php echo $values['supporter_street']; ?>" size="30" maxlength="60" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Village:</strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_villae'] . "\n" ?>
-                                    <input name="supporter_village" type="text" id="supporter_village" value="<?php echo $values['supporter_village']; ?>" size="30" maxlength="60" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Treatment Supporter Telephone:</strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_telephone'] . "\n" ?>
-                                    <input name="supporter_telephone" type="text" id="supporter_telephone" value="<?php echo $values['supporter_telephone']; ?>" size="10" maxlength="10" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Patient Joined Community Support Organisation:</strong></td> 
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['joined_supporter_org'] . "\n" ?>
-                                    <?php echo $o_tb_patient->form_dropdown('joined_supporter_org', array('No' => 'No', 'Yes' => 'Yes'), $values['joined_supporter_org'], "id = \"joined_supporter_org\" onchange=\"check_joined('joined_supporter_org','supporter_organisation')\""); ?>
+                                <td bgcolor="#F0F8FF"><strong>Physical Address: </strong></td>
+                                <td bgcolor="#F0F8FF">
+                                    <input class="form-control" name="treatment_supporter_address" type="text" id="treatment_supporter_address" value="<?php echo $values['treatment_supporter_address']; ?>" size="25" maxlength="255" />
+                                    <?php echo $messages['treatment_supporter_address'] . "\n" ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2" bgcolor="#F0F8FF" id="supporter_organisation_td"><strong>Community Support Organisation/Group </strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_organisation'] . "\n" ?>
-                                    <input name="supporter_organisation" type="text" id="supporter_organisation" value="<?php echo $values['supporter_organisation']; ?>" size="30" maxlength="60" /></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"></td>
+                                <td bgcolor="#F0F8FF"><strong>Telephone/Mobile Number of Tratment Supporter: </strong></td>
+                                <td bgcolor="#F0F8FF">
+                                    <input class="form-control" name="treatment_supporter_phone" type="text" id="treatment_supporter_phone" value="<?php echo $values['treatment_supporter_phone']; ?>" size="25" maxlength="60" />
+                                    <?php echo $messages['treatment_supporter_phone'] . "\n" ?>
+                                </td>
                             </tr>
                         </table>
                     </fieldset>
                     <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Drug Allergies</strong></legend>
+                        <legend onClick="toggle(this)">
+                            <img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
+                            Patient Classification
+                        </legend>
+                        <table width="750" border="0">
+                            <tr>
+                                <td bgcolor="#F0F8FF"><strong>Classification by Site:</strong></td>
+                                <td colspan="1" bgcolor="#F0F8FF">
+                                    <?php echo $o_tb_patient->form_dropdown('classification_bysiteid', $o_tb_patient->get_classification_bysite(), $values['classification_bysiteid'], "id = \"classification_bysiteid\" class=\"form-control\" onchange=\"check_eptb('classification_bysiteid','eptb_site')\""); ?>
+                                    <?php echo $messages['classification_bysiteid'] . "\n" ?>
+                                </td>
+                                <td colspan="3" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="eptb_site" id="eptb_site" type="text" value="<?php echo $values['eptb_site']; ?>" maxlength="100" />
+                                    <?php echo $messages['eptb_site'] . "\n" ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="#F0F8FF"><strong>Classification by History of Treatment:</strong></td>
+                                <td colspan="1" bgcolor="#F0F8FF">
+                                    <?php echo $o_tb_patient->form_dropdown('classification_byhistoryid', $o_tb_patient->get_classification_byhistory(), $values['classification_byhistoryid'], "id = \"classification_byhistoryid\" class=\"form-control\" onchange=\"check_other('classification_byhistoryid','classification_byhistory_other')\""); ?>
+                                    <?php echo $messages['classification_byhistoryid'] . "\n" ?>
+                                </td>
+                                <td colspan="3" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="classification_byhistory_other" id="classification_byhistory_other" type="text" value="<?php echo $values['classification_byhistory_other']; ?>" maxlength="100" />
+                                    <?php echo $messages['classification_byhistory_other'] . "\n" ?>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </fieldset>
+                    <fieldset>
+                        <legend onClick="toggle(this)">
+                            <img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
+                            HIV Details
+                        </legend>
+                        <table width="750" border="0">
+                            <tr>
+                                <td bgcolor="#F0F8FF"><strong>HIV Status:</strong></td>
+                                <td colspan="2" bgcolor="#F0F8FF">
+                                    <?php echo $o_tb_patient->form_dropdown('hiv_status', $o_tb_patient->get_hiv_status(), $values['hiv_status'], "id = \"hiv_status\" class=\"form-control\" onchange=\"check_hiv_status('hiv_status','hiv_details');\""); ?>
+                                    <?php echo $messages['hiv_status'] . "\n" ?>
+                                </td>
+                                <td colspan="3" bgcolor="#F0F8FF">
+                                </td>
+                            </tr>
+                        </table>
+                        <?php
+                        if ($mode == 'edit' && $values['hiv_status'] == 1) {
+                            ?><div>
+                                <?php
+                            } else {
+                                ?>
+                                <div id="hiv_details">
+                                <?php } ?>
+                                <table width="750" border="0">
+                                    <tr>
+                                        <td bgcolor="#F0F8FF"><strong>HIV Care Registration Number: </strong></td>
+                                        <td bgcolor="#F0F8FF">
+                                            <input class="form-control" name="hiv_regno" type="text" id="hiv_regno" value="<?php echo $values['hiv_regno']; ?>" size="25" maxlength="255" /></td>
+                                        <?php echo $messages['hiv_regno'] . "\n" ?>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#F0F8FF"><strong>On CPT?:</strong></td>
+
+                                        <td colspan="2" bgcolor="#F0F8FF">
+                                            <?php echo $o_tb_patient->form_dropdown('on_cpt', $yesno, $values['on_cpt'], "id = \"on_cpt\" class=\"form-control\" onchange=\"check_on_cpt('on_cpt','date_start_cpt');\""); ?>
+                                            <?php echo $messages['on_cpt'] . "\n" ?>
+                                        </td>
+                                        <td colspan="3" bgcolor="#F0F8FF">
+                                            <input class="form-control" placeholder="YYYY-MM-DD" name="date_start_cpt" id="date_start_cpt" type="text" value="<?php echo $values['date_start_cpt']; ?>" maxlength="30" />
+                                            <?php echo $messages['date_start_cpt'] . "\n" ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#F0F8FF"><strong>On ART Drugs?:</strong></td>
+                                        <td colspan="2" bgcolor="#F0F8FF">
+                                            <?php echo $o_tb_patient->form_dropdown('on_art', $yesno, $values['on_art'], "id = \"on_art\" class=\"form-control\" onchange=\"check_on_cpt('on_art','date_start_art');\""); ?>
+                                            <?php echo $messages['on_art'] . "\n" ?>
+                                        </td>
+                                        <td colspan="3" bgcolor="#F0F8FF">
+                                            <!--<input class="form-control" name="date_start_art" id="date_start_art" type="text" value="<?php // echo $values['date_start_art'];                                               ?>" maxlength="30" />-->
+                                            <input class="form-control" placeholder="YYYY-MM-DD" name="date_start_art" type="text" id="date_start_art" value="<?php echo $values['date_start_art']; ?>" size="10" maxlength="10" 
+                                                   onfocus="this.select()" />
+                                                   <?php echo $messages['date_start_art'] . "\n" ?>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend onClick="toggle(this)"><img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
+                            Drug Allergies</legend>
                         <table width="750" border="0" bgcolor="#F0F8FF">
                             <tr>
                                 <td width="266" rowspan="2" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="insert_allergies" type="text" id="insert_allergies" size="30" maxlength="60">
                                     <?php echo $messages['insert_allergies'] . "\n" ?>
-                                    <input name="insert_allergies" type="text" id="insert_allergies" size="30" maxlength="60"></td>
-                                <td width="86" bgcolor="#F0F8FF"><input name="add" type="button" id="add" onclick="javascript:insert()" value="add"></td>
+                                </td>
+                                <td width="86" bgcolor="#F0F8FF"><input class="form-control" name="add" type="button" id="add" onclick="javascript:insert()" value="add"></td>
                                 <td width="384" colspan="2" rowspan="2">
-                                    <select name="allergies[]" size="4" multiple id="allergies[]" style="width:250px">
+                                    <select class="form-control" name="allergies[]" size="4" multiple id="allergies[]" style="width:250px">
                                         <?php echo $values['allergies'] ?>
-                                    </select>		  </td>
+                                    </select>
+                                </td>
                             </tr>
-
                             <tr>
-                                <td bgcolor="#F0F8FF"><input name="delete" type="button" onclick="javascript:remove_element()" id="delete" value="del"></td>
+                                <td bgcolor="#F0F8FF"><input class="form-control" name="delete" type="button" onclick="javascript:remove_element()" id="delete" value="del"></td>
                             </tr>
                         </table>
                     </fieldset>
 
                     <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">TB Data </strong></legend>
-                        <table width="750" border="0">
+                        <table width="750">
                             <tr>
-                                <td bgcolor="#F0F8FF"><strong>TB Registration No:</strong></td>
-                                <td bgcolor="#F0F8FF">
-                                    <?php echo $messages['tb_reg_no'] . "\n" ?>
-                                    <input name="tb_reg_no" type="text" id="tb_reg_no" value="<?php echo $values['tb_reg_no']; ?>" size="20" maxlength="60" />
+                                <td width="95" bgcolor="#F0F8FF"><strong>Signature:</strong></td>
+                                <td width="643" bgcolor="#F0F8FF"><input class="form-control" name="signature" type="text" readonly id="signature" value="<?php echo $values['signature']; ?>" size="20" maxlength="60" />
+                                    <?php echo $messages['signature'] . "\n" ?>
                                 </td>
-                                <td bgcolor="#F0F8FF"></td>
                             </tr>
                             <tr>
-                                <td bgcolor="#F0F8FF"><strong>Huwanyu/HBC Number:</strong></td>
-                                <td bgcolor="#F0F8FF">
-                                    <?php echo $messages['hbc_number'] . "\n" ?>
-                                    <input name="hbc_number" type="text" id="hbc_number" value="<?php echo $values['hbc_number']; ?>" size="20" maxlength="60" />
-                                </td>
-                                <td bgcolor="#F0F8FF"></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Date of first HIV+ Test: </strong></td>
-                                <td bgcolor="#F0F8FF">
-                                    <?php echo $messages['date_first_hiv_test'] . "\n" ?>
-                                    <input name="date_first_hiv_test" type="text" id="date_first_hiv_test" size="8" maxlength="10" 
-                                           onfocus="this.select()" onClick="show_calendar('arv_registration.date_first_hiv_test', '<?php echo $date_format; ?>')" onkeyup="setDate(this, '<?php echo $date_format; ?>', '<?php echo $lang; ?>')" 
-                                           value="<?php echo $values['date_first_hiv_test']; ?>" />
-                                    <a href="javascript:show_calendar('arv_registration.date_first_hiv_test','<?php echo $date_format; ?>')">
-                                        <img src="<?php echo $root_path; ?>gui/img/common/default/show-calendar.gif" border=0 align="absmiddle" width="26" height="22"></a>
-                                    (dd/mm/yyyy)		  </td>
                                 <td colspan="2" bgcolor="#F0F8FF">&nbsp;</td>
                             </tr>
                             <tr>
-                                <td bgcolor="#F0F8FF"><strong>Date Confirmed HIV+:</strong></td>
-                                <td bgcolor="#F0F8FF">
-                                    <?php echo $messages['date_confirmed_hiv'] . "\n" ?>
-                                    <input name="date_confirmed_hiv" type="text" id="date_confirmed_hiv" value="<?php echo $values['date_confirmed_hiv']; ?>" size="8" maxlength="10" 
-                                           onfocus="this.select()" onkeyup="setDate(this, '<?php echo $date_format; ?>', '<?php echo $lang; ?>')" 
-                                           onClick="show_calendar('arv_registration.date_confirmed_hiv', '<?php echo $date_format; ?>')"/>
-                                    <a href="javascript:show_calendar('arv_registration.date_confirmed_hiv','<?php echo $date_format; ?>')">
-                                        <img src="<?php echo $root_path; ?>gui/img/common/default/show-calendar.gif" border=0 align="absmiddle" width="26" height="22"></a>
-                                    (dd/mm/yyyy)		  </td>
-                                <td colspan="2" bgcolor="#F0F8FF">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Date Enrolled in Care: </strong></td>
-                                <td bgcolor="#F0F8FF"><?php echo $messages['date_enrolled'] . "\n" ?>
-                                    <input name="date_enrolled" type="text" id="date_enrolled" value="<?php echo $values['date_enrolled']; ?>" size="8" maxlength="10" 
-                                           onfocus="this.select()" onkeyup="setDate(this, '<?php echo $date_format; ?>', '<?php echo $lang; ?>')" 
-                                           onClick="show_calendar('arv_registration.date_enrolled', '<?php echo $date_format; ?>')"/>
-                                    <a href="javascript:show_calendar('arv_registration.date_enrolled','<?php echo $date_format; ?>')">
-                                        <img src="<?php echo $root_path; ?>gui/img/common/default/show-calendar.gif" border=0 align="absmiddle" width="26" height="22"></a>(dd/mm/yyyy)		  </td>
-                                <td colspan="2" bgcolor="#F0F8FF">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Date Medically Eligible: </strong></td>
-                                <td bgcolor="#F0F8FF"><?php echo $messages['date_eligible'] . "\n" ?>
-                                    <input name="date_eligible" type="text" id="date_eligible" value="<?php echo $values['date_eligible']; ?>" size="8" maxlength="10" 
-                                           onfocus="this.select()" onkeyup="setDate(this, '<?php echo $date_format; ?>', '<?php echo $lang; ?>')" 
-                                           onClick="show_calendar('arv_registration.date_eligible', '<?php echo $date_format; ?>')"/>
-                                    <a href="javascript:show_calendar('arv_registration.date_eligible','<?php echo $date_format; ?>')">
-                                        <img src="<?php echo $root_path; ?>gui/img/common/default/show-calendar.gif" border=0 align="absmiddle" width="26" height="22"></a> (dd/mm/yyyy)		  </td>
-                                <td colspan="2" bgcolor="#F0F8FF"><strong><i>Why Eligible: </i></strong></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td bgcolor="#F0F8FF">
-                                    <?php echo $messages['eligible_reason'] . "\n" ?>
-                                    <input name="eligible_reason" type="radio" value="1"  <?php echo $values['eligible_reason'] == 1 ? 'checked="checked" ' : '' ?> />
-                                    WHO STAGE (1-4) 
-                                </td>
-                                <td bgcolor="#F0F8FF">
-                                    <input name="eligible_reason_who" type="text" id="eligible_reason_who" value="<?php echo $values['eligible_reason_who']; ?>" size="8" maxlength="8" />
+                                <td colspan="2" bgcolor="#F0F8FF">
+                                    <!--<input class="form-control" name="registration_id" type="hidden" value="<?php // echo $values['registration_id']       ?>" />-->
+                                    <input class="form-control" name="mode" type="hidden" value="<?php echo $_REQUEST['mode'] ?>" />
+                                    <input class="form-control" name="pid" type="hidden" value="<?php echo $_REQUEST['pid'] ?>" />
+                                    <input class="form-control" name="encounter_nr" type="hidden" value="<?php echo $_REQUEST['encounter_nr'] ?>" />
                                 </td>
                             </tr>
                             <tr>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td bgcolor="#F0F8FF"><?php echo $messages['eligible_reason_cd4'] . "\n" ?>
-                                    <input name="eligible_reason" type="radio"   <?php echo $values['eligible_reason'] == 2 ? 'checked="checked" ' : '' ?> value="2" />
-                                    CD4 Count/% 
-                                </td>
-                                <td bgcolor="#F0F8FF">
-                                    <input name="eligible_reason_cd4" type="text" id="eligible_reason_cd4" value="<?php echo $values['eligible_reason_cd4']; ?>" size="8" maxlength="8" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td bgcolor="#F0F8FF"><?php echo $messages['eligible_reason_tlc'] . "\n" ?>
-                                    <input name="eligible_reason" type="radio"  <?php echo $values['eligible_reason'] == 3 ? 'checked="checked" ' : '' ?> value="3" />
-                                    TLC 
-                                </td>
-                                <td bgcolor="#F0F8FF">
-                                    <input name="eligible_reason_tlc" type="text" id="eligible_reason_tlc" value="<?php echo $values['eligible_reason_tlc']; ?>" size="8" maxlength="8" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td colspan="2" bgcolor="#F0F8FF">&nbsp;</td>
-
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Date Eligible &amp; Ready:</strong> </td>
-                                <td bgcolor="#F0F8FF">
-                                    <?php echo $messages['date_ready'] . "\n" ?>
-                                    <input name="date_ready" type="text" id="date_ready" value="<?php echo $values['date_ready']; ?>" size="10" maxlength="10" 
-                                           onfocus="this.select()" onkeyup="setDate(this, '<?php echo $date_format; ?>', '<?php echo $lang; ?>')" 
-                                           onClick="show_calendar('arv_registration.date_ready', '<?php echo $date_format; ?>');"/>
-                                    <a href="javascript:show_calendar('arv_registration.date_ready','<?php echo $date_format; ?>')">
-                                        <img src="<?php echo $root_path; ?>gui/img/common/default/show-calendar.gif" border=0 align="absmiddle" width="26" height="22"></a>(dd/mm/yy)		  </td>
-                                <td colspan="2" bgcolor="#F0F8FF">&nbsp;</td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                <?php } else { ?>
-                    </table>
-                    </fieldset>
-                    <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Patient Address</strong></legend>
-                        <table width="750" border="0">
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Region: </strong> &nbsp;<?php echo $registration_data['region']; ?></td>
-                                <td bgcolor="#F0F8FF" colspan="2"><strong>District: </strong>&nbsp;<?php echo $registration_data['district']; ?></td>
-                                <td bgcolor="#F0F8FF" colspan="2"><strong>Division: </strong>&nbsp;<?php echo $registration_data['division']; ?></td>
-
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Ward: </strong> &nbsp;<?php echo $registration_data['ward']; ?></td>
-    <!--                            <td bgcolor="#F0F8FF"><strong>Village: </strong>  <?php // echo $registration_data['street'];                                                                                                                                                 ?></td>-->
-                                <td bgcolor="#EAF4FF" colspan="2"><strong>Street/Village: </strong>  <?php echo $registration_data['village']; ?></td>
-                                <td bgcolor="#F0F8FF" colspan="2"><strong>Telephone:</strong>  <?php echo $registration_data['telephone']; ?></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF" colspan="5">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Street/Village Chairman: </strong></td>
-                                <td colspan="4" bgcolor="#F0F8FF">
-                                    <?php echo $messages['area_leader'] . "\n" ?>
-                                    <!--                                First Name:          </td>-->
-                                    <!--                            <td bgcolor="#F0F8FF">-->
-                                    <input name="area_leader" type="text" id="area_leader" value="<?php echo $values['area_leader']; ?>" size="20" maxlength="100" /></td>
-    <!--                            <td bgcolor="#F0F8FF"><?php // echo $messages['chairman_nname'] . "\n"                                                     ?> Last Name:          </td>
-                                <td bgcolor="#F0F8FF"><input name="chairman_nname" type="text" id="chairman_nname" value="<?php // echo $values['chairman_nname'];                                                     ?>" size="15" maxlength="60" /></td>-->
-                            </tr>
-
-                            <tr>
-                                <td bgcolor="#F0F8FF">&nbsp;</td>
-                                <td colspan="4" bgcolor="#F0F8FF">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Name of Ten Cell Leader: </strong></td>
-                                <td colspan="4" bgcolor="#F0F8FF">
-                                    <?php echo $messages['treatment_supporter'] . "\n" ?>
-                                    <input name="treatment_supporter" type="text" id="treatment_supporter" value="<?php echo $values['treatment_supporter']; ?>" size="20" maxlength="100" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Name of Head of Household: </strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF"><?php echo $messages['head_of_household'] . "\n" ?>
-                                    <input name="head_of_household" type="text" id="head_of_household" value="<?php echo $values['head_of_household']; ?>" size="14" maxlength="60" />
-                                </td>
-                                <td bgcolor="#F0F8FF"><strong>Contact of Household Head: </strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF"><?php echo $messages['head_of_household_contact'] . "\n" ?>
-                                    <input name="head_of_household_contact" type="text" id="head_of_household_contact" value="<?php echo $values['head_of_household_contact']; ?>" size="14" maxlength="60" />
+                                <td colspan="2" bgcolor="#F0F8FF" align="center">
+                                    <input class="button submit" name="submit" type="submit" value='' onClick="javascript:selectAll();"/>
                                 </td>
                             </tr>
                         </table>
                     </fieldset>
-                    <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Patient Support</strong></legend>
-                        <table width="750" border="0">
-                            <tr>
-                                <td width="316" bgcolor="#F0F8FF"><strong>Treatment Supporter Name:</strong></td>
-                                <td width="424" colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_vname'] . "\n" ?>
-                                    <input name="supporter_vname" type="text" id="supporter_vname" value="<?php echo $values['supporter_vname']; ?>" size="30" maxlength="60" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Street:</strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_street'] . "\n" ?>
-                                    <input name="supporter_street" type="text" id="supporter_street" value="<?php echo $values['supporter_street']; ?>" size="30" maxlength="60" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Village:</strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_villae'] . "\n" ?>
-                                    <input name="supporter_village" type="text" id="supporter_village" value="<?php echo $values['supporter_village']; ?>" size="30" maxlength="60" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Treatment Supporter Telephone:</strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_telephone'] . "\n" ?>
-                                    <input name="supporter_telephone" type="text" id="supporter_telephone" value="<?php echo $values['supporter_telephone']; ?>" size="10" maxlength="10" /></td>
-                            </tr>
-                            <tr>
-                                <td bgcolor="#F0F8FF"><strong>Patient Joined Community Support Organisation:</strong></td> 
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['joined_supporter_org'] . "\n" ?>
-                                    <?php echo $o_tb_patient->form_dropdown('joined_supporter_org', array('No' => 'No', 'Yes' => 'Yes'), $values['joined_supporter_org'], "id = \"joined_supporter_org\" onchange=\"check_joined('joined_supporter_org','supporter_organisation')\""); ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td rowspan="2" bgcolor="#F0F8FF" id="supporter_organisation_td"><strong>Community Support Organisation/Group </strong></td>
-                                <td colspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['supporter_organisation'] . "\n" ?>
-                                    <input name="supporter_organisation" type="text" id="supporter_organisation" value="<?php echo $values['supporter_organisation']; ?>" size="30" maxlength="60" /></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"></td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                    <fieldset>
-                        <legend onClick="toggle(this)"><strong><img src="<?php echo $root_path; ?>gui/img/common/default/plus_menu.gif" width="18" height="18">Drug Allergies</strong></legend>
-                        <table width="750" border="0" bgcolor="#F0F8FF">
-                            <tr>
-                                <td width="266" rowspan="2" bgcolor="#F0F8FF">
-                                    <?php echo $messages['insert_allergies'] . "\n" ?>
-                                    <input name="insert_allergies" type="text" id="insert_allergies" size="30" maxlength="60"></td>
-                                <td width="86" bgcolor="#F0F8FF"><input name="add" type="button" id="add" onclick="javascript:insert()" value="add"></td>
-                                <td width="384" colspan="2" rowspan="2">
-                                    <select name="allergies[]" size="4" multiple id="allergies[]" style="width:250px">
-                                        <?php echo $values['allergies'] ?>
-                                    </select>		  </td>
-                            </tr>
 
-                            <tr>
-                                <td bgcolor="#F0F8FF"><input name="delete" type="button" onclick="javascript:remove_element()" id="delete" value="del"></td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                <?php } ?>
-                <fieldset>
-                    <table width="750">
+                </form>
+                </p>
+                <p>&nbsp;</p></td>
+                </tr>
+            </div>
+            <div class="row">
+
+            </div>
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="1" bgcolor="#cfcfcf">
+            <tr>
+                <td>
+                    <br/>
+                </td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="1" bgcolor="#cfcfcf">
+            <tr>
+                <td align="center">
+                    <table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=5>
                         <tr>
-                            <td width="95" bgcolor="#F0F8FF"><?php echo $messages['signature'] . "\n" ?><strong>Signature:</strong></td>
-                            <td width="643" bgcolor="#F0F8FF"><input name="signature" type="text" id="signature" value="<?php echo $values['signature']; ?>" size="20" maxlength="60" /></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" bgcolor="#F0F8FF">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" bgcolor="#F0F8FF">
-                                <input name="registration_id" type="hidden" value="<?php echo $values['registration_id'] ?>" />
-                                <input name="mode" type="hidden" value="<?php echo $_REQUEST['mode'] ?>" />
-                                <input name="pid" type="hidden" value="<?php echo $_REQUEST['pid'] ?>" />
-                                <input name="encounter_nr" type="hidden" value="<?php echo $_REQUEST['encounter_nr'] ?>" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" bgcolor="#F0F8FF" align="center">
-                                <input name="submit" type="submit" class="submit" value='' onClick="javascript:selectAll();"/>
-                            </td>
+                            <td><div class="copyright">
+                                    <script language="JavaScript">
+
+                                        function openCreditsWindow() {
+
+                                            urlholder = "../../language/$lang/$lang_credits.php?lang=$lang";
+                                            creditswin = window.open(urlholder, "creditswin", "width=500,height=600,menubar=no,resizable=yes,scrollbars=yes");
+                                        }
+
+                                    </script>
+
+
+                                    <a href="http://www.care2x.org" target=_new>CARE2X 3rd Generation pre-deployment 3.5</a> :: <a href="../../legal_gnu_gpl.htm" target=_new> License</a> :: <a href=mailto:care2x@makiungu.co.tz>Contact</a>  :: <a href="../../language/en/en_privacy.htm" target="pp"> Our Privacy Policy </a> ::
+                                    <a href="../../docs/show_legal.php?lang=$lang" target="lgl"> Legal </a> :: <a href="javascript:openCreditsWindow()"> Credits </a> ::.<br>
+                                </div></td>
                         </tr>
                     </table>
-                </fieldset>
+                </td>
+            </tr>
+        </table>
 
-            </form>
-        </p>
-        <p>&nbsp;</p></td>
-</tr>
-</div>
-</body>
-</html>
+    </BODY>
+</HTML>

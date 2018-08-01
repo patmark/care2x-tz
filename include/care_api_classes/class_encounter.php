@@ -401,7 +401,7 @@ class Encounter extends Notes {
 							 ORDER BY enfc.date_create ";
 
         if ($this->single_result)
-            $this->sql.=' LIMIT 1';
+            $this->sql .= ' LIMIT 1';
 
         if ($this->result = $db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
@@ -1689,17 +1689,17 @@ class Encounter extends Notes {
                 echo " -> the key is nummeric<br>";
             $key = (int) $key;
             if ($enc_class == 2) {
-                $this->sql.=" WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key OR rc.batch_nr $sql_LIKE '$key%' ) " . $add_opt;
+                $this->sql .= " WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key OR rc.batch_nr $sql_LIKE '$key%' ) " . $add_opt;
             } else {
-                $this->sql.=" WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key) AND  e.is_discharged IN ('',0)" . $add_opt;
+                $this->sql .= " WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key) AND  e.is_discharged IN ('',0)" . $add_opt;
             }
         } elseif ($key == '%' || $key == '*') {
             if ($db->debug)
                 echo " -> the joker is given as search key<br>";
             if ($enc_class == 2) {
-                $this->sql.=" WHERE e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= " WHERE e.status NOT IN ($this->dead_stat) " . $add_opt;
             } else {
-                $this->sql.=" WHERE e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= " WHERE e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
             }
         } else {
             if ($db->debug) {
@@ -1713,16 +1713,16 @@ class Encounter extends Notes {
 //						OR p.date_birth $sql_LIKE '$key%'
 //						)";
 
-            $this->sql.=" WHERE (p.name_last $sql_LIKE '$key%'
+            $this->sql .= " WHERE (p.name_last $sql_LIKE '$key%'
 						OR p.name_first $sql_LIKE '$key%'
 						OR p.date_birth $sql_LIKE '$key%'
 						)";
             if ($enc_class == 1)
-                $this->sql.="	AND e.encounter_class_nr=$enc_class";
+                $this->sql .= "	AND e.encounter_class_nr=$enc_class";
             if ($enc_class == 2) {
-                $this->sql.="  AND e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= "  AND e.status NOT IN ($this->dead_stat) " . $add_opt;
             } else {
-                $this->sql.="  AND  e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= "  AND  e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
             }
         }
         if ($limit) {
@@ -1763,22 +1763,22 @@ class Encounter extends Notes {
                 echo " -> the key is nummeric<br>";
             $key = (int) $key;
             if ($enc_class == 2) {
-                $this->sql.=" WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key OR rc.batch_nr $sql_LIKE '$key%' ) " . $add_opt;
+                $this->sql .= " WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key OR rc.batch_nr $sql_LIKE '$key%' ) " . $add_opt;
             } else {
-                $this->sql.=" WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key) AND  e.is_discharged IN ('',0)" . $add_opt;
+                $this->sql .= " WHERE (e.encounter_nr = $key OR p.pid = $key OR p.selian_pid = $key) AND  e.is_discharged IN ('',0)" . $add_opt;
             }
         } elseif ($key == '%' || $key == '*') {
             if ($db->debug)
                 echo " -> the joker is given as search key<br>";
             if ($enc_class == 2) {
-                $this->sql.=" WHERE e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= " WHERE e.status NOT IN ($this->dead_stat) " . $add_opt;
             } else {
-                $this->sql.=" WHERE e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= " WHERE e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
             }
         } else {
             if ($db->debug)
                 echo " -> we have to search in a text comparision<br>";
-            $this->sql.=" WHERE (e.encounter_nr $sql_LIKE '$key%'
+            $this->sql .= " WHERE (e.encounter_nr $sql_LIKE '$key%'
 						OR p.pid $sql_LIKE '$key%'
 						OR p.selian_pid $sql_LIKE '$key%'
 						OR p.name_last $sql_LIKE '$key%'
@@ -1786,11 +1786,11 @@ class Encounter extends Notes {
 						OR p.date_birth $sql_LIKE '$key%'
 						)";
             if ($enc_class == 1)
-                $this->sql.="	AND e.encounter_class_nr=$enc_class";
+                $this->sql .= "	AND e.encounter_class_nr=$enc_class";
             if ($enc_class == 2) {
-                $this->sql.="  AND e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= "  AND e.status NOT IN ($this->dead_stat) " . $add_opt;
             } else {
-                $this->sql.="  AND  e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
+                $this->sql .= "  AND  e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_opt;
             }
         }
         if ($limit) {
@@ -1847,17 +1847,17 @@ class Encounter extends Notes {
                 echo " -> the key is nummeric<br>";
             $key = (int) $key;
             if ($enc_class == 2) {
-                $this->sql.=" WHERE (*.* $sql_LIKE '$key%' ) " . $add_where;
+                $this->sql .= " WHERE (*.* $sql_LIKE '$key%' ) " . $add_where;
             } else {
-                $this->sql.=" WHERE (*.* $sql_Like '$key%') AND  e.is_discharged IN ('',0)" . $add_where;
+                $this->sql .= " WHERE (*.* $sql_Like '$key%') AND  e.is_discharged IN ('',0)" . $add_where;
             }
         } elseif ($key == '%' || $key == '*') {
             if ($db->debug)
                 echo " -> the joker is given as search key<br>";
             if ($enc_class == 2) {
-                $this->sql.=" WHERE e.status NOT IN ($this->dead_stat) " . $add_where;
+                $this->sql .= " WHERE e.status NOT IN ($this->dead_stat) " . $add_where;
             } else {
-                $this->sql.=" WHERE e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_where;
+                $this->sql .= " WHERE e.is_discharged IN ('',0) AND e.status NOT IN ($this->dead_stat) " . $add_where;
             }
         }
         if ($limit) {
@@ -1944,19 +1944,19 @@ class Encounter extends Notes {
         if (!empty($sortitem)) {
             $option = ' ORDER BY ';
             switch ($sortitem) {
-                case 'LASTNAME': $option.=' p.name_last ';
+                case 'LASTNAME': $option .= ' p.name_last ';
                     break;
-                case 'FIRSTNAME': $option.=' p.name_first ';
+                case 'FIRSTNAME': $option .= ' p.name_first ';
                     break;
-                case 'ENCNR': $option.=' e.encounter_nr ';
+                case 'ENCNR': $option .= ' e.encounter_nr ';
                     break;
-                case 'BDAY': $option.=' p.date_birth ';
+                case 'BDAY': $option .= ' p.date_birth ';
                     break;
-                case 'PID': $option.=' p.pid ';
+                case 'PID': $option .= ' p.pid ';
                     break;
-                default: $option.='';
+                default: $option .= '';
             }
-            $option.=$order;
+            $option .= $order;
         }
         return $this->_searchAdmissionBasicInfo($key, 0, $option); // 0 = all kinds of admission
     }
@@ -1975,17 +1975,17 @@ class Encounter extends Notes {
         if (!empty($sortitem)) {
             $option = ' ORDER BY ';
             switch ($sortitem) {
-                case 'LASTNAME': $option.=' p.name_last ';
+                case 'LASTNAME': $option .= ' p.name_last ';
                     break;
-                case 'FIRSTNAME': $option.=' p.name_first ';
+                case 'FIRSTNAME': $option .= ' p.name_first ';
                     break;
-                case 'ENCNR': $option.=' e.encounter_nr ';
+                case 'ENCNR': $option .= ' e.encounter_nr ';
                     break;
-                case 'BDAY': $option.=' p.date_birth ';
+                case 'BDAY': $option .= ' p.date_birth ';
                     break;
-                default: $option.='';
+                default: $option .= '';
             }
-            $option.=$order;
+            $option .= $order;
         }
         return $this->_searchAdmissionBasicInfo($key, 2, $option); // 0 = all kinds of admission
     }
@@ -2323,17 +2323,17 @@ class Encounter extends Notes {
          */
 
 
-        $data.=",history=" . $this->ConcatHistory("\n$act " . date('Y-m- H:i:s') . " " . $_SESSION['sess_user_name']) . ", ";
-        $data.="	modify_id='" . $_SESSION['sess_user_name'] . "',
+        $data .= ",history=" . $this->ConcatHistory("\n$act " . date('Y-m- H:i:s') . " " . $_SESSION['sess_user_name']) . ", ";
+        $data .= "	modify_id='" . $_SESSION['sess_user_name'] . "',
 				modify_time='" . date('YmdHis') . "', in_dept=1 ";
 
         if ($outpatient == 2) {
             //case transfer from outpatient-department to ward
-            $data.=", encounter_class_nr=1";
+            $data .= ", encounter_class_nr=1";
         } else {
 
             if ($outpatient == 'for inpatient')
-                $date.=", current_room_nr=0";
+                $date .= ", current_room_nr=0";
         }
 
         $this->sql = "UPDATE $this->tb_enc SET $data WHERE encounter_nr=$enr";
@@ -2622,8 +2622,8 @@ class Encounter extends Notes {
           $this->sql.=" history= history || '\nUpdate (discharged): ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."' ,";
           }
          */
-        $this->sql.= "history =" . $this->ConcatHistory("Update (discharged): " . date('Y-m-d H:i:s') . " " . $_SESSION['sess_user_name'] . "\n") . ",";
-        $this->sql.=" modify_id='" . $_SESSION['sess_user_name'] . "'
+        $this->sql .= "history =" . $this->ConcatHistory("Update (discharged): " . date('Y-m-d H:i:s') . " " . $_SESSION['sess_user_name'] . "\n") . ",";
+        $this->sql .= " modify_id='" . $_SESSION['sess_user_name'] . "'
 							WHERE encounter_nr=$enr AND type_nr IN ($loc_types) AND date_to ='$dbf_nodate'";
         //echo $this->sql;
         if ($this->Transact($this->sql)) {
@@ -2653,8 +2653,8 @@ class Encounter extends Notes {
           $this->sql.=" history= history || '\nUpdate (transfered to ipd): ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."' ,";
           }
          */
-        $this->sql.= "history =" . $this->ConcatHistory("Update (transfered to ipd): " . date('Y-m-d H:i:s') . " " . $_SESSION['sess_user_name'] . "\n") . ",";
-        $this->sql.=" modify_id='" . $_SESSION['sess_user_name'] . "'
+        $this->sql .= "history =" . $this->ConcatHistory("Update (transfered to ipd): " . date('Y-m-d H:i:s') . " " . $_SESSION['sess_user_name'] . "\n") . ",";
+        $this->sql .= " modify_id='" . $_SESSION['sess_user_name'] . "'
 							WHERE encounter_nr=$enr AND type_nr IN ($loc_types) AND date_to ='$dbf_nodate'";
         //echo $this->sql;
         if ($this->Transact($this->sql)) {
@@ -2909,7 +2909,7 @@ class Encounter extends Notes {
 						WHERE s.encounter_nr=$this->enc_nr AND s.status NOT IN ($this->dead_stat)";
         if ($dept_nr)
             $this->sql = $this->sql . " AND s.dept_nr=$dept_nr";
-        $this->sql.=' ORDER BY s.date_confirm DESC';
+        $this->sql .= ' ORDER BY s.date_confirm DESC';
 
         //echo $this->sql;
         if ($this->result = $db->Execute($this->sql)) {
@@ -3040,7 +3040,7 @@ class Encounter extends Notes {
 							ORDER BY $sort ASC";
         /* 							GROUP BY e.encounter_nr,e.pid,e.insurance_class_nr,p.title,p.name_last,p.name_first,p.date_birth,p.sex,
           p.photo_filename,a.date, a.time,a.urgency,i.LD_var,i.name, n.nr */
-
+//        echo $this->sql;
         if ($this->res['opb'] = $db->Execute($this->sql)) {
             if ($this->rec_count = $this->res['opb']->RecordCount()) {
                 return $this->res['opb'];

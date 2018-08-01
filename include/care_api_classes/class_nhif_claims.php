@@ -890,7 +890,7 @@ class Nhif_claims extends Nhif {
                                                                             <HEAD>
                                                                                 <TITLE>' . $Title . ' ' . $Title_Tag . '</TITLE>
                                                                                 <meta name="Description" content="Hospital and Healthcare Integrated Information System - CARE2x">
-                                                                                <meta name="author" content="ISRAEL PASCAL" >
+                                                                                <meta name="author" content="ABEL HAULE" >
                                                                                 <meta name="generator" content="Bluefish 2.0.2" >
                                                                                 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 

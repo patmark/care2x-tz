@@ -41,9 +41,9 @@ switch ($target) {
         $fileforward = "tb_registration.php" . $append . "&sid=$sid&target=new&lang=$lang&pid=$pid&patient=$patient&encounter_nr=$encounter_nr&mode=$mode";
         $lognow = 'TB login ok';
         break;
-    case 'visit':
-        $allowedarea = $allow_area['tb_all'];
-        $fileforward = "tb_visit.php" . $append . "&sid=$sid&target=visitdetails&pid=$pid&patient=$patient&lang=$lang&encounter_nr=$encounter_nr&page_action=$page_action&date_from=$date_from&date_to=$date_to";
+    case 'newdrtb':
+        $allowedarea = $allow_area['tb_write'];
+        $fileforward = "tb_drtb_registration.php" . $append . "&sid=$sid&target=newdrtb&pid=$pid&patient=$patient&lang=$lang&encounter_nr=$encounter_nr";
         $lognow = 'TB login ok';
         break;
     case 'report':

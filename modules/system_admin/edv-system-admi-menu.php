@@ -75,12 +75,16 @@ switch ($dbtype) {
                     </tr>
                     <tr>
                         <td bgcolor="#e9e9e9" valign="top">
-                            <FONT  color="#0000cc" FACE="verdana,arial" size=2><b><?php echo "ARV Admin"; ?></b> </FONT><br>
+                            <FONT  color="#0000cc" FACE="verdana,arial" size=2><b><?php echo "Facility Information"; ?></b> </FONT><br>
                         </td>
                     </tr>
                     <tr>
                         <td bgcolor="#ffffff">
-                            &nbsp;&nbsp;&nbsp;<img <?php echo createComIcon($root_path, 'redpfeil.gif', '0', 'absmiddle') ?>><FONT  color="#0000cc" FACE="verdana,arial" size=2><a href="edv_arv_information.php<?php echo URL_APPEND ?>" target="SYSADMIN_WFRAME"> <?php echo "Facility Information" ?></a></FONT><br>
+                            &nbsp;&nbsp;&nbsp;<img <?php echo createComIcon($root_path, 'redpfeil.gif', '0', 'absmiddle') ?>><FONT  color="#0000cc" FACE="verdana,arial" size=2><a href="edv_arv_information.php<?php echo URL_APPEND ?>" target="SYSADMIN_WFRAME"> <?php echo "CTC Facility Information" ?></a></FONT><br>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#ffffff">
+                            &nbsp;&nbsp;&nbsp;<img <?php echo createComIcon($root_path, 'redpfeil.gif', '0', 'absmiddle') ?>><FONT  color="#0000cc" FACE="verdana,arial" size=2><a href="edv_tb_information.php<?php echo URL_APPEND ?>" target="SYSADMIN_WFRAME"> <?php echo "TB Facility Information" ?></a></FONT><br>
                     </tr>
                     <tr>
                         <td bgcolor="#e9e9e9" valign="top">

@@ -84,12 +84,12 @@ if ($o_tb_patient->is_tb_admitted() || $o_tb_patient->is_drtb_admitted()) {
                                                 <TBODY class="submenu">
                                                     <TR> 
                                                         <td align=center><img src="../../gui/img/common/default/showdata.gif" border=0></td>
-                                                        <TD class="submenu_item"><nobr><a href="tb_registration.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=edit" target="_parent">Edit TB Patient</a></nobr></TD>
+                                                        <TD class="submenu_item"><nobr><a href="tb_registration.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=edit" >Edit TB Patient</a></nobr></TD>
                                         <TD>Edit Patient's TB Registration data</TD>
                                     </tr>
                                     <TR> 
                                         <td align=center><img src="../../gui/img/common/default/new_group.gif" border=0></td>
-                                        <TD class="submenu_item"><nobr><a href="tb_family_info.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=new" target="_parent">Family Information</a></nobr></TD>
+                                        <TD class="submenu_item"><nobr><a href="tb_family_info.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=new" >Family Information</a></nobr></TD>
                                 <TD>Add/Edit Patient's Family Information</TD>
                                 </tr>
                                 <?php
@@ -97,18 +97,18 @@ if ($o_tb_patient->is_tb_admitted() || $o_tb_patient->is_drtb_admitted()) {
                                     ?>
                                     <TR> 
                                         <td align=center><img src="../../gui/img/common/default/new_group.gif" border=0></td>
-                                        <TD class="submenu_item"><nobr><a href="<?php echo $root_path ?>modules/tb/tb_visit_frameset.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=new" target="_parent">New Visit</a></nobr></TD>
+                                        <TD class="submenu_item"><nobr><a href="<?php echo $root_path ?>modules/tb/tb_visit_frameset.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=new" >New Visit</a></nobr></TD>
                                     <TD>Insert data of a new TB visit</TD>
                                     </tr>
                                 <?php } ?>
                                 <TR> 
                                     <td height="26" align=center><img src="../../gui/img/common/default/pdata.gif" border=0 width="16" height="16"></td>
-                                    <TD class="submenu_item"><nobr><a href="tb_overview.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" target="_parent">Show TB Data</a></nobr></TD>
+                                    <TD class="submenu_item"><nobr><a href="tb_overview.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" >Show TB Data</a></nobr></TD>
                                 <TD>Get an overview over patient's TB data</TD>
                                 </tr>
                                 <TR> 
                                     <td height="26" align=center><img src="../../gui/img/common/default/yellowlist.gif" border=0 width="16" height="17"></td>
-                                    <TD class="submenu_item"><nobr><a href="tb_education_menu.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" target="_parent">Follup-up education</a></nobr></TD>
+                                    <TD class="submenu_item"><nobr><a href="tb_education_menu.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" >Follup-up education</a></nobr></TD>
                                 <TD>Get an overview over patient's TB data</TD>
                                 </tr>
                                 <TR  height=1> 

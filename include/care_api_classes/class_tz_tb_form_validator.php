@@ -10,13 +10,13 @@ class TBValidator {
     var $rules;
     var $msg_tpl = "<div class=\"error\">%s</div>";
 
-    function Validator($defaults_, $data_in_) {
+    function TBValidator($defaults_, $data_in_) {
         $this->defaults = $defaults_;
         $this->data_in = $data_in_;
     }
 
     function set_rule($field, $rule, $param) {
-        //Method for setting a validation rule for the ARV forms
+        //Method for setting a validation rule for the TB forms
         $this->rules[$field][$rule] = $param;
     }
 
@@ -53,7 +53,6 @@ class TBValidator {
             $this->data_out[$k] = $this->data_in[$k];
         }
 
-
         foreach ($keys as $field) {
             while (list($rule, $param) = each($this->rules[$field])) {
 
@@ -84,12 +83,21 @@ class TBValidator {
     function rule_required($val) {
         if (empty($val)) {
             $msg_string = "Please enter a value!";
+//            echo $msg_string . '<br/>';
             return $msg_string;
         }
         return false;
     }
 
-    function rule_ctc_id($val) {
+    function rule_select_required($val) {
+        if (empty($val)) {
+            $msg_string = "Please select an option!";
+            return $msg_string;
+        }
+        return false;
+    }
+
+    function rule_district_regno($val) {
         
     }
 
@@ -171,7 +179,7 @@ class TBValidator {
         }
     }
 
-    function unique_ctc_id($val) {
+    function unique_district_regno($val) {
         if (!empty($val)) {
             $val = trim(str_replace('-', '', $val));
             global $db;
@@ -179,14 +187,14 @@ class TBValidator {
             ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
 
             //Check if patient with that id already exists
-            $this->sql = "SELECT pid, ctc_id
-                        FROM care_tz_arv_registration
-					WHERE ctc_id =" . $val;
+            $this->sql = "SELECT pid, district_regno
+                        FROM care_tb_patient
+					WHERE district_regno =" . $val;
 
             if ($this->res = $db->Execute($this->sql) AND $data = $this->res->FetchRow()) {
 //                header("Location: arv_registration.php" . URL_APPEND . "&pid=" . $data['pid'] . "&mode=edit");
-                return "A patient with this ID already exists! Click "
-                        . "<a href=javascript:redirect_fn('arv_registration.php" . URL_APPEND . "&encounter_nr=000000&pid=" . $data['pid'] . "&mode=edit" . "')" . ">HERE</a>&nbspto view or edit patient";
+                return "A patient with this district registration already exists! Click "
+                        . "<a href=javascript:redirect_fn('tb_registration.php" . URL_APPEND . "&encounter_nr=000000&pid=" . $data['pid'] . "&mode=edit" . "')" . ">HERE</a>&nbspto view or edit patient";
             } else {
                 return FALSE;
             }
