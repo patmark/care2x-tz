@@ -46,7 +46,7 @@
 <?php
 //        require_once('./classes/phpSniff/phpSniff.class.php'); # Sniffer for PHP 
 
-if ($o_tb_patient->is_tb_admitted()) {
+if ($o_tb_patient->is_tb_admitted() || $o_tb_patient->is_drtb_admitted()) {
     $mode = "registered";
 } else {
     $mode = "not_registered";
@@ -122,7 +122,12 @@ if ($o_tb_patient->is_tb_admitted()) {
                                     <TR> 
                                         <td align=center><img src="../../gui/img/common/default/showdata.gif" border=0></td>
                                         <TD class="submenu_item"><nobr><a href="tb_clinic_pass.php<?php echo URL_APPEND ?>&pid=<?php echo $_GET['pid'] ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&mode=new&target=new">New TB Patient</a></nobr></TD>
-                                <TD>Admit a New Patient to TB Care Programme</TD>
+                                <TD>Admit a New Patient to Normal TB Care Programme</TD>
+                                </tr>
+                                <TR> 
+                                    <td align=center><img src="../../gui/img/common/default/showdata.gif" border=0></td>
+                                    <TD class="submenu_item"><nobr><a href="tb_clinic_pass.php<?php echo URL_APPEND ?>&pid=<?php echo $_GET['pid'] ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&mode=new&target=newdrtb">New DR-TB Patient</a></nobr></TD>
+                                <TD>Admit a New Patient to Drug Resistant (DR-TB) Care Programme</TD>
                                 </tr>
                                 </TBODY>
                                 <?php
@@ -133,7 +138,7 @@ if ($o_tb_patient->is_tb_admitted()) {
                                 <TR> 
                                     <td align=center><img src="../../gui/img/common/default/persons.gif" border=0></td>
                                     <TD class="submenu_item"><nobr><a href="../../modules/ambulatory/amb_clinic_patients.php?lang=en&sid=<?php echo session_id(); ?>&origin=pass&target=list&dept_nr=47&checkintern=1">Patients</a></nobr></TD>
-                            <TD>Back to Choosing Patients</TD>
+                            <TD>Back to Choosing Patients in TB Outpatient Clinic</TD>
                             </tr>
                             </TBODY>
                         </TABLE>

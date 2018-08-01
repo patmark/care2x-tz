@@ -126,7 +126,7 @@ class TB_patient extends Person {
     function getFormData($vars) {
         $temp = $vars;
         foreach ($vars['allergies'] as $element) {
-            $temp['allergies'].="<option>$element</option>";
+            $temp['allergies'] .= "<option>$element</option>";
         }
         return $temp;
     }
@@ -137,9 +137,25 @@ class TB_patient extends Person {
 
         $debug = false;
         ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
-        $sql = "SELECT * from care_person, care_tz_tb_registration
-			  WHERE care_tz_tb_registration.pid=care_person.pid
-			  AND care_person.pid=$this->pid";
+        $sql = "SELECT * from care_tb_patient
+		WHERE care_tb_patient.pid=$this->pid";
+
+        return ($rs = $db->Execute($sql) AND $rs->FetchRow()) ? true : false;
+    }
+
+    /*
+     * this function checks if a patient is registered to
+     * MDR-TB programme at the facility
+     */
+
+    function is_drtb_admitted() {
+        // check if a patient is already registered to the TB Care programme
+        global $db;
+
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+        $sql = "SELECT * from care_tb_dr_patient
+		WHERE care_tb_dr_patient.pid=$this->pid";
 
         return ($rs = $db->Execute($sql) AND $rs->FetchRow()) ? true : false;
     }
@@ -1070,10 +1086,10 @@ class TB_patient extends Person {
     }
 
     function getTelephoneCombined() {
-        ($this->getValue('phone_1_nr')) ? $tel.=$this->getValue('phone_1_nr') . "; " : $tel = "";
-        ($this->getValue('phone_2_nr')) ? $tel.=$this->getValue('phone_2_nr') . "; " : $tel.="";
-        ($this->getValue('cellphone_1_nr')) ? $tel.=$this->getValue('cellphone_1_nr') . "; " : $tel.="";
-        ($this->getValue('cellphone_2_nr')) ? $tel.=$this->getValue('cellphone_2_nr') . "" : $tel.="";
+        ($this->getValue('phone_1_nr')) ? $tel .= $this->getValue('phone_1_nr') . "; " : $tel = "";
+        ($this->getValue('phone_2_nr')) ? $tel .= $this->getValue('phone_2_nr') . "; " : $tel .= "";
+        ($this->getValue('cellphone_1_nr')) ? $tel .= $this->getValue('cellphone_1_nr') . "; " : $tel .= "";
+        ($this->getValue('cellphone_2_nr')) ? $tel .= $this->getValue('cellphone_2_nr') . "" : $tel .= "";
 
         return $tel;
     }
@@ -1121,7 +1137,7 @@ class TB_patient extends Person {
                 if (is_array($value)) {
                     foreach ($value as $element) {
                         $temp = explode("|", $element, 3);
-                        $visit_data[$i][$index].=$temp[2] . ", ";
+                        $visit_data[$i][$index] .= $temp[2] . ", ";
                     }
                 } else {
                     if (strpos($value, "|")) {
@@ -1353,35 +1369,35 @@ class TB_patient extends Person {
                       FROM care_tz_arv_relatives
                       WHERE care_tz_arv_registration_id = '$registration_id'";
         if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
-            $table.='<tr>';
-            $table.='<td bgcolor="#F0F8FF" align="center"><strong>File Reference</strong></td>';
-            $table.='<td bgcolor="#F0F8FF" align="center"><strong>Name</strong></td>';
-            $table.='<td bgcolor="#F0F8FF" align="center"><strong>Age</strong></td>';
-            $table.='<td bgcolor="#F0F8FF" align="center"><strong>HIV Status</strong></td>';
-            $table.='<td bgcolor="#F0F8FF" align="center"><strong>HIV Care Status</strong></td>';
-            $table.='<td bgcolor="#F0F8FF" align="center"><strong>Action</strong></td>';
-            $table.='</tr>';
+            $table .= '<tr>';
+            $table .= '<td bgcolor="#F0F8FF" align="center"><strong>File Reference</strong></td>';
+            $table .= '<td bgcolor="#F0F8FF" align="center"><strong>Name</strong></td>';
+            $table .= '<td bgcolor="#F0F8FF" align="center"><strong>Age</strong></td>';
+            $table .= '<td bgcolor="#F0F8FF" align="center"><strong>HIV Status</strong></td>';
+            $table .= '<td bgcolor="#F0F8FF" align="center"><strong>HIV Care Status</strong></td>';
+            $table .= '<td bgcolor="#F0F8FF" align="center"><strong>Action</strong></td>';
+            $table .= '</tr>';
             while ($this->row_elem = $this->res->FetchRow()) {
-                $table.='<tr>';
-                $table.="<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['facility_file_no'] . "</td>";
-                $table.="<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['relative_name'] . "</td>";
-                $table.="<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['age'] . "</td>";
-                $table.="<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['hiv_status'] . "</td>";
-                $table.="<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['hiv_care_status'] . "</td>";
-                $table.="<td bgcolor=\"#F0F8FF\" align=\"center\">";
-                $table.='<a href="' . $root_path . 'arv_family_info_new.php' .
+                $table .= '<tr>';
+                $table .= "<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['facility_file_no'] . "</td>";
+                $table .= "<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['relative_name'] . "</td>";
+                $table .= "<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['age'] . "</td>";
+                $table .= "<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['hiv_status'] . "</td>";
+                $table .= "<td bgcolor=\"#F0F8FF\" align=\"center\">" . $this->row_elem['hiv_care_status'] . "</td>";
+                $table .= "<td bgcolor=\"#F0F8FF\" align=\"center\">";
+                $table .= '<a href="' . $root_path . 'arv_family_info_new.php' .
                         URL_APPEND . '&encounter_nr=' . $_GET['encounter_nr'] . '&pid=' . $_GET['pid'] . '&file_no=' . $this->row_elem['facility_file_no'] . '&mode=edit" target="_parent"' .
                         '"><img src="../../gui/img/control/blue_aqua/en/en_edit_sm.gif" border=0 width="76" height="16" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>';
-                $table.='&nbsp&nbsp';
-                $table.='<a href="' . $root_path . 'arv_delete_relative.php' .
+                $table .= '&nbsp&nbsp';
+                $table .= '<a href="' . $root_path . 'arv_delete_relative.php' .
                         URL_APPEND . '&encounter_nr=' . $_GET['encounter_nr'] . '&pid=' . $_GET['pid'] . '&arv_reg_id=' . $this->row_elem['care_tz_arv_registration_id'] . '&file_no=' . $this->row_elem['facility_file_no'] . '&mode=new" target="_parent"' .
                         '"><img src="../../gui/img/common/default/delete.gif" border=0 width="19" height="19" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>';
-                $table.="</td>";
-                $table.='</tr>';
+                $table .= "</td>";
+                $table .= '</tr>';
 //                $res.= $this->row_elem['relative_name'];
             }
         } else {
-            $table.="<table class=\"mainTable\"><tr><td bgcolor=\"#F0F8FF\" class=\"error2\">No Patient Relative Registered!</td></tr></table>";
+            $table .= "<table class=\"mainTable\"><tr><td bgcolor=\"#F0F8FF\" class=\"error2\">No Patient Relative Registered!</td></tr></table>";
         }
         return $table;
     }

@@ -4,7 +4,7 @@
         <TITLE>TB Menu</TITLE>
         <meta name="Description" content="Hospital and Healthcare Integrated Information System - CARE2x">
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <meta name="Author" content="Dorothea Reichert">
+        <meta name="Author" content="Patrick Mark">
 -->        <script language="javascript">
 
 //    if (parent.frames.length >= 1) {
@@ -76,14 +76,19 @@ $claims_obj->Display_Header($LDTBClinic, '', '');
                                             <TBODY class="submenu">
                                                 <TR> 
                                                     <td height="26" align=center><img src="../../gui/img/common/default/pdata.gif" border=0 width="16" height="16"></td>
-                                                    <TD class="submenu_item"><nobr><a href="tb_overview.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" target="_parent">TB Registered Patients</a></nobr></TD>
-                                    <TD>TB Registered Patients</TD>
+                                                    <TD class="submenu_item"><nobr><a href="tb_overview.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>">TB Registered Patients</a></nobr></TD>
+                                    <TD>Patients Registered to Normal TB Care Programme</TD>
                                 </tr>
                                 <TR> 
-                                    <td height="26" align=center><img src="../../gui/img/common/default/yellowlist.gif" border=0 width="16" height="17"></td>
-                                    <TD class="submenu_item"><nobr><a href="tb_admitted.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" target="_parent">Admitted Patients</a></nobr></TD>
-                            <TD>Admitted Patients</TD>
+                                    <td height="26" align=center><img src="../../gui/img/common/default/pdata.gif" border=0 width="16" height="16"></td>
+                                    <TD class="submenu_item"><nobr><a href="tb_overview_drtb.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>">DR-TB Registered Patients</a></nobr></TD>
+                            <TD>Patients Registered to Drug Resistant TB (DR-TB) Care Programme</TD>
                             </tr>
+<!--                            <TR> 
+                                <td height="26" align=center><img src="../../gui/img/common/default/yellowlist.gif" border=0 width="16" height="17"></td>
+                                <TD class="submenu_item"><nobr><a href="tb_admitted.php<?php // echo URL_APPEND ?>&encounter_nr=<?php // echo $_GET['encounter_nr']; ?>&pid=<?php // echo $_GET['pid'] ?>" >Admitted Patients</a></nobr></TD>
+                            <TD>Admitted Patients</TD>
+                            </tr>-->
                             <TR  height=1> 
                                 <TD colSpan=3 class="vspace"><IMG height=1 src="../../gui/img/common/default/pixel.gif" width=5></TD>
                             </TR>
@@ -93,7 +98,7 @@ $claims_obj->Display_Header($LDTBClinic, '', '');
                                 <TR> 
                                     <td align=center><img src="../../gui/img/common/default/persons.gif" border=0></td>
                                     <TD class="submenu_item"><nobr><a href="../../modules/ambulatory/amb_clinic_patients.php?lang=en&sid=<?php echo session_id(); ?>&origin=pass&target=list&dept_nr=47&checkintern=1">Patients</a></nobr></TD>
-                            <TD>Back to Choosing Patients</TD>
+                            <TD>Back to Choosing Patients in TB Outpatient Clinic</TD>
                             </tr>
                             <TR  height=1> 
                                 <TD colSpan=3 class="vspace"><IMG height=1 src="../../gui/img/common/default/pixel.gif" width=5></TD>
