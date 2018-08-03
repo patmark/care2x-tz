@@ -3,12 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/gui/gui_tb_menu_main.php</file>
-            <file>file:/home/pat/Dropbox/care2x-tz/sql-mod/for_tb_mod/various.sql</file>
             <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/tb_menu_main.php</file>
-            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/tb_overview.php</file>
-            <file>file:/home/pat/Dropbox/care2x-tz/sql-mod/other_to_hlh_update.sql</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/include/care_api_classes/class_tz_tb_patient.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/ambulatory/amb_clinic_patients.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/gui/gui_tb_registration.php</file>
             <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/tb_menu.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/tb_treatment_support.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/nhif/gui/gui_nhif_claims_review.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/include/care_api_classes/class_tz_tb_form_validator.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/gui/gui_tb_menu_main.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/tb_overview.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/tb_registration.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/gui/gui_tb_menu.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/tb/gui/gui_tb_treatment_support.php</file>
+            <file>file:/home/pat/Dropbox/care2x-tz/modules/nursing/nursing-station.php</file>
         </group>
     </open-files>
 </project-private>

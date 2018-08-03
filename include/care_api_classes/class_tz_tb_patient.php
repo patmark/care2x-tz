@@ -43,15 +43,25 @@ class TB_patient extends Person {
             'referrer_id' => '',
             'referrer_other' => '',
             'dotoption_id' => '',
+            'treatment_supporterid' => '',
             'treatment_supporter_name' => '',
             'treatment_supporter_address' => '',
             'treatment_supporter_phone' => '',
             'classification_bysiteid' => '',
+            'patient_household_contactid' => '',
+            'household_contact_name' => '',
+            'household_contact_age' => '',
+            'household_contact_sex' => '',
+            'is_screened' => '',
+            'outcome' => '',
+            'started_medication' => '',
+            'medication' => '',
             'eptb_site' => '',
             'classification_byhistoryid' => '',
             'classification_byhistory_other' => '',
             'hiv_status' => '',
             'hiv_regno' => '',
+            'is_current' => '',
             'on_cpt' => '',
             'date_start_cpt' => '',
             'on_art' => '',
@@ -59,6 +69,17 @@ class TB_patient extends Person {
             'allergies' => '',
             'facility_file_no' => '',
             'file_no' => '',
+            'phase_id' => '',
+            'tb_caseid' => '',
+            'patient_treatment_phaseid' => '',
+            'treatment_phase_drugs' => '',
+            'treatment_phase_dosage' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'start_encounter_nr' => '',
+            'treatment_outcomeid' => '',
+            'outcome_date' => '',
+            'remarks' => '',
             'signature' => $_SESSION['sess_login_username'],
         );
 
@@ -231,10 +252,14 @@ class TB_patient extends Person {
 //                if (in_array($x, $date)) {
 //                    $returnArray[$x] = formatDate2STD($array[$x], $date_format);
 //                } else {
-                    $returnArray[$x] = $array[$x];
+                $returnArray[$x] = $array[$x];
 //                }
             } else {
-                $returnArray[$x] = 'null';
+                if ($array[$x] == 0) {
+                    $returnArray[$x] = $array[$x];
+                } else {
+                    $returnArray[$x] = 'null';
+                }
             }
         }
 
@@ -462,7 +487,50 @@ class TB_patient extends Person {
         return true;
     }
 
-    function updateTBPatientFamilyInfo($data) {
+    function updateTBPatientTreatmentSupport($data) {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $value = $this->prepDataforDB($data);
+
+        if ($debug == true) {
+            echo "<pre>";
+        }
+        $pid = $this->getValue('pid');
+        $updatearray['modify_id'] = $value['signature'];
+        $updatearray['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
+
+        $this->coretable = "care_tb_treatment_supporter";
+
+        //is_current=1';
+        //Check if new entry is set to current and set the rest not to current
+        if ($value['is_current'] == 1) {
+            $updatearray['is_current'] = 0;
+            $this->where = "pid=" . $pid;
+            if (!Core::updateDataFromArray($updatearray, 100, false)) {
+                return false;
+            }
+        }
+//        $updatearray['pid'] = $pid;
+        $updatearray['treatment_supporter_name'] = $value['treatment_supporter_name'];
+        $updatearray['treatment_supporter_address'] = $value['treatment_supporter_address'];
+        $updatearray['treatment_supporter_phone'] = $value['treatment_supporter_phone'];
+        $updatearray['treatment_supporterid'] = $value['treatment_supporterid'];
+
+        $updatearray['is_current'] = $value['is_current'];
+        $this->where = "treatment_supporterid=" . $updatearray['treatment_supporterid'];
+        if (!Core::updateDataFromArray($updatearray, 100, false)) {
+            return false;
+        }
+
+        $updatearray = null;
+        if ($debug == true)
+            echo "</pre>";
+        return true;
+    }
+
+    function insertTBPatientTreatmentSupport($data) {
         global $db;
         $debug = false;
         ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
@@ -473,21 +541,33 @@ class TB_patient extends Person {
             echo "<pre>";
         }
 
-        $updatearray['relative_ctc_id'] = trim(str_replace('-', '', $value['relative_ctc_id']));
-        $updatearray['relative_name'] = $value['relative_name'];
-        $updatearray['care_tz_arv_relatives_code_id'] = $value['care_tz_arv_relatives_code_id'];
-        $updatearray['age'] = $value['age'];
-        $updatearray['hiv_status'] = $value['hiv_status'];
-        $updatearray['hiv_care_status'] = $value['hiv_care_status'];
-        $updatearray['facility_file_no'] = $value['facility_file_no'];
+        $pid = $this->getValue('pid');
+        $updatearray['modify_id'] = $value['signature'];
         $updatearray['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
 
-        $this->where = "care_tz_arv_registration_id=" . $this->district_regno;
-        $this->setTable("care_tz_arv_relatives");
-        $this->where = "facility_file_no=" . $value['file_no'];
-        if (!Core::updateDataFromArray($updatearray, 100, false)) {
+        $this->coretable = "care_tb_treatment_supporter";
+
+        //is_current=1';
+        //Check if new entry is set to current and set the rest not to current
+        if ($value['is_current'] == 1) {
+            $updatearray['is_current'] = 0;
+            $this->where = "pid=" . $pid;
+            if (!Core::updateDataFromArray($updatearray, 100, false)) {
+                return false;
+            }
+        }
+
+        $updatearray['treatment_supporter_name'] = $value['treatment_supporter_name'];
+        $updatearray['treatment_supporter_address'] = $value['treatment_supporter_address'];
+        $updatearray['treatment_supporter_phone'] = $value['treatment_supporter_phone'];
+        $updatearray['treatment_supporterid'] = $value['treatment_supporterid'];
+        $updatearray['pid'] = $pid;
+        $updatearray['is_current'] = $value['is_current'];
+//        $this->where = "treatment_supporterid=" . $updatearray['treatment_supporterid'];
+        if (!Core::insertDataFromArray($updatearray, 100, false)) {
             return false;
         }
+
         $updatearray = null;
         if ($debug == true)
             echo "</pre>";
@@ -510,10 +590,9 @@ class TB_patient extends Person {
         if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
             while ($this->row_elem = $this->res->FetchRow()) {
                 $temp = $this->row_elem[0];
-                $arv_facility_data[$temp] = $this->row_elem[1];
-                ;
+                $tb_facility_data[$temp] = $this->row_elem[1];
             }
-            return $arv_facility_data;
+            return $tb_facility_data;
         } else {
             $this->errors++;
             $this->error_message['facility_info'] = sprintf($this->msg_tpl, "There is no information given about this TB facility!
@@ -539,6 +618,296 @@ class TB_patient extends Person {
         $registrationData['village'] = $this->getValue('citizenship');
         $registrationData['telephone'] = $this->getTelephoneCombined();
         return $registrationData;
+    }
+
+    function getTreatmentSupportData() {
+        //reads the information out of the DB that are entered inside the ARV Administration
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *	FROM care_tb_treatment_supporter
+			WHERE pid= $this->pid";
+
+        if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
+            $treatment_support_data = array();
+            while ($this->row_elem = $this->res->FetchRow()) {
+                array_push($treatment_support_data, $this->row_elem);
+//                $temp = $this->row_elem[0];
+//                $treatment_support_data[$temp] = $this->row_elem[1];
+            }
+            return $treatment_support_data;
+        } else {
+            $this->errors++;
+            $this->error_message['treatment_support'] = sprintf($this->msg_tpl, "There is no information given about Treatment Support!");
+            return false;
+        }
+    }
+
+    function getTBHouseholdData() {
+        //reads the information out of the DB
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *	FROM care_tb_patient_household
+			WHERE pid= $this->pid";
+
+        if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
+            $tb_data = array();
+            while ($this->row_elem = $this->res->FetchRow()) {
+                array_push($tb_data, $this->row_elem);
+            }
+            return $tb_data;
+        } else {
+            $this->errors++;
+            $this->error_message['household_contact'] = sprintf($this->msg_tpl, "There is no information given!");
+            return false;
+        }
+    }
+
+    function getTBPatientHouseholdContact($hcid) {
+        //reads the information out of the DB
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *	FROM care_tb_patient_household
+			WHERE patient_household_contactid= $hcid";
+
+        if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
+            $tb_data = $this->res->FetchRow();
+            $tb_data['signature'] = $_SESSION['sess_login_username'];
+        } else {
+            $this->errors++;
+            $this->error_message['household_contact'] = sprintf($this->msg_tpl, "There is no information given about Treatment Support!");
+            return false;
+        }
+        return $tb_data;
+    }
+
+    function updateTBPatientHouseholdContact($data) {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $value = $this->prepDataforDB($data);
+
+        if ($debug == true) {
+            echo "<pre>";
+        }
+        $pid = $this->getValue('pid');
+        $updatearray['modify_id'] = $value['signature'];
+        $updatearray['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
+
+        $this->coretable = "care_tb_patient_household";
+
+        $updatearray['household_contact_name'] = $value['household_contact_name'];
+        $updatearray['household_contact_age'] = $value['household_contact_age'];
+        $updatearray['household_contact_sex'] = $value['household_contact_sex'];
+        $updatearray['is_screened'] = $value['is_screened'];
+        $updatearray['pid'] = $pid;
+        $updatearray['outcome'] = $value['outcome'];
+        $updatearray['started_medication'] = $value['started_medication'];
+        $updatearray['medication'] = $value['medication'];
+
+        $this->where = "patient_household_contactid=" . $value['patient_household_contactid'];
+
+        if (!Core::updateDataFromArray($updatearray, 100, false)) {
+            return false;
+        }
+
+        $updatearray = null;
+        if ($debug == true)
+            echo "</pre>";
+        return true;
+    }
+
+    function insertTBPatientHouseholdContact($data) {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $value = $this->prepDataforDB($data);
+
+        if ($debug == true) {
+            echo "<pre>";
+        }
+
+        $pid = $this->getValue('pid');
+        $insertarray['household_contact_name'] = $value['household_contact_name'];
+        $insertarray['household_contact_age'] = $value['household_contact_age'];
+        $insertarray['household_contact_sex'] = $value['household_contact_sex'];
+        $insertarray['is_screened'] = $value['is_screened'];
+        $insertarray['pid'] = $pid;
+        $insertarray['outcome'] = $value['outcome'];
+        $insertarray['started_medication'] = $value['started_medication'];
+        $insertarray['medication'] = $value['medication'];
+
+        $insertarray['create_id'] = $value['signature'];
+//        $insertarray['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
+
+        $this->coretable = "care_tb_patient_household";
+
+        if (!Core::insertDataFromArray($insertarray, 100, false)) {
+            return false;
+        }
+
+        $insertarray = null;
+        if ($debug == true)
+            echo "</pre>";
+        return true;
+    }
+
+    function getTreatmentSupportSID($suppid) {
+        //reads the information out of the DB that are entered inside the ARV Administration
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *	FROM care_tb_treatment_supporter
+			WHERE treatment_supporterid= $suppid";
+
+        if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
+            $tb_data = $this->res->FetchRow();
+            $tb_data['signature'] = $_SESSION['sess_login_username'];
+        } else {
+            $this->errors++;
+            $this->error_message['treatment_support'] = sprintf($this->msg_tpl, "There is no information given about Treatment Support!");
+            return false;
+        }
+        return $tb_data;
+    }
+
+    function getTBTreatmentPhaseData() {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *	FROM care_tb_patient_treatment_phases tp,
+                            care_tb_phases p, care_tb_cases c, care_tb_treatment_outcomes o
+			WHERE tp.phase_id = p.phase_id
+                        AND tp.tb_caseid = c.tb_caseid 
+                        AND tp.treatment_outcomeid = o.treatment_outcome_id
+                        AND tp.pid= $this->pid";
+
+        if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
+            $tb_data = array();
+            while ($this->row_elem = $this->res->FetchRow()) {
+                array_push($tb_data, $this->row_elem);
+            }
+            return $tb_data;
+        } else {
+            $this->errors++;
+            $this->error_message['treatment_phases'] = "There is no information given!";
+            return false;
+        }
+    }
+
+    function getTBPatientTreatmentPhase($tphaseid) {
+        //reads the information out of the DB
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *	FROM care_tb_patient_treatment_phases
+			WHERE patient_treatment_phaseid= $tphaseid";
+
+        if ($this->res = $db->Execute($this->sql) AND $this->res->RecordCount()) {
+            $tb_data = $this->res->FetchRow();
+            $tb_data['signature'] = $_SESSION['sess_login_username'];
+        } else {
+            $this->errors++;
+            $this->error_message['treatment_phases'] = sprintf($this->msg_tpl, "There is no information given!");
+            return false;
+        }
+        return $tb_data;
+    }
+
+    function insertTBPatientTreatmentPhase($data) {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $value = $this->prepDataforDB($data);
+
+        if ($debug == true) {
+            echo "<pre>";
+        }
+
+        $insertarray['pid'] = $this->getValue('pid');
+        $insertarray['phase_id'] = $value['phase_id'];
+        $insertarray['tb_caseid'] = $value['tb_caseid'];
+        $insertarray['treatment_phase_drugs'] = $value['treatment_phase_drugs'];
+        $insertarray['treatment_phase_dosage'] = $value['treatment_phase_dosage'];
+
+        $insertarray['start_date'] = $value['start_date'];
+        $insertarray['end_date'] = $value['end_date'];
+        $insertarray['start_encounter_nr'] = $value['start_encounter_nr'];
+        if ($value['treatment_outcomeid'] == '' || $value['treatment_outcomeid'] < 1) {
+            $insertarray['treatment_outcomeid'] = -1;
+        } else {
+            $insertarray['treatment_outcomeid'] = $value['treatment_outcomeid'];
+        }
+        $insertarray['outcome_date'] = $value['outcome_date'];
+        $insertarray['create_id'] = $value['signature'];
+//        $insertarray['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
+
+        $this->coretable = "care_tb_patient_treatment_phases";
+
+        if (!Core::insertDataFromArray($insertarray, 100, false)) {
+            return false;
+        }
+
+        $insertarray = null;
+        if ($debug == true)
+            echo "</pre>";
+        return true;
+    }
+
+    function updateTBPatientTreatmentPhase($data) {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $value = $this->prepDataforDB($data);
+
+        if ($debug == true) {
+            echo "<pre>";
+        }
+        $pid = $this->getValue('pid');
+        $updatearray['modify_id'] = $value['signature'];
+        $updatearray['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
+
+        $this->coretable = "care_tb_patient_treatment_phases";
+
+        $updatearray['pid'] = $pid;
+        $updatearray['phase_id'] = $value['phase_id'];
+        $updatearray['tb_caseid'] = $value['tb_caseid'];
+        $updatearray['treatment_phase_drugs'] = $value['treatment_phase_drugs'];
+        $updatearray['treatment_phase_dosage'] = $value['treatment_phase_dosage'];
+
+        $updatearray['start_date'] = $value['start_date'];
+        $updatearray['end_date'] = $value['end_date'];
+//        $updatearray['start_encounter_nr'] = $value['start_encounter_nr'];
+        if ($value['treatment_outcomeid'] == '' || $value['treatment_outcomeid'] < 1) {
+            $updatearray['treatment_outcomeid'] = -1;
+        } else {
+            $updatearray['treatment_outcomeid'] = $value['treatment_outcomeid'];
+        }
+        $updatearray['outcome_date'] = $value['outcome_date'];
+        $updatearray['create_id'] = $value['signature'];
+
+        $this->where = "patient_treatment_phaseid=" . $value['patient_treatment_phaseid'];
+
+        if (!Core::updateDataFromArray($updatearray, 100, false)) {
+            return false;
+        }
+
+        $updatearray = null;
+        if ($debug == true)
+            echo "</pre>";
+        return true;
     }
 
     function get_region($reg_id) {
@@ -776,6 +1145,57 @@ class TB_patient extends Person {
             while ($this->row_elem = $this->res->FetchRow()) {
 //                array_push($result, $this->row_elem);
                 $result[$this->row_elem['dotoption_id']] = $this->row_elem['dotoption_description'];
+            }
+        }
+        return $result;
+    }
+
+    function get_TreatmentPhase() {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *
+                      FROM care_tb_phases";
+        $result = array('' => '--Select--');
+        if ($this->res = $db->Execute($this->sql)) {
+            while ($this->row_elem = $this->res->FetchRow()) {
+//                array_push($result, $this->row_elem);
+                $result[$this->row_elem['phase_id']] = $this->row_elem['phase_description'];
+            }
+        }
+        return $result;
+    }
+
+    function get_TreatmentCase() {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *
+                      FROM care_tb_cases";
+        $result = array('' => '--Select--');
+        if ($this->res = $db->Execute($this->sql)) {
+            while ($this->row_elem = $this->res->FetchRow()) {
+//                array_push($result, $this->row_elem);
+                $result[$this->row_elem['tb_caseid']] = $this->row_elem['tb_case'];
+            }
+        }
+        return $result;
+    }
+
+    function get_TreatmentOutcomes() {
+        global $db;
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT *
+                      FROM care_tb_treatment_outcomes";
+        $result = array('' => '--Select--');
+        if ($this->res = $db->Execute($this->sql)) {
+            while ($this->row_elem = $this->res->FetchRow()) {
+//                array_push($result, $this->row_elem);
+                $result[$this->row_elem['treatment_outcome_id']] = $this->row_elem['treatment_outcome'];
             }
         }
         return $result;

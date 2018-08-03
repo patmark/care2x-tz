@@ -5,7 +5,11 @@
 require('./roots.php');
 require($root_path . 'include/inc_environment_global.php');
 
-
+//Get the source of script call
+$source = '';
+if (isset($_REQUEST['source'])) {
+    $_SESSION['script_source'] = $_REQUEST['source'];
+}
 
 $lang_tables[] = 'departments.php';
 $lang_tables[] = 'pharmacy.php';
@@ -277,8 +281,14 @@ $smarty->assign('pbBack', FALSE);
 $smarty->assign('pbHelp', "javascript:gethelp('patient_charts.php','Patient&acute;s chart folder :: Overview','','$station','Main folder')");
 
 # href for close button
-$smarty->assign('breakfile', 'javascript:window.close()');
-
+if (isset($_SESSION['script_source']) && $_SESSION['script_source'] == 'tbcare') {
+//    $smarty->assign('breakfile', 'javascript:window.history.back()');
+    $smarty->assign('breakfile', $root_path . 'modules/tb/tb_clinic_pass.php' . URL_REDIRECT_APPEND .
+            "&target=menu&pid=$pid" .
+            "&encounter_nr=$encounter_nr");
+} else {
+    $smarty->assign('breakfile', 'javascript:window.close()');
+}
 # Window bar title
 $smarty->assign('sWindowTitle', ucfirst($result[name_last]) . "," . ucwords($result[name_first]) . " " . $result[date_birth] . " " . $LDPatDataFolder);
 
@@ -469,177 +479,177 @@ ob_start();
 
 <ul><p><br>
 
-    <form  method="post" name="patient_folder" onSubmit="return isColorBarUpdated()">
+            <form  method="post" name="patient_folder" onSubmit="return isColorBarUpdated()">
 
 
-        <?php
+                <?php
 # internal function for the following lines of code only
 
-        function ha() {
-            global $edit;
-            if ($edit) {
-                return '<a href="#">';
-            }
-        }
+                function ha() {
+                    global $edit;
+                    if ($edit) {
+                        return '<a href="#">';
+                    }
+                }
 
-        function he() {
-            global $edit;
-            if ($edit) {
-                return 'onClick="javascript:pullbar(this)"></a><a href="#">';
-            } else {
-                return '>';
-            }
-        }
+                function he() {
+                    global $edit;
+                    if ($edit) {
+                        return 'onClick="javascript:pullbar(this)"></a><a href="#">';
+                    } else {
+                        return '>';
+                    }
+                }
 
-        function hx() {
-            global $edit;
-            if ($edit) {
-                return 'onClick="javascript:pullbar(this)"></a>';
-            } else {
-                return '>';
-            }
-        }
+                function hx() {
+                    global $edit;
+                    if ($edit) {
+                        return 'onClick="javascript:pullbar(this)"></a>';
+                    } else {
+                        return '>';
+                    }
+                }
 
-        function gx() {
-            global $edit;
-            if ($edit) {
-                return 'onClick="javascript:pullGreenbar(this)"></a>';
-            } else {
-                return '>';
-            }
-        }
+                function gx() {
+                    global $edit;
+                    if ($edit) {
+                        return 'onClick="javascript:pullGreenbar(this)"></a>';
+                    } else {
+                        return '>';
+                    }
+                }
 
-        function rx() {
-            global $edit;
-            if ($edit) {
-                return 'onClick="javascript:pullRosebar(this)"></a>';
-            } else {
-                return '>';
-            }
-        }
+                function rx() {
+                    global $edit;
+                    if ($edit) {
+                        return 'onClick="javascript:pullRosebar(this)"></a>';
+                    } else {
+                        return '>';
+                    }
+                }
 
-        function mx() {
-            global $edit;
-            if ($edit) {
-                return 'onClick="javascript:pullMaroonbar(this)"></a>';
-            } else {
-                return '>';
-            }
-        }
+                function mx() {
+                    global $edit;
+                    if ($edit) {
+                        return 'onClick="javascript:pullMaroonbar(this)"></a>';
+                    } else {
+                        return '>';
+                    }
+                }
 
-        require_once($root_path . 'include/care_api_classes/class_notes_nursing.php');
-        include_once($root_path . 'include/care_api_classes/class_person.php');
+                require_once($root_path . 'include/care_api_classes/class_notes_nursing.php');
+                include_once($root_path . 'include/care_api_classes/class_person.php');
 
-        $pobj = new Person;
+                $pobj = new Person;
 
-        $pid = $pobj->GetPidFromEncounter($pn);
-        ?>
+                $pid = $pobj->GetPidFromEncounter($pn);
+                ?>
 
 
-        <script language="javascript" type="text/javascript">
-            <!--
+            <script language="javascript" type="text/javascript">
+                <!--
                     function hideme(str, div, ht) {
-                if (document.getElementById(str).value == "+") {
-                    document.getElementById(str).value = "-";
-                    document.getElementById(div).style.height = ht + 'px';
-                } else {
-                    document.getElementById(str).value = "+";
-                    document.getElementById(div).style.height = "30px";
+                    if (document.getElementById(str).value == "+") {
+                        document.getElementById(str).value = "-";
+                        document.getElementById(div).style.height = ht + 'px';
+                    } else {
+                        document.getElementById(str).value = "+";
+                        document.getElementById(div).style.height = "30px";
+                    }
                 }
-            }
 
-            function extratable() {
-                var my = document.getElementById('extratable');
-                var bt = document.getElementById('bner');
-                if (my.style.display == 'none') {
-                    my.style.display = 'block';
-                    bt.value = 'Hide History';
-                } else {
-                    my.style.display == 'none';
-                    bt.value = 'History';
+                function extratable() {
+                    var my = document.getElementById('extratable');
+                    var bt = document.getElementById('bner');
+                    if (my.style.display == 'none') {
+                        my.style.display = 'block';
+                        bt.value = 'Hide History';
+                    } else {
+                        my.style.display == 'none';
+                        bt.value = 'Histo                    ry';
+                    }
                 }
-            }
 -->
         </script>
 
-        <style type="text/css">
-            <!--
-            .heading {
-                font-family: Tahoma, monospace;
-                font-size: 11px;
-                color: white;
-                background-color: #696969;
-                font:bold 11px Tahoma; color:white; text-transform:uppercase;
-            }
-            -->
-        </style>
+                    <style type="text/css">
+                            <!--
+                            .heading {
+                                font-family: Tahoma, monospace;
+                                font-size: 11px;
+                                color: white;
+                                background-color: #696969;
+                                font:bold 11px Tahoma; color:white; text-transform:uppercase;
+                            }
+                            -->
+                        </style>
 
-        <table width="700px" align='center' border="0" style="min-width:700px;">
-            <tr><td align="right" valign="top">
-                    <table style="border:1px solid #A7A7A7;" cellpadding="1" cellspacing="0">
+                        <table width="700px" align='center' border="0" style="min-width:700px;">
+                            <tr><td align="right" valign="top">
+                                    <table style="border:1px solid #A7A7A7;" cellpadding="1" cellspacing="0">
 
-                        <!-- DIAGNOSIS AND PRESCRIPTIONS -->
-                        <tr>
-                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
-                                <div id="dpDiv" style="width:99%; overflow:hidden; height:140px; background-color:#A7A7A7; padding:2px;">
-                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
+                                        <!-- DIAGNOSIS AND PRESCRIPTIONS -->
+                                        <tr>
+                                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
+                                                <div id="dpDiv" style="width:99%; overflow:hidden; height:140px; background-color:#A7A7A7; padding:2px;">
+                                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
 
-                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
-                                            <tr align="center" valign="middle">
-                                                <td width="30px" height="28">&nbsp;</td>
-                                                <td width="340px" align="center" class="heading">
-                                                    DIAGNOSIS AND PRESCRIPTIONS
-                                                </td>
-                                                <td width="30px">
-                                                    <input id="dpB" onClick="hideme('dpB', 'dpDiv', 140)" type="button" value="-" style="width:20px; float:right;border:1px solid maroon; font-weight:bold; margin:2px;">
-                                                </td>
-                                            </tr>
-                                        </table>
+                                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
+                                                            <tr align="center" valign="middle">
+                                                                <td width="30px" height="28">&nbsp;</td>
+                                                                <td width="340px" align="center" class="heading">
+                                                                    DIAGNOSIS AND PRESCRIPTIONS
+                                                                </td>
+                                                                <td width="30px">
+                                                                    <input id="dpB" onClick="hideme('dpB', 'dpDiv', 140)" type="button" value="-" style="width:20px; float:right;border:1px solid maroon; font-weight:bold; margin:2px;">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
 
-                                    </span>
-                                    <br>
-                                    <center>
-                                        <?php
+                                                    </span>
+                                                    <br>
+                                                    <center>
+                                                        <?php
 // DIAGNOSIS
 
-                                        if ($dept_nr == '43') {
-                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/diagnostics_tz/icd10_quicklist.php?sid=' . $sid . '&encounter=' . $pn . '&reference=quicklist&quicklist=160\'" value="' . $LDDentaldiagnoses . '">';
-                                        } else {
-                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/diagnostics_tz/icd10_quicklist.php?sid=' . $sid . '&encounter=' . $pn . '&lang=en&ntid=false&externalcall=true&target=search&1=1&ispopup=true&backpath_diag=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn) . '\'" value="' . $LDDiagnoses . '">';
-                                        }
+                                                        if ($dept_nr == '43') {
+                                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/diagnostics_tz/icd10_quicklist.php?sid=' . $sid . '&encounter=' . $pn . '&reference=quicklist&quicklist=160\'" value="' . $LDDentaldiagnoses . '">';
+                                                        } else {
+                                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/diagnostics_tz/icd10_quicklist.php?sid=' . $sid . '&encounter=' . $pn . '&lang=en&ntid=false&externalcall=true&target=search&1=1&ispopup=true&backpath_diag=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn) . '\'" value="' . $LDDiagnoses . '">';
+                                                        }
 
-                                        echo '<br />';
+                                                        echo '<br />';
 
 
 // PRESCRIPTIONS
-                                        if ($dept_nr == '43') {
-                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDPrescrWithoutServices . '"><br>
+                                                        if ($dept_nr == '43') {
+                                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDPrescrWithoutServices . '"><br>
 						  <input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDServices . '"><br>
 						  <input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=proc&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDProcedures . '">';
-                                        } else {
-                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=false&help_site=patient_charts&target=search&1=1&prescrServ=&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDPrescrWithoutServices . '"><br>' .
-                                            '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=serv&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDServices . '"><br>' .
-                                            '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=proc&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDProcedures . '">';
-                                        }
-                                        ?>
-                                    </center>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- CREATE IMAGES -->
-                        <tr>
-                            <td  colspan="3" align="center" valign="top" <?php echo 'background="' . createBgSkin($root_path, 'folderskin2.jpg') . '"'; ?>>
+                                                        } else {
+                                                            echo '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=false&help_site=patient_charts&target=search&1=1&prescrServ=&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDPrescrWithoutServices . '"><br>' .
+                                                            '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=serv&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDServices . '"><br>' .
+                                                            '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="window.location.href=\'' . $root_path . 'modules/registration_admission/show_prescription_doc.php' . URL_REDIRECT_APPEND . '$sid=' . $SID . '&pn=' . $pn . '&lang=en&ntid=false&externalcall=true&help_site=patient_charts&target=search&1=1&prescrServ=proc&backpath=' . urlencode($_SERVER["PHP_SELF"] . URL_APPEND . '&pn=' . $pn . '&edit=1') . '\'" value="' . $LDProcedures . '">';
+                                                        }
+                                                        ?>
+                                                    </center>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!-- CREATE IMAGES -->
+                                        <tr>
+                                            <td  colspan="3" align="center" valign="top" <?php echo 'background="' . createBgSkin($root_path, 'folderskin2.jpg') . '"'; ?>>
 
 
-                                <?PHP
-                                echo '<table width="868" border="0" cellpadding="1" cellspacing="1" style="width:500px; overflow:hidden;">';
+                                                <?PHP
+                                                echo '<table width="868" border="0" cellpadding="1" cellspacing="1" style="width:500px; overflow:hidden;">';
 
-                                '<tr><td colspan="3" bgcolor="#696969"><nobr>';
+                                                '<tr><td colspan="3" bgcolor="#696969"><nobr>';
 
 //==================================================================
 
-                                /* Now create the first group of color event signaller */
-                                echo ha() . '<img
+                                                /* Now create the first group of color event signaller */
+                                                echo ha() . '<img
 		' . createComIcon($root_path, 'qbar_' . $event['yellow'] . '_yellow.gif', '0') . ' name="yellow" ' . he() . '<img
 		' . createComIcon($root_path, 'qbar_' . $event['black'] . '_black.gif', '0') . ' name="black" ' . he() . '<img
 		' . createComIcon($root_path, 'qbar_' . $event['blue_pale'] . '_blue_pale.gif', '0') . ' name="blue_pale" ' . he() . '<img
@@ -658,12 +668,12 @@ ob_start();
 		' . createComIcon($root_path, 'qbar_trans.gif', '0') . '>';
 
 
-                                /* Create the maroon bars */
+                                                /* Create the maroon bars */
 //  echo ha().'<img
 // '.createComIcon($root_path,'qbar_'.$event['maroon'].'_maroon.gif','0').' alt="Maroon"  name="maroon'.'" '.mx();
 
-                                /* Create the green bars */
-                                /* Note $h is used here as counter  */
+                                                /* Create the green bars */
+                                                /* Note $h is used here as counter  */
 //for ($h = 1; $h < 8; $h++) {
 //    echo ha() . '<img
 //		 ' . createComIcon($root_path, 'qbar_' . $event['rose_' . $h] . '_green.gif', '0') . ' alt="' . $LDFullDayName[$h] . '"  name="green_' . $h . '" ' . gx();
@@ -671,8 +681,8 @@ ob_start();
 //echo '<img
 //		' . createComIcon($root_path, 'qbar_trans.gif', '0') . '>';
 //
-                                /* Create the rose bars */
-                                /* Note $h is used here as counter  */
+                                                /* Create the rose bars */
+                                                /* Note $h is used here as counter  */
 //for ($h = 1; $h < 25; $h++) {
 //    echo ha() . '<img
 //			 ' . createComIcon($root_path, 'qbar_' . $event['rose_' . $h] . '_rose.gif', '0') . ' alt="' . $h . ' ' . $LDHour . '"  name="rose_' . $h . '" ' . rx();
@@ -682,23 +692,23 @@ ob_start();
 //}
 
 
-                                echo '
+                                                echo '
 			 <tr bgcolor="#696969" >
 			 <td colspan=3   background="' . createBgSkin($root_path, 'folderskin2.jpg') . '">&nbsp;</td>
 			 </tr>' .
-                                '' .
-                                '';
+                                                '' .
+                                                '';
 
-                                echo '</nobr></td></tr>';
+                                                echo '</nobr></td></tr>';
 
-                                echo '<tr  bgcolor="#696969" >
+                                                echo '<tr  bgcolor="#696969" >
 			<td  background="' . createBgSkin($root_path, 'folderskin2.jpg') . '" width="10px">&nbsp;</td>
 				<td valign="top" bgcolor="#ffffff">';
 
 
-                                echo '<img src="' . $root_path . 'main/imgcreator/barcode_label_single_large.php?sid=' . $sid . '&lang=' . $lang . '&fen=' . $full_en . '&en=' . $pn . '&pid=' . $pid . '" width=282 height=178 align="left" hspace=5 vspace=5>';
+                                                echo '<img src="' . $root_path . 'main/imgcreator/barcode_label_single_large.php?sid=' . $sid . '&lang=' . $lang . '&fen=' . $full_en . '&en=' . $pn . '&pid=' . $pid . '" width=282 height=178 align="left" hspace=5 vspace=5>';
 
-                                echo '
+                                                echo '
 		<table border=0 cellspacing=1 cellpadding=0 width="140px" style="border:0px solid black;">
 		  <tr>
 		    <td bgcolor="#ffff00"><font size=1>&nbsp;&nbsp;&nbsp;</font></td>
@@ -764,361 +774,361 @@ ob_start();
 		</table>
 		';
 
-                                echo '</td>
+                                                echo '</td>
 			<td background="' . createBgSkin($root_path, 'folderskin2.jpg') . '" width="10px">&nbsp;
 			</td>
 			</tr>
 			</table>';
-                                ?>
+                                                ?>
 
 
-                            </td>
-                        </tr>
+                                            </td>
+                                        </tr>
 
-                    </table>
+                                    </table>
 
-                </td>
+                                </td>
 
-                <td valign="top" align="left">
-                    <table border="0" align="center" cellpadding="1" cellspacing="0" style="width:100px; overflow:hidden; border:1px solid #A7A7A7;">
-                        <!--
-                                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                        -->
-
-
-                        <!-- NOTES AND APPOINTMENTS -->
-                        <tr>
-                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
-                                <div id="pDiv" style="width:100%; overflow:hidden; height:88px; background-color:#A7A7A7; padding:2px;">
-                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
-
-                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
-                                            <tr align="center" valign="middle">
-                                                <td width="30px" height="28">&nbsp;</td>
-                                                <td width="340px" align="center" class="heading">
-                                                    Patient Notes
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                    </span>
-                                    <br>
-                                    <center>
-                                        <?php
-                                        echo '' . // view notes
-                                        '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 9px 6px;" type = "button" value = "Patient Notes" onClick="window.location.href=\'../../modules/dental/gui_patient_history.php?sid=' . $sid . '&ntid=false&lang=en&pid=' . $pid . '&encounter=' . $pn . '&frm=chart\'">' .
-                                        '' .
-                                        '<br />' .
-                                        '' . // enter new note
-                                        '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type = "button" value = "Enter Patient Notes" onClick="window.location.href=\'../../modules/dental/gui_patient_history.php?sid=' . $sid . '&ntid=false&lang=en&pid=' . $pid . '&mode=new&encounter=' . $pn . '&frm=chart\'">' .
-                                        //'<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type = "button" value = "Patient HistoryYY" onClick="window.location.href=\'../../modules/registration_admission/show_encounter_list.php?sid='.$sid.'&ntid=false&lang=en&pid='.$pid.'&target=search\'">' .
-                                        '' .
-                                        //
-
-                                        '<br />' .
-                                        '' .
-                                        //'<input  style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="javascript:window.location.href=\''.$root_path.'modules/appointment_scheduler/appt_main_pass.php?sid='.$sid.'&ntid=false&lang=en&dept_nr=43&'. $_SESSION['deptnr'] .'dept_name=\'" value="Appointments">' .
-                                        '';
-                                        ?>
-
-                                    </center>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- RADIOLOGY -->
-                        <tr>
-                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
-                                <div id="radDiv" style="width:100%; overflow:hidden; height:85px; background-color:#A7A7A7; padding:2px;">
-                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
-
-                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
-                                            <tr align="center" valign="middle">
-                                                <td width="30px" height="28">&nbsp;</td>
-                                                <td width="340px" align="center" class="heading">
-                                                    Radiology
-
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                    </span>
-                                    <br>
-                                    <center>
-                                        <?php
-                                        $rads = $rad_obj->GetRadiologyBatchNo($pn);
+                                <td valign="top" align="left">
+                                    <table border="0" align="center" cellpadding="1" cellspacing="0" style="width:100px; overflow:hidden; border:1px solid #A7A7A7;">
+                                        <!--
+                                                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                                        -->
 
 
-                                        echo '' . // RADIOLOGY REQUEST
-                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" ' .
-                                        'onClick="javascript:window.location.href=\'' . $root_path . 'modules/nursing/nursing-station-patientdaten-doconsil-radio.php?sid=' . $sid . '&ntid=false&lang=en&pn=' . $pn . '&edit=1&status=&target=radio&user_origin=' . $user_origin . '&noresize=1&mode=\'"' .
-                                        ' value="Radiology Request">' .
-                                        '';
+                                        <!-- NOTES AND APPOINTMENTS -->
+                                        <tr>
+                                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
+                                                <div id="pDiv" style="width:100%; overflow:hidden; height:88px; background-color:#A7A7A7; padding:2px;">
+                                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
+
+                                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
+                                                            <tr align="center" valign="middle">
+                                                                <td width="30px" height="28">&nbsp;</td>
+                                                                <td width="340px" align="center" class="heading">
+                                                                    Patient Notes
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                    </span>
+                                                    <br>
+                                                    <center>
+                                                        <?php
+                                                        echo '' . // view notes
+                                                        '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 9px 6px;" type = "button" value = "Patient Notes" onClick="window.location.href=\'../../modules/dental/gui_patient_history.php?sid=' . $sid . '&ntid=false&lang=en&pid=' . $pid . '&encounter=' . $pn . '&frm=chart\'">' .
+                                                        '' .
+                                                        '<br />' .
+                                                        '' . // enter new note
+                                                        '<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type = "button" value = "Enter Patient Notes" onClick="window.location.href=\'../../modules/dental/gui_patient_history.php?sid=' . $sid . '&ntid=false&lang=en&pid=' . $pid . '&mode=new&encounter=' . $pn . '&frm=chart\'">' .
+                                                        //'<input style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type = "button" value = "Patient HistoryYY" onClick="window.location.href=\'../../modules/registration_admission/show_encounter_list.php?sid='.$sid.'&ntid=false&lang=en&pid='.$pid.'&target=search\'">' .
+                                                        '' .
+                                                        //
+
+                                                        '<br />' .
+                                                        '' .
+                                                        //'<input  style="width:220px; overflow:hidden; border:1px solid white; margin:0px 0px 7px 6px;" type="button" onClick="javascript:window.location.href=\''.$root_path.'modules/appointment_scheduler/appt_main_pass.php?sid='.$sid.'&ntid=false&lang=en&dept_nr=43&'. $_SESSION['deptnr'] .'dept_name=\'" value="Appointments">' .
+                                                        '';
+                                                        ?>
+
+                                                    </center>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- RADIOLOGY -->
+                                        <tr>
+                                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
+                                                <div id="radDiv" style="width:100%; overflow:hidden; height:85px; background-color:#A7A7A7; padding:2px;">
+                                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
+
+                                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
+                                                            <tr align="center" valign="middle">
+                                                                <td width="30px" height="28">&nbsp;</td>
+                                                                <td width="340px" align="center" class="heading">
+                                                                    Radiology
+
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                    </span>
+                                                    <br>
+                                                    <center>
+                                                        <?php
+                                                        $rads = $rad_obj->GetRadiologyBatchNo($pn);
+
+
+                                                        echo '' . // RADIOLOGY REQUEST
+                                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" ' .
+                                                        'onClick="javascript:window.location.href=\'' . $root_path . 'modules/nursing/nursing-station-patientdaten-doconsil-radio.php?sid=' . $sid . '&ntid=false&lang=en&pn=' . $pn . '&edit=1&status=&target=radio&user_origin=' . $user_origin . '&noresize=1&mode=\'"' .
+                                                        ' value="Radiology Request">' .
+                                                        '';
 
 //                                                        if ($rads != 'none') {
-                                        echo '<br />' .
-                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" ' .
-                                        'onClick="javascript:window.location.href=\'' . $root_path . 'modules/radiology/list_test_findings_radio.php?sid=' . $sid . '&lang=en&edit=' . $edit . '&mode=done&target=admin&subtarget=radio&batch_nr=' . $rads . '&pn=' . $pn . '&user_origin=' . $user_origin . '&entry_date=0000-00-00\'"' .
-                                        ' value="Radiology Report(s)">';
+                                                        echo '<br />' .
+                                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" ' .
+                                                        'onClick="javascript:window.location.href=\'' . $root_path . 'modules/radiology/list_test_findings_radio.php?sid=' . $sid . '&lang=en&edit=' . $edit . '&mode=done&target=admin&subtarget=radio&batch_nr=' . $rads . '&pn=' . $pn . '&user_origin=' . $user_origin . '&entry_date=0000-00-00\'"' .
+                                                        ' value="Radiology Report(s)">';
 //                                                        }
-                                        ?>
+                                                        ?>
 
-                                    </center>
-                                </div>
-                            </td>
-                        </tr>
-
-
-                        <!-- LABORATORY -->
-                        <tr>
-                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
-                                <div id="jj" style="width:100%; overflow:hidden; height:85px; background-color:#A7A7A7; padding:2px;">
-                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
-
-                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
-                                            <tr align="center" valign="middle">
-                                                <td width="30px" height="28">&nbsp;</td>
-                                                <td width="340px" align="center" class="heading">
-                                                    LABORATORY
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                    </span>
-                                    <br>
-                                    <center>
-                                        <?php
-                                        echo '' . // LABORATORY REQUEST
-                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" onClick="javascript:window.location.href=\'' . $root_path . 'modules/nursing/nursing-station-patientdaten-doconsil-chemlabor.php' . URL_REDIRECT_APPEND . '&station=' . $station . '&pn=' . $pn . '&user_origin=' . $user_origin . '&target=chemlabor&noresize=1&edit=' . $edit . '\'" value="' . $LDLabRequest . '">' .
-                                        '' .
-                                        '<br />' .
-                                        '' .
-                                        '' . // LABORATORY REPORTS
-                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" onClick="javascript:window.location.href=\'' . $root_path . 'modules/laboratory/labor_datalist_noedit.php' . URL_REDIRECT_APPEND . '&station=' . $station . '&pn=' . $pn . '&user_origin=' . $user_origin . '&edit=' . $edit . '\'" value="' . $LDLabReports . '">' .
-                                        '';
-                                        ?>
-                                    </center>
-                                </div>
-                                <div style="background-color:#A7A7A7;">
-                                                    <a href="<?php echo $root_path."modules/registration_admission/show_appointment.php"?><?php echo URL_APPEND ?>&pid=<?php echo $pid ?>&target=<?php echo $target ?>"><input style="width: 220px; border: 1px solid main; background-color: lightblue; margin: 0px 6px 7px 0px; overflow:hidden;" type="button" value="APPOINTMENTS"></a>
+                                                    </center>
                                                 </div>
-                            </td>
-                        </tr>
+                                            </td>
+                                        </tr>
 
 
-                        <!-- OTHER REQUESTS -->
-                        <tr>
-                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
-                                <div id="otherDiv" style="width:100%; overflow:hidden; height:55px; background-color:#A7A7A7; padding:2px;">
-                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
+                                        <!-- LABORATORY -->
+                                        <tr>
+                                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
+                                                <div id="jj" style="width:100%; overflow:hidden; height:85px; background-color:#A7A7A7; padding:2px;">
+                                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
 
-                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
-                                            <tr align="center" valign="middle">
-                                                <td width="30px" height="28">&nbsp;</td>
-                                                <td width="340px" align="center" class="heading">
-                                                    Consultation Requests
-                                                </td>
-                                            </tr>
-                                        </table>
+                                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
+                                                            <tr align="center" valign="middle">
+                                                                <td width="30px" height="28">&nbsp;</td>
+                                                                <td width="340px" align="center" class="heading">
+                                                                    LABORATORY
+                                                                </td>
+                                                            </tr>
+                                                        </table>
 
-                                    </span>
-                                    <br>
-                                    <center>
+                                                    </span>
+                                                    <br>
+                                                    <center>
+                                                        <?php
+                                                        echo '' . // LABORATORY REQUEST
+                                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" onClick="javascript:window.location.href=\'' . $root_path . 'modules/nursing/nursing-station-patientdaten-doconsil-chemlabor.php' . URL_REDIRECT_APPEND . '&station=' . $station . '&pn=' . $pn . '&user_origin=' . $user_origin . '&target=chemlabor&noresize=1&edit=' . $edit . '\'" value="' . $LDLabRequest . '">' .
+                                                        '' .
+                                                        '<br />' .
+                                                        '' .
+                                                        '' . // LABORATORY REPORTS
+                                                        '<input style="width:220px; overflow:hidden; border:1px solid maroon; margin:0px 6px 7px 0px;" type="button" onClick="javascript:window.location.href=\'' . $root_path . 'modules/laboratory/labor_datalist_noedit.php' . URL_REDIRECT_APPEND . '&station=' . $station . '&pn=' . $pn . '&user_origin=' . $user_origin . '&edit=' . $edit . '\'" value="' . $LDLabReports . '">' .
+                                                        '';
+                                                        ?>
+                                                    </center>
+                                                </div>
+                                                <div style="background-color:#A7A7A7;">
+                                                    <a href="<?php echo $root_path . "modules/registration_admission/show_appointment.php" ?><?php echo URL_APPEND ?>&pid=<?php echo $pid ?>&target=<?php echo $target ?>"><input style="width: 220px; border: 1px solid main; background-color: lightblue; margin: 0px 6px 7px 0px; overflow:hidden;" type="button" value="APPOINTMENTS"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                        <?php
-                                        // OTHER REQUESTS
-                                        //if($edit){
 
-                                        echo '<select style="margin:0px 6px 7px 0px; width:220px; border:1px solid maroon;"
+                                        <!-- OTHER REQUESTS -->
+                                        <tr>
+                                            <td  colspan="3" align="center" valign="top" bgcolor="#696969">
+                                                <div id="otherDiv" style="width:100%; overflow:hidden; height:55px; background-color:#A7A7A7; padding:2px;">
+                                                    <span style="float:left; background-color:#696969; text-align:center; white-space:nowrap; width:100%; margin:0px 0px 3px 0px; background-color:#696969; color:white; border-bottom:1px solid maroon; font:bold 11px Tahoma, monospace; ">
+
+                                                        <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0">
+                                                            <tr align="center" valign="middle">
+                                                                <td width="30px" height="28">&nbsp;</td>
+                                                                <td width="340px" align="center" class="heading">
+                                                                    Consultation Requests
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                    </span>
+                                                    <br>
+                                                    <center>
+
+                                                        <?php
+                                                        // OTHER REQUESTS
+                                                        //if($edit){
+
+                                                        echo '<select style="margin:0px 6px 7px 0px; width:220px; border:1px solid maroon;"
 					name="konsiltyp" size="1" onChange=makekonsil(this.value)>
 					<option value="">ConsultationRequest</option>';
 
-                                        while (list($x, $v) = each($medical_depts)) {
-                                            //echo'
-                                            //<option value="'.$v['nr'].'">';
-                                            echo'
+                                                        while (list($x, $v) = each($medical_depts)) {
+                                                            //echo'
+                                                            //<option value="'.$v['nr'].'">';
+                                                            echo'
 						<option value="' . $v['nr'] . '~' . $v['id'] . '">';
-                                            $buffer = $v['LD_var'];
-                                            if (isset($$buffer) && !empty($$buffer))
-                                                echo $$buffer;
-                                            else
-                                                echo $v['name_formal'];
-                                            echo '</option>';
-                                        }
-                                        echo '
+                                                            $buffer = $v['LD_var'];
+                                                            if (isset($$buffer) && !empty($$buffer))
+                                                                echo $$buffer;
+                                                            else
+                                                                echo $v['name_formal'];
+                                                            echo '</option>';
+                                                        }
+                                                        echo '
 					</select>';
-                                        //}
-                                        ?>
+                                                        //}
+                                                        ?>
 
-                                    </center>
-                                </div>
-                            </td>
-                        </tr>
+                                                    </center>
+                                                </div>
+                                            </td>
+                                        </tr>
 
 
-                        <!-- measurements -->
-                        <!--
-                        <tr>
-                            <td style="text-align:center;  padding:5px; border:2px solid white;">
-                                <a href="#" onclick="window.location.href = '../../modules/registration_admission/amb_clinic_history.php?pid=<?php echo $pid; ?>&target=<?php echo $target; ?>'" title="vital sign">
-                                   vital sign
-                                </a>
-                            </td>
-                        </tr>
-                        -->
+                                        <!-- measurements -->
+                                        <!--
+                                        <tr>
+                                            <td style="text-align:center;  padding:5px; border:2px solid white;">
+                                                <a href="#" onclick="window.location.href = '../../modules/registration_admission/amb_clinic_history.php?pid=<?php echo $pid; ?>&target=<?php echo $target; ?>'" title="vital sign">
+                                                   vital sign
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        -->
 
-                    </table>
-                </td>
-            <tr>
-            <tr>
-                <td colspan="2" style="padding-top:15px;">
-                    <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0" style=" border:1px solid #ccc;">
-                        <tr align="center" valign="middle">
-                            <td align="center" class="heading" style="color:black; text-transform:uppercase; padding:6px; text-align:left; background:none !important; font-size:15px;">
-                                Patient History
-                                <input id="bner" onClick="extratable()"
-                                       type="button"  style="width:100px; float:right;border:1px solid maroon; margin:-2px;">
-                            </td>
-                        </tr>
-                    </table>
+                                    </table>
+                                </td>
+                            <tr>
+                            <tr>
+                                <td colspan="2" style="padding-top:15px;">
+                                    <table width="100%" height="28" border="0" align="center" cellpadding="0" cellspacing="0" style=" border:1px solid #ccc;">
+                                        <tr align="center" valign="middle">
+                                            <td align="center" class="heading" style="color:black; text-transform:uppercase; padding:6px; text-align:left; background:none !important; font-size:15px;">
+                                                Patient History
+                                                <input id="bner" onClick="extratable()"
+                                                       type="button"  style="width:100px; float:right;border:1px solid maroon; margin:-2px;">
+                                            </td>
+                                        </tr>
+                                    </table>
 
-                    <table width="100%"  border="0" align="center" cellpadding="10" cellspacing="1" id="extratable" style="">
+                                    <table width="100%"  border="0" align="center" cellpadding="10" cellspacing="1" id="extratable" style="">
 
-                        <tr>
-                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>notes</strong></td>
-                            <td width="85%" style="border-top:3px solid red;">
-                                <table width="100%"  border="0" align="center" cellpadding="4" cellspacing="1" bgcolor="#A6BFA2" class="style3">
-                                    <tr bgcolor="#D2DFD0">
-                                        <td width="93"><strong>Date</strong></td>
-                                        <td width="368"><strong>Patient Notes </strong></td>
-                                        <td width="101"><strong>Written by:</strong></td>
-                                    </tr>
-                                    <?php $alergic->PrintPatientNotes($pid, $encounter_nr, $LDNoRecordFound, $c1, $c2, $records); ?>
-                                </table>
-                            </td>
-                        </tr> 
+                                        <tr>
+                                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>notes</strong></td>
+                                            <td width="85%" style="border-top:3px solid red;">
+                                                <table width="100%"  border="0" align="center" cellpadding="4" cellspacing="1" bgcolor="#A6BFA2" class="style3">
+                                                    <tr bgcolor="#D2DFD0">
+                                                        <td width="93"><strong>Date</strong></td>
+                                                        <td width="368"><strong>Patient Notes </strong></td>
+                                                        <td width="101"><strong>Written by:</strong></td>
+                                                    </tr>
+                                                    <?php $alergic->PrintPatientNotes($pid, $encounter_nr, $LDNoRecordFound, $c1, $c2, $records); ?>
+                                                </table>
+                                            </td>
+                                        </tr> 
 
-                        <tr>
-                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Laboratory</strong></td>
-                            <td width="85%" style="border-top:3px solid red;">
-                                <?php ?>
-                                <?php
-                                include('./labor_datalist_history.php');
-                                ?>
+                                        <tr>
+                                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Laboratory</strong></td>
+                                            <td width="85%" style="border-top:3px solid red;">
+                                                <?php ?>
+                                                <?php
+                                                include('./labor_datalist_history.php');
+                                                ?>
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Diagnosis</strong></td>
-                            <td width="85%" style="border-top:3px solid red;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Diagnosis</strong></td>
+                                            <td width="85%" style="border-top:3px solid red;">
 
-                                <?php $diagnostic_obj->Display_Archived_Diagnoses($pid); ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Prescriptions</strong></td>
-                            <td width="85%" style="border-top:3px solid red;">
-                                <?php include('./labor_datalist_prescription.php'); ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Vital Signs</strong></td>
-                            <td width="85%" style="border-top:3px solid red;">
-                                <?php include('./vital_sign.php'); ?>
-                            </td>
-                        </tr>
-                        <tr align="center" valign="middle">
-                            <td align="center" colspan=2 style="border-top:3px solid red;">
-                                <input id="bner" onClick="window.location.href = './nursing-station-patientdaten_print.php<?php print "?&sid=" . $_GET['sid'] . "&pday=" . $_GET['pday'] . "&pn=" . $_GET['pn'] . "&lang=" . $_GET['lang'] . "&pday=" . $_GET['pday'] . "&pmonth=" . $_GET['pmonth'] . "&pyear=" . $_GET['pyear'] . "&pid=" . (($pid != '') ? $pid : $_SESSION['sess_pid']); ?>'"
-                                       type="button" value="PRINT" style="width:100px; border:1px solid maroon; margin:-2px;">
+                                                <?php $diagnostic_obj->Display_Archived_Diagnoses($pid); ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Prescriptions</strong></td>
+                                            <td width="85%" style="border-top:3px solid red;">
+                                                <?php include('./labor_datalist_prescription.php'); ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="15%" bgcolor="#D2DFD0" style="border-top:3px solid red;" valign="top"><strong>Vital Signs</strong></td>
+                                            <td width="85%" style="border-top:3px solid red;">
+                                                <?php include('./vital_sign.php'); ?>
+                                            </td>
+                                        </tr>
+                                        <tr align="center" valign="middle">
+                                            <td align="center" colspan=2 style="border-top:3px solid red;">
+                                                <input id="bner" onClick="window.location.href = './nursing-station-patientdaten_print.php<?php print "?&sid=" . $_GET['sid'] . "&pday=" . $_GET['pday'] . "&pn=" . $_GET['pn'] . "&lang=" . $_GET['lang'] . "&pday=" . $_GET['pday'] . "&pmonth=" . $_GET['pmonth'] . "&pyear=" . $_GET['pyear'] . "&pid=" . (($pid != '') ? $pid : $_SESSION['sess_pid']); ?>'"
+                                                       type="button" value="PRINT" style="width:100px; border:1px solid maroon; margin:-2px;">
 
 <!--                                <input id="bner" onClick="window.print()"
                                        type="button" value="PRINT" style="width:100px; border:1px solid maroon; margin:-2px;">-->
 
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
 
 
 
 
-        <input type="hidden" name="sid" value="<?php echo $sid ?>">
-        <input type="hidden" name="lang" value="<?php echo $lang ?>">
-        <input type="hidden" name="dept_nr" value="<?php echo $dept_nr ?>">
-        <input type="hidden" name="pn" value="<?php echo $pn ?>">
+                        <input type="hidden" name="sid" value="<?php echo $sid ?>">
+                        <input type="hidden" name="lang" value="<?php echo $lang ?>">
+                        <input type="hidden" name="dept_nr" value="<?php echo $dept_nr ?>">
+                        <input type="hidden" name="pn" value="<?php echo $pn ?>">
 
-        <?php
-        # If in edit mode create the hidden items
-        if ($edit) {
-            ?>
+                        <?php
+                        # If in edit mode create the hidden items
+                        if ($edit) {
+                            ?>
 
-            <input type="hidden" name="yellow" value="<?php echo $event['yellow'] ?>">
-            <input type="hidden" name="black" value="<?php echo $event['black'] ?>">
-            <input type="hidden" name="blue_pale" value="<?php echo $event['blue_pale'] ?>">
-            <input type="hidden" name="brown" value="<?php echo $event['brown'] ?>">
-            <input type="hidden" name="pink" value="<?php echo $event['pink'] ?>">
-            <input type="hidden" name="yellow_pale" value="<?php echo $event['yellow_pale'] ?>">
-            <input type="hidden" name="red" value="<?php echo $event['red'] ?>">
-            <input type="hidden" name="green_pale" value="<?php echo $event['green_pale'] ?>">
-            <input type="hidden" name="violet" value="<?php echo $event['violet'] ?>">
-            <input type="hidden" name="blue" value="<?php echo $event['blue'] ?>">
-            <input type="hidden" name="biege" value="<?php echo $event['biege'] ?>">
-            <input type="hidden" name="orange" value="<?php echo $event['orange'] ?>">
-            <input type="hidden" name="green_1" value="<?php echo $event['green_1'] ?>">
-            <input type="hidden" name="green_2" value="<?php echo $event['green_2'] ?>">
-            <input type="hidden" name="green_3" value="<?php echo $event['green_3'] ?>">
-            <input type="hidden" name="green_4" value="<?php echo $event['green_4'] ?>">
-            <input type="hidden" name="green_5" value="<?php echo $event['green_5'] ?>">
-            <input type="hidden" name="green_6" value="<?php echo $event['green_6'] ?>">
-            <input type="hidden" name="green_7" value="<?php echo $event['green_7'] ?>">
-            <input type="hidden" name="rose_1" value="<?php echo $event['rose_1'] ?>">
-            <input type="hidden" name="rose_2" value="<?php echo $event['rose_2'] ?>">
-            <input type="hidden" name="rose_3" value="<?php echo $event['rose_3'] ?>">
-            <input type="hidden" name="rose_4" value="<?php echo $event['rose_4'] ?>">
-            <input type="hidden" name="rose_5" value="<?php echo $event['rose_5'] ?>">
-            <input type="hidden" name="rose_6" value="<?php echo $event['rose_6'] ?>">
-            <input type="hidden" name="rose_7" value="<?php echo $event['rose_7'] ?>">
-            <input type="hidden" name="rose_8" value="<?php echo $event['rose_8'] ?>">
-            <input type="hidden" name="rose_9" value="<?php echo $event['rose_9'] ?>">
-            <input type="hidden" name="rose_10" value="<?php echo $event['rose_10'] ?>">
-            <input type="hidden" name="rose_11" value="<?php echo $event['rose_11'] ?>">
-            <input type="hidden" name="rose_12" value="<?php echo $event['rose_12'] ?>">
-            <input type="hidden" name="rose_13" value="<?php echo $event['rose_13'] ?>">
-            <input type="hidden" name="rose_14" value="<?php echo $event['rose_14'] ?>">
-            <input type="hidden" name="rose_15" value="<?php echo $event['rose_15'] ?>">
-            <input type="hidden" name="rose_16" value="<?php echo $event['rose_16'] ?>">
-            <input type="hidden" name="rose_17" value="<?php echo $event['rose_17'] ?>">
-            <input type="hidden" name="rose_18" value="<?php echo $event['rose_18'] ?>">
-            <input type="hidden" name="rose_19" value="<?php echo $event['rose_19'] ?>">
-            <input type="hidden" name="rose_20" value="<?php echo $event['rose_20'] ?>">
-            <input type="hidden" name="rose_21" value="<?php echo $event['rose_21'] ?>">
-            <input type="hidden" name="rose_22" value="<?php echo $event['rose_22'] ?>">
-            <input type="hidden" name="rose_23" value="<?php echo $event['rose_23'] ?>">
-            <input type="hidden" name="rose_24" value="<?php echo $event['rose_24'] ?>">
-            <input type="hidden" name="mode" value="save_event_changes">
-            <!-- dony by d.r. from merotech
-            <input type="submit" value="<?php echo $LDSaveChanges ?>">-->
+                            <input type="hidden" name="yellow" value="<?php echo $event['yellow'] ?>">
+                            <input type="hidden" name="black" value="<?php echo $event['black'] ?>">
+                            <input type="hidden" name="blue_pale" value="<?php echo $event['blue_pale'] ?>">
+                            <input type="hidden" name="brown" value="<?php echo $event['brown'] ?>">
+                            <input type="hidden" name="pink" value="<?php echo $event['pink'] ?>">
+                            <input type="hidden" name="yellow_pale" value="<?php echo $event['yellow_pale'] ?>">
+                            <input type="hidden" name="red" value="<?php echo $event['red'] ?>">
+                            <input type="hidden" name="green_pale" value="<?php echo $event['green_pale'] ?>">
+                            <input type="hidden" name="violet" value="<?php echo $event['violet'] ?>">
+                            <input type="hidden" name="blue" value="<?php echo $event['blue'] ?>">
+                            <input type="hidden" name="biege" value="<?php echo $event['biege'] ?>">
+                            <input type="hidden" name="orange" value="<?php echo $event['orange'] ?>">
+                            <input type="hidden" name="green_1" value="<?php echo $event['green_1'] ?>">
+                            <input type="hidden" name="green_2" value="<?php echo $event['green_2'] ?>">
+                            <input type="hidden" name="green_3" value="<?php echo $event['green_3'] ?>">
+                            <input type="hidden" name="green_4" value="<?php echo $event['green_4'] ?>">
+                            <input type="hidden" name="green_5" value="<?php echo $event['green_5'] ?>">
+                            <input type="hidden" name="green_6" value="<?php echo $event['green_6'] ?>">
+                            <input type="hidden" name="green_7" value="<?php echo $event['green_7'] ?>">
+                            <input type="hidden" name="rose_1" value="<?php echo $event['rose_1'] ?>">
+                            <input type="hidden" name="rose_2" value="<?php echo $event['rose_2'] ?>">
+                            <input type="hidden" name="rose_3" value="<?php echo $event['rose_3'] ?>">
+                            <input type="hidden" name="rose_4" value="<?php echo $event['rose_4'] ?>">
+                            <input type="hidden" name="rose_5" value="<?php echo $event['rose_5'] ?>">
+                            <input type="hidden" name="rose_6" value="<?php echo $event['rose_6'] ?>">
+                            <input type="hidden" name="rose_7" value="<?php echo $event['rose_7'] ?>">
+                            <input type="hidden" name="rose_8" value="<?php echo $event['rose_8'] ?>">
+                            <input type="hidden" name="rose_9" value="<?php echo $event['rose_9'] ?>">
+                            <input type="hidden" name="rose_10" value="<?php echo $event['rose_10'] ?>">
+                            <input type="hidden" name="rose_11" value="<?php echo $event['rose_11'] ?>">
+                            <input type="hidden" name="rose_12" value="<?php echo $event['rose_12'] ?>">
+                            <input type="hidden" name="rose_13" value="<?php echo $event['rose_13'] ?>">
+                            <input type="hidden" name="rose_14" value="<?php echo $event['rose_14'] ?>">
+                            <input type="hidden" name="rose_15" value="<?php echo $event['rose_15'] ?>">
+                            <input type="hidden" name="rose_16" value="<?php echo $event['rose_16'] ?>">
+                            <input type="hidden" name="rose_17" value="<?php echo $event['rose_17'] ?>">
+                            <input type="hidden" name="rose_18" value="<?php echo $event['rose_18'] ?>">
+                            <input type="hidden" name="rose_19" value="<?php echo $event['rose_19'] ?>">
+                            <input type="hidden" name="rose_20" value="<?php echo $event['rose_20'] ?>">
+                            <input type="hidden" name="rose_21" value="<?php echo $event['rose_21'] ?>">
+                            <input type="hidden" name="rose_22" value="<?php echo $event['rose_22'] ?>">
+                            <input type="hidden" name="rose_23" value="<?php echo $event['rose_23'] ?>">
+                            <input type="hidden" name="rose_24" value="<?php echo $event['rose_24'] ?>">
+                            <input type="hidden" name="mode" value="save_event_changes">
+                            <!-- dony by d.r. from merotech
+                            <input type="submit" value="<?php echo $LDSaveChanges ?>">-->
+                            <?php
+                        }
+
+                        //echo '<a href="javascript:winClose()"><img '.createLDImgSrc($root_path,'close2.gif','0','absmiddle').'></a>';
+                        ?>
+
+                    </form>
+
+            </ul>
             <?php
-        }
-
-        //echo '<a href="javascript:winClose()"><img '.createLDImgSrc($root_path,'close2.gif','0','absmiddle').'></a>';
-        ?>
-
-    </form>
-
-</ul>
-<?php
-$sTemp = ob_get_contents();
-ob_end_clean();
+            $sTemp = ob_get_contents();
+            ob_end_clean();
 
 # Assign page output to the mainframe template
 
-$smarty->assign('sMainFrameBlockData', $sTemp);
-/**
- * show Template
- */
-$smarty->display('common/mainframe.tpl');
-?>
+            $smarty->assign('sMainFrameBlockData', $sTemp);
+            /**
+             * show Template
+             */
+            $smarty->display('common/mainframe.tpl');
+            ?>

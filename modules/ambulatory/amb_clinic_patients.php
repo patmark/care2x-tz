@@ -228,9 +228,9 @@ ob_start();
 <!--
     var urlholder;
     function getinfo(pn) {
-    if (pn === 'nobill') {
-    alert('Not billed yet!');
-    } else {
+        if (pn === 'nobill') {
+            alert('Not billed yet!');
+        } else {
 <?php
 /* if($edit) */ {
     echo '
@@ -247,7 +247,7 @@ ob_start();
 /* else echo '
   window.location.href=\'nursing-station-pass.php'.URL_APPEND.'&rt=pflege&edit=1&station='.$station.'\''; */
 ?>
-    }
+        }
     }
     /*
      function getARV(pid, encounter_nr) {
@@ -276,7 +276,7 @@ ob_start();
 /* else echo '
   window.location.href=\'nursing-station-pass.php'.URL_APPEND.'&rt=pflege&edit=1&station='.$station.'\''; */
 ?>
-    window.location.href = urlholder;
+        window.location.href = urlholder;
     }
 
     function getTB(pid, encounter_nr) {
@@ -296,56 +296,56 @@ echo '";';
 /* else echo '
   window.location.href=\'nursing-station-pass.php'.URL_APPEND.'&rt=pflege&edit=1&station='.$station.'\''; */
 ?>
-    window.location.href = urlholder;
+        window.location.href = urlholder;
     }
 
 
     function getEyeclinic(pid, encounter_nr) {
-    urlholder = "<?php echo $root_path ?>modules/eyeclinic/eye_menu.php<?php echo URL_REDIRECT_APPEND; ?>&pid=" + pid + "&encounter_nr=" + encounter_nr;
-    //patientwin=window.open(urlholder,"arv","menubar=no,resizable=yes,scrollbars=yes")
-    window.location.href = urlholder;
+        urlholder = "<?php echo $root_path ?>modules/eyeclinic/eye_menu.php<?php echo URL_REDIRECT_APPEND; ?>&pid=" + pid + "&encounter_nr=" + encounter_nr;
+        //patientwin=window.open(urlholder,"arv","menubar=no,resizable=yes,scrollbars=yes")
+        window.location.href = urlholder;
 //        patientwin.resizeTo(screen.availWidth, screen.availHeight);
 //        patientwin.focus();
     }
 
 
     function getrem(pn) {
-    urlholder = "<?php echo $root_path ?>modules/nursing/nursing-station-remarks.php<?php echo URL_REDIRECT_APPEND; ?>&pn=" + pn + "<?php echo "&dept_nr=$dept_nr&pday=$pday&pmonth=$pmonth&pyear=$pyear"; ?>";
-    patientwin = window.open(urlholder, pn, "width=700,height=500,menubar=no,resizable=yes,scrollbars=yes");
+        urlholder = "<?php echo $root_path ?>modules/nursing/nursing-station-remarks.php<?php echo URL_REDIRECT_APPEND; ?>&pn=" + pn + "<?php echo "&dept_nr=$dept_nr&pday=$pday&pmonth=$pmonth&pyear=$pyear"; ?>";
+        patientwin = window.open(urlholder, pn, "width=700,height=500,menubar=no,resizable=yes,scrollbars=yes");
     }
 
     function release(nr)
     {
-    urlholder = "amb_clinic_discharge.php<?php echo URL_REDIRECT_APPEND; ?>&pn=" + nr + "<?php echo "&pyear=" . $pyear . "&pmonth=" . $pmonth . "&pday=" . $pday . "&tb=" . str_replace("#", "", $cfg['top_bgcolor']) . "&tt=" . str_replace("#", "", $cfg['top_txtcolor']) . "&bb=" . str_replace("#", "", $cfg['body_bgcolor']) . "&d=" . $cfg['dhtml']; ?>&station=<?php echo $station; ?>&dept_nr=<?php echo $dept_nr; ?>";
-        //indatawin=window.open(urlholder,"bedroom","width=700,height=450,menubar=no,resizable=yes,scrollbars=yes"
-        window.location.href = urlholder;
-        }
+        urlholder = "amb_clinic_discharge.php<?php echo URL_REDIRECT_APPEND; ?>&pn=" + nr + "<?php echo "&pyear=" . $pyear . "&pmonth=" . $pmonth . "&pday=" . $pday . "&tb=" . str_replace("#", "", $cfg['top_bgcolor']) . "&tt=" . str_replace("#", "", $cfg['top_txtcolor']) . "&bb=" . str_replace("#", "", $cfg['body_bgcolor']) . "&d=" . $cfg['dhtml']; ?>&station=<?php echo $station; ?>&dept_nr=<?php echo $dept_nr; ?>";
+                //indatawin=window.open(urlholder,"bedroom","width=700,height=450,menubar=no,resizable=yes,scrollbars=yes"
+                window.location.href = urlholder;
+            }
 
-        function popinfo(l, d)
-        {
-        urlholder = "<?php echo $root_path ?>modules/doctors/doctors-dienstplan-popinfo.php<?php echo URL_REDIRECT_APPEND ?>&nr=" + l + "&dept_nr=" + d + "&user=<?php echo $aufnahme_user . '"' ?>;
+            function popinfo(l, d)
+            {
+                urlholder = "<?php echo $root_path ?>modules/doctors/doctors-dienstplan-popinfo.php<?php echo URL_REDIRECT_APPEND ?>&nr=" + l + "&dept_nr=" + d + "&user=<?php echo $aufnahme_user . '"' ?>;
 
-                infowin = window.open(urlholder, "dienstinfo", "width=400,height=450,menubar=no,resizable=yes,scrollbars=yes");
-        }
-        function assignWaiting(pn, pw)
-        {
-        urlholder = "amb_clinic_assignwaiting.php<?php echo URL_REDIRECT_APPEND ?>&pn=" + pn + "&pdept=" + pw + "&dept_nr=<?php echo $dept_nr ?>&station=<?php echo $station ?>";
-        asswin<?php echo $sid ?> = window.open(urlholder, "asswind<?php echo $sid ?>", "width=650,height=500,menubar=no,resizable=yes,scrollbars=yes");
-        }
-        function Transfer(pn, pw, patnr)
-        {
-        if (confirm("<?php echo $LDSureTransferPatient . "-" ?>")) {
-        urlholder = "amb_clinic_transfer_select.php<?php echo URL_REDIRECT_APPEND ?>&pn=" + pn + "&pat_station=" + pw + "&dept_nr=<?php echo $dept_nr ?>&station=<?php echo $station ?>&patnr=" + patnr;
-        transwin<?php echo $sid ?> = window.open(urlholder, "transwin<?php echo $sid ?>", "width=800,height=620,menubar=no,resizable=yes,scrollbars=yes");
-        }
-        }
+                        infowin = window.open(urlholder, "dienstinfo", "width=400,height=450,menubar=no,resizable=yes,scrollbars=yes");
+            }
+            function assignWaiting(pn, pw)
+            {
+                urlholder = "amb_clinic_assignwaiting.php<?php echo URL_REDIRECT_APPEND ?>&pn=" + pn + "&pdept=" + pw + "&dept_nr=<?php echo $dept_nr ?>&station=<?php echo $station ?>";
+                asswin<?php echo $sid ?> = window.open(urlholder, "asswind<?php echo $sid ?>", "width=650,height=500,menubar=no,resizable=yes,scrollbars=yes");
+            }
+            function Transfer(pn, pw, patnr)
+            {
+                if (confirm("<?php echo $LDSureTransferPatient . "-" ?>")) {
+                    urlholder = "amb_clinic_transfer_select.php<?php echo URL_REDIRECT_APPEND ?>&pn=" + pn + "&pat_station=" + pw + "&dept_nr=<?php echo $dept_nr ?>&station=<?php echo $station ?>&patnr=" + patnr;
+                    transwin<?php echo $sid ?> = window.open(urlholder, "transwin<?php echo $sid ?>", "width=800,height=620,menubar=no,resizable=yes,scrollbars=yes");
+                }
+            }
 
 <?php
 require($root_path . 'include/inc_checkdate_lang.php');
 ?>
 
 // -->
-</script>
+    </script>
 
 <script language="javascript" src="<?php echo $root_path; ?>js/setdatetime.js"></script>
 
@@ -598,7 +598,7 @@ if ($rows) {
 
             if ($dept_nr == 47) {
                 $o_tb_patient = new TB_patient($patient['pid']);
-                if ($o_tb_patient->is_tb_admitted($patient['pid'])) {
+                if ($o_tb_patient->is_tb_admitted()||$o_tb_patient->is_drtb_admitted()) {
                     $temp_image = "<a href=\"javascript:getTB('" . $patient['pid'] . "','" . $patient['encounter_nr'] . "')\"><img " . createComIcon($root_path, 'ball_gray.png', '0', '', TRUE) . " alt=\"in TB Care\" title=\"TB Module: Click\"></a>";
                 } else {
                     $temp_image = "<a href=\"javascript:getTB('" . $patient['pid'] . "','" . $patient['encounter_nr'] . "')\"><img " . createComIcon($root_path, 'green_dot.gif', '0', '', TRUE) . " alt=\"not in TB Care\" title=\"TB Module: Click\"></a>";
@@ -688,7 +688,6 @@ if ($rows) {
         $smarty->assign('sOccListRows', $sListRows);
     } // end of patients loop
 }else {
-
     # Prompt no outpatients available
     $smarty->assign('sWarningPrompt', '
 			<div class="warnprompt"><p><ul><img ' . createMascot($root_path, 'mascot1_r.gif', '0', 'absmiddle') . '>
@@ -712,83 +711,82 @@ $smarty->display('common/mainframe.tpl');
     <!--src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">-->
     <script type="text/javascript" src="<?php echo $root_path; ?>js/jquery.1.10.js"></script>
 
-    <script type="text/javascript">
-        function open_chatbox()
-        {
-        $('#result').fadeOut(500);
-        $('#resultBox').fadeIn(1000);
-        }
-        function closeChat()
-        {
-        $('#resultBox').fadeOut(500);
-        $('#result').fadeIn(1000);
-        }
-        function openPat(url) {
-        var patientwin;
-        patientwin = window.open(url, '_blank', "width=840,height=650,menubar=no,resizable=yes,scrollbars=yes");
-        patientwin.moveTo(0, 0);
-        patientwin.resizeTo(screen.availWidth, screen.availHeight)
-        }
+        <script type="text/javascript">
+            function open_chatbox()
+            {
+                $('#result').fadeOut(500);
+                $('#resultBox').fadeIn(1000);
+            }
+            function closeChat()
+            {
+                $('#resultBox').fadeOut(500);
+                $('#result').fadeIn(1000);
+            }
+            function openPat(url) {
+                var patientwin;
+                patientwin = window.open(url, '_blank', "width=840,height=650,menubar=no,resizable=yes,scrollbars=yes");
+                patientwin.moveTo(0, 0);
+                patientwin.resizeTo(screen.availWidth, screen.availHeight)
+            }
 
-        </scri        pt>
+        </script>
         <style>
                 #result
-        {
-        position:fixed;
-        width:200px;
-        border - radius: 30px 40px 20px;
-        height:auto;
-        padding:10px;
-        background:lime;
-        text - align:center;
-        font - family:Cambria;
-        font - size:20px;
-        bottom:0px;
-        right:15px;
-        cursor:pointer;
-        }
-        #resultBox
-        {
-        display:none;
-        position:fixed;
-        width:250px;
-        min - height: 300px;
-        max - height: 600px;
-        padding:5px;
-        background:#EEEEEE;
-        color:#FF7700;
-        box - shadow:0 0 0.1em #000;
-        font - family:Cambria;
-        font - size:15px;
-        bottom:0px;
-        right:15px;
-        cursor:pointer;
-        overflow - y: scroll;
-        }
-        #close
-        {
-        position:absolute;
-        width:15px;
-        height:15px;
-        padding:6px 5px 10px 5px;
-        text - align:center;
-        background:rgba(0, 0, 0, 0.8);
-        color:#FF7700;
-        font - family:Cambria;
-        right:0px; top:0px;
-        border - radius: 60px;
-        }
-    </style>
-    </head>
-    
-    <body>
-    <div id="result" onClick="open_chatbo
-                x();"> Tests Results < /div>
-    <div id="resultBox">
-    <div onclick="closeChat()" id="close">x</div>
-    <div>
-                <?php
-                $sqlnames = "SELECT DISTINCT ce.pid, concat(cp.name_first,' ',cp.name_last) as fullname,
+                {
+                    position:fixed;
+                    width:200px;
+                    border-radius: 30px 40px 20px;
+                    height:auto;
+                    padding:10px;
+                    background:lime;
+                    text-align:center;
+                    font-family:Cambria;
+                    font-size:20px;
+                    bottom:0px;
+                    right:15px;
+                    cursor:pointer;
+                }
+                #resultBox
+                {
+                    display:none;
+                    position:fixed;
+                    width:250px;
+                    min-height: 300px;
+                    max-height: 600px;
+                    padding:5px;
+                    background:#EEEEEE;
+                    color:#FF7700;
+                    box-shadow:0 0 0.1em #000;
+                    font-family:Cambria;
+                    font-size:15px;
+                    bottom:0px;
+                    right:15px;
+                    cursor:pointer;
+                    overflow-y: scroll;
+                }
+                #close
+                {
+                    position:absolute;
+                    width:15px;
+                    height:15px;
+                    padding:6px 5px 10px 5px;
+                    text-align:center;
+                    background:rgba(0, 0, 0, 0.8);
+                    color:#FF7700;
+                    font-family:Cambria;
+                    right:0px; top:0px;
+                    border-radius: 60px;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div id="result" onClick="open_chatbox();"> Tests Results </div>
+            <div id="resultBox">
+                <div onclick="closeChat()" id="close">x</div>
+                <div>
+                    <?php
+                    $sqlnames = "SELECT DISTINCT ce.pid, concat(cp.name_first,' ',cp.name_last) as fullname,
                                 ce.encounter_nr, dr.report_nr
                             FROM care_person cp,care_encounter_diagnostics_report dr,care_encounter ce
                             WHERE ce.encounter_nr=dr.encounter_nr
@@ -798,19 +796,19 @@ $smarty->display('common/mainframe.tpl');
                             AND ce.current_dept_nr='$dept_nr'
                         ORDER BY dr.create_time ASC";
 
-                $resultsnames = $db->Execute($sqlnames);
+                    $resultsnames = $db->Execute($sqlnames);
 
-                while ($namesresults = $resultsnames->FetchRow()) {
-                    $nameR = $namesresults['fullname'];
-                    $encounter = $namesresults['encounter_nr'];
-                    $report_nr = $namesresults['report_nr'];
+                    while ($namesresults = $resultsnames->FetchRow()) {
+                        $nameR = $namesresults['fullname'];
+                        $encounter = $namesresults['encounter_nr'];
+                        $report_nr = $namesresults['report_nr'];
 
-                    $url = $root_path . "modules/nursing/nursing-station-patientdaten.php" . URL_REDIRECT_APPEND . "&pn=$encounter" . "&pday=$pday" . "&pmonth=$pmonth" . "&pyear=$pyear&edit=$edit&station=$dept_nr&open=1&report_nr=$report_nr";
+                        $url = $root_path . "modules/nursing/nursing-station-patientdaten.php" . URL_REDIRECT_APPEND . "&pn=$encounter" . "&pday=$pday" . "&pmonth=$pmonth" . "&pyear=$pyear&edit=$edit&station=$dept_nr&open=1&report_nr=$report_nr";
 
-                    echo "<p>";
-                    echo '<a href="javascript:openPat(\'' . $url . '\')">' . $nameR . '</a> </br>';
-                    echo "</p>";
-                }
-                ?>
-    
-    </div>
+                        echo "<p>";
+                        echo '<a href="javascript:openPat(\'' . $url . '\')">' . $nameR . '</a> </br>';
+                        echo "</p>";
+                    }
+                    ?>
+
+                </div>

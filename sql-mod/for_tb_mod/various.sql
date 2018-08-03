@@ -14,7 +14,7 @@ ALTER TABLE `care_test_request_chemlabor` ADD `tb_request_month` VARCHAR(25) NOT
 
 ALTER TABLE `care_test_request_chemlabor`  
 ADD `exam_reasonid` SMALLINT(2) NULL AFTER `is_tb_request`,  
-ADD `tb_anatomical_site` VARCHAR(200) NULL  AFTER `tb_exam_reason`,  
+ADD `tb_anatomical_site` VARCHAR(200) NULL  AFTER `exam_reasonid`,  
 ADD `sample_qualityid` TINYINT(1) NULL DEFAULT '1'  AFTER `tb_anatomical_site`,  
 ADD `sample_received_by` VARCHAR(200) NULL  AFTER `sample_quality`;
 
