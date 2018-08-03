@@ -52,7 +52,7 @@ class TBValidator {
             $this->filterData($this->data_in[$k]);
             $this->data_out[$k] = $this->data_in[$k];
         }
-
+       
         foreach ($keys as $field) {
             while (list($rule, $param) = each($this->rules[$field])) {
 
