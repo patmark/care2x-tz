@@ -281,20 +281,11 @@ ob_start();
 
     function getTB(pid, encounter_nr) {
 <?php
-// if($edit) {
 echo '
         urlholder="' . $root_path . 'modules/tb/tb_clinic_pass.php' . URL_REDIRECT_APPEND;
 echo '&target=menu&pid=" + pid + "';
 echo '&encounter_nr=" + encounter_nr + "';
 echo '";';
-//    echo '
-//        patientwin=window.open(urlholder,encounter_nr,"width=700,height=600,menubar=no,resizable=yes,scrollbars=yes");
-//
-//        patientwin.moveTo(0,0)
-//        patientwin.resizeTo(screen.availWidth,screen.availHeight)';
-//}
-/* else echo '
-  window.location.href=\'nursing-station-pass.php'.URL_APPEND.'&rt=pflege&edit=1&station='.$station.'\''; */
 ?>
         window.location.href = urlholder;
     }
@@ -430,6 +421,7 @@ if ($rows) {
         $smarty->assign('sFlagDiag', '');
         $smarty->assign('sFlagDiag2', '');
         $smarty->assign('sNoDiag', '');
+        $smarty->assign('sARVIcon', '');
 
         $sAstart = '';
         $sAend = '';
@@ -598,7 +590,7 @@ if ($rows) {
 
             if ($dept_nr == 47) {
                 $o_tb_patient = new TB_patient($patient['pid']);
-                if ($o_tb_patient->is_tb_admitted()||$o_tb_patient->is_drtb_admitted()) {
+                if ($o_tb_patient->is_tb_admitted() || $o_tb_patient->is_drtb_admitted()) {
                     $temp_image = "<a href=\"javascript:getTB('" . $patient['pid'] . "','" . $patient['encounter_nr'] . "')\"><img " . createComIcon($root_path, 'ball_gray.png', '0', '', TRUE) . " alt=\"in TB Care\" title=\"TB Module: Click\"></a>";
                 } else {
                     $temp_image = "<a href=\"javascript:getTB('" . $patient['pid'] . "','" . $patient['encounter_nr'] . "')\"><img " . createComIcon($root_path, 'green_dot.gif', '0', '', TRUE) . " alt=\"not in TB Care\" title=\"TB Module: Click\"></a>";

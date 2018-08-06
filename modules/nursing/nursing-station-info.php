@@ -24,6 +24,10 @@ $thisfile = basename($_SERVER['PHP_SELF']);
 require_once($root_path . 'include/care_api_classes/class_ward.php');
 $ward_obj = new Ward($ward_nr);
 
+include_once($root_path . 'include/care_api_classes/class_department.php');
+$dept = new Department;
+$depts = $dept->getAllMedical();
+
 $rows = 0;
 
 //$db->debug=1;
@@ -43,11 +47,9 @@ switch ($mode) {
                 extract($ward);
                 // Get all medical departments
                 /* Load the dept object */
-                if ($edit) {
-                    include_once($root_path . 'include/care_api_classes/class_department.php');
-                    $dept = new Department;
-                    $depts = &$dept->getAllMedical();
-                }
+//                if ($edit) {
+//                    
+//                }
             } else {
                 header('location:nursing-station-info.php' . URL_REDIRECT_APPEND);
                 exit;
@@ -269,7 +271,7 @@ if ($rows == 1) {
     # Assign input values
     $smarty->assign('name', $name);
     $smarty->assign('ward_id', $ward_id);
-    $smarty->assign('dept_name', $dept_name);
+//    $smarty->assign('dept_name', $dept_name);
     $smarty->assign('description', $description);
     $smarty->assign('room_nr_start', $room_nr_start);
     $smarty->assign('room_nr_end', $room_nr_end);
@@ -279,6 +281,30 @@ if ($rows == 1) {
 
     $smarty->assign('ward_descr', $ward_nr);
 
+    # Create department select box
+    $sTemp = '<select name="dept_nr">
+			<option value="">-- Select -- </option>';
+
+    if ($depts && is_array($depts)) {
+        while (list($x, $v) = each($depts)) {
+            $sTemp = $sTemp . '	
+		<option value="' . $v['nr'] . '"';
+            if ($v['nr'] == $dept_nr) {
+                $sTemp = $sTemp . ' selected';
+            }
+            $sTemp = $sTemp . '>';
+            if (isset($$v['LD_var']) && $$v['LD_var']) {
+                $sTemp = $sTemp . $$v['LD_var'];
+            } else {
+                $sTemp = $sTemp . $v['name_formal'];
+            }
+            $sTemp = $sTemp . '</option>';
+        }
+    }
+    $sTemp = $sTemp . '
+	</select>';
+
+    $smarty->assign('dept_name', $sTemp);
 
     //Add Select option for pharmacy here---------------
     if (!isset($db) || !$db)

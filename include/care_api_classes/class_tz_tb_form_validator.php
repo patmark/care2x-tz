@@ -181,7 +181,7 @@ class TBValidator {
 
     function unique_district_regno($val) {
         if (!empty($val)) {
-            $val = trim(str_replace('-', '', $val));
+//            $val = trim(str_replace('-', '', $val));
             global $db;
             $debug = FALSE;
             ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
@@ -195,6 +195,28 @@ class TBValidator {
 //                header("Location: arv_registration.php" . URL_APPEND . "&pid=" . $data['pid'] . "&mode=edit");
                 return "A patient with this district registration already exists! Click "
                         . "<a href=javascript:redirect_fn('tb_registration.php" . URL_APPEND . "&encounter_nr=000000&pid=" . $data['pid'] . "&mode=edit" . "')" . ">HERE</a>&nbspto view or edit patient";
+            } else {
+                return FALSE;
+            }
+        }
+    }
+    
+    function unique_drtb_regno($val) {
+        if (!empty($val)) {
+//            $val = trim(str_replace('-', '', $val));
+            global $db;
+            $debug = FALSE;
+            ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+            //Check if patient with that id already exists
+            $this->sql = "SELECT pid, drtb_regno
+                        FROM care_tb_dr_patient
+					WHERE drtb_regno =" . $val;
+
+            if ($this->res = $db->Execute($this->sql) AND $data = $this->res->FetchRow()) {
+//                header("Location: arv_registration.php" . URL_APPEND . "&pid=" . $data['pid'] . "&mode=edit");
+                return "A patient with this DR-TB registration already exists! Click "
+                        . "<a href=javascript:redirect_fn('tb_drtb_registration.php" . URL_APPEND . "&encounter_nr=000000&pid=" . $data['pid'] . "&mode=edit" . "')" . ">HERE</a>&nbspto view or edit patient";
             } else {
                 return FALSE;
             }

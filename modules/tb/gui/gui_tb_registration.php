@@ -369,7 +369,7 @@
                 <fieldset>
                     <legend onClick="toggle(this)"><img src="<?php echo $root_path ?>gui/img/common/default/plus.gif" width="18" height="18" >
                         Facility Information</legend>
-                    <table border="0">
+                    <table border="0" class="col-12 table">
                         <tr>
                             <td bgcolor="#F0F8FF" width="40%"><strong>Facility Name:</strong> <?php echo $facility_info['main_info_tb_facility_name']; ?></td>
                             <td bgcolor="#F0F8FF" width="20%"><strong>Facility Code:</strong> <?php echo $facility_info['main_info_tb_facility_code']; ?></td>
@@ -417,7 +417,7 @@
                             <tr>
                                 <td width="206" bgcolor="#F0F8FF"><strong>District Reg Number: </strong></td>
                                 <td width="550" colspan="3" bgcolor="#F0F8FF">
-                                    <input class="form-control" name="district_regno" type="text" id="district_regno" <?php echo $mode == 'edit' ? 'readonly' : ''; ?> value="<?php echo $o_tb_patient->format_district_regno($values['district_regno']); ?>" size="25" maxlength="17"/>
+                                    <input class="form-control" name="district_regno" type="text" id="district_regno" <?php echo $mode == 'edit' ? 'readonly' : ''; ?> value="<?php echo $o_tb_patient->format_district_regno($values['district_regno']); ?>" size="25" maxlength="25"/>
                                 </td>
                             </tr>
                             <tr>
@@ -433,7 +433,7 @@
                                     <?php echo $messages['placeofwork_id'] . "\n" ?>
                                 </td>
                                 <td colspan="3" bgcolor="#F0F8FF">
-                                    <input class="form-control" name="placeofwork_other" id="placeofwork_other" type="text" value="<?php echo $values['placeofwork_other']; ?>" maxlength="30" />
+                                    <input class="form-control" name="placeofwork_other" id="placeofwork_other" type="text" value="<?php echo $values['placeofwork_other']; ?>" maxlength="100" />
                                     <?php echo $messages['placeofwork_other'] . "\n" ?>
                                 </td>
                             </tr>
@@ -589,7 +589,7 @@
                                         </td>
                                         <td colspan="3" bgcolor="#F0F8FF">
                                             <!--<input class="form-control" name="date_start_art" id="date_start_art" type="text" value="<?php // echo $values['date_start_art'];                                               ?>" maxlength="30" />-->
-                                            <input class="form-control" placeholder="YYYY-MM-DD" name="date_start_art" type="text" id="date_start_art" value="<?php echo $values['date_start_art']; ?>" size="10" maxlength="10" 
+                                            <input class="form-control" placeholder="YYYY-MM-DD" name="date_start_art" type="text" id="date_start_art" value="<?php echo $values['date_start_art']; ?>" size="10" maxlength="15" 
                                                    onfocus="this.select()" />
                                                    <?php echo $messages['date_start_art'] . "\n" ?>
                                         </td>

@@ -4,11 +4,10 @@ require_once($root_path . 'include/care_api_classes/class_person.php');
 require_once('class_tz_arv_visit.php');
 
 /**
- *  ARV methods for tanzania (the product-module is completely rewritten by Dorothea Reichert)
+ *  TB methods for Tanzania 
  *
  * Note this class should be instantiated only after a "$db" adodb  connector object  has been established by an adodb instance
- * @author Dorothea Reichert (Version 1.0.0) - dorothea.reichert@merotech.de
- * @copyright 2006 Robert Meggle (MEROTECH info@merotech.de)
+ * @author Patrick Mark
  * @package care_api from Elpidio Latirilla
  */
 /*
@@ -18,7 +17,7 @@ require_once('class_tz_arv_visit.php');
   |
   `---> Class Person
   |
-  `--->Class ARV_patient
+  `--->Class TB_patient
  */
 
 class TB_patient extends Person {
@@ -31,7 +30,7 @@ class TB_patient extends Person {
     var $error_messages;
     var $errors;
 
-    function TB_patient($pid, $district_regno) {
+    function TB_patient($pid, $district_regno = '') {
 
         $this->defaultData = array(
             'district_regno' => '',
@@ -239,6 +238,101 @@ class TB_patient extends Person {
         return $tb_data;
     }
 
+    function getTBPatients() {
+        global $db, $date_format;
+        $this->debug = FALSE;
+        ($this->debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT care_person.pid, 
+						district_regno, 
+                                                care_tb_patient.create_date as tb_date_registration,
+                                                selian_pid,
+                                                name_first,
+                                                name_middle,
+                                                name_last
+					FROM care_tb_patient,care_person
+					WHERE care_tb_patient.pid = care_person.pid ";
+
+        if ($this->res = $db->Execute($this->sql)) {
+            return $this->res;
+        } else {
+            return false;
+        }
+    }
+
+    function getDRTBPatients() {
+        global $db;
+        $this->debug = FALSE;
+        ($this->debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT care_person.pid, drtb_regno, date_drtbreg,
+                                                date_districttb_reg,
+						district_regno, 
+                                                care_tb_dr_patient.create_date as tb_date_registration,
+                                                selian_pid,
+                                                name_first,
+                                                name_middle,
+                                                name_last
+					FROM care_tb_dr_patient,care_person
+					WHERE care_tb_dr_patient.pid = care_person.pid ";
+
+        if ($this->res = $db->Execute($this->sql)) {
+            return $this->res;
+        } else {
+            return false;
+        }
+    }
+
+    function getDRTBAdmittedPatients() {
+        global $db;
+        $this->debug = FALSE;
+        ($this->debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT care_person.pid, drtb_regno, date_drtbreg,
+                                                date_districttb_reg,
+						district_regno, 
+                                                care_tb_dr_patient.create_date as tb_date_registration,
+                                                selian_pid,
+                                                name_first,
+                                                name_middle,
+                                                name_last
+					FROM care_tb_dr_patient, care_person, care_encounter
+					WHERE care_tb_dr_patient.pid = care_person.pid 
+                                        AND care_encounter.pid = care_person.pid 
+                                        AND (care_encounter.current_dept_nr=47 OR care_encounter.current_ward_nr!=0)
+                                        AND care_encounter.is_discharged=0 ";
+
+        if ($this->res = $db->Execute($this->sql)) {
+            return $this->res;
+        } else {
+            return false;
+        }
+    }
+
+    function getTBAdmittedPatients() {
+        global $db;
+        $this->debug = FALSE;
+        ($this->debug) ? $db->debug = TRUE : $db->debug = FALSE;
+
+        $this->sql = "SELECT care_person.pid, district_regno, 
+                                                care_tb_patient.create_date as tb_date_registration,
+                                                selian_pid,
+                                                name_first,
+                                                name_middle,
+                                                name_last
+					FROM care_tb_patient, care_person, care_encounter
+					WHERE care_tb_patient.pid = care_person.pid 
+                                        AND care_encounter.pid = care_person.pid 
+                                        AND (care_encounter.current_dept_nr=47 OR care_encounter.current_ward_nr!=0)
+                                        AND care_encounter.is_discharged=0 ";
+
+        if ($this->res = $db->Execute($this->sql)) {
+            return $this->res;
+        } else {
+            return false;
+        }
+    }
+
     function getRegistrationID() {
         return $this->district_regno;
     }
@@ -439,19 +533,87 @@ class TB_patient extends Person {
         return true;
     }
 
-    function check_exists($table, $where) {
-        // check if an entry already exists in a table
+    function insertDRTBPatient($data) {
         global $db;
-
         $debug = false;
         ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
-        $sql = "SELECT * from $table
-		WHERE $where";
 
-        return ($rs = $db->Execute($sql) AND $rs->FetchRow()) ? true : false;
+        $value = $this->prepDataforDB($data);
+
+        $data_array['district_regno'] = $value['district_regno'];
+        $data_array['drtb_regno'] = $value['drtb_regno'];
+        $data_array['pid'] = $this->getValue('pid');
+        $data_array['date_drtbreg'] = $value['date_drtbreg'];
+        $data_array['date_districttb_reg'] = $value['date_districttb_reg'];
+        $data_array['next_ofkin'] = $value['next_ofkin'];
+        $data_array['next_ofkin_add'] = $value['next_ofkin_add'];
+        $data_array['telephone'] = $value['telephone'];
+        $data_array['classification_bysiteid'] = $value['classification_bysiteid'];
+        $data_array['eptb_site'] = $value['eptb_site'];
+        $data_array['drtb_reg_groupid'] = $value['drtb_reg_groupid'];
+        $data_array['drtb_reg_group_other'] = $value['drtb_reg_group_other'];
+        
+        $data_array['used_second_line_drugs'] = $value['used_second_line_drugs'];
+        $data_array['second_line_drugs'] = $value['second_line_drugs'];
+        $data_array['hiv_status'] = $value['hiv_status'];
+        $data_array['hiv_regno'] = $value['hiv_regno'];
+
+        $data_array['cd4_cell_count'] = $value['cd4_cell_count'];
+        $data_array['cd4_cell_count_date'] = $value['cd4_cell_count_date'];
+        $data_array['on_cpt'] = $value['on_cpt'];
+        $data_array['date_start_cpt'] = $value['date_start_cpt'];
+        $data_array['on_art'] = $value['on_art'];
+        $data_array['date_start_art'] = $value['date_start_art'];
+        
+        $data_array['create_id'] = $value['signature'];
+        $data_array['history'] = "Created " . date('Y-m-d H:i:s') . ": " . $value['signature'] . ";\n";
+
+        $this->setTable("care_tb_dr_patient");
+        if (!Core::insertDataFromArray($data_array)) {
+            if ($db->ErrorNo() == 1062) {
+                $this->errors++;
+                $this->error_message['db'] = sprintf($this->msg_tpl, "A patient with this ID is already registered");
+            } else {
+                $this->errors++;
+                $this->error_message['db'] = sprintf($this->msg_tpl, "Insert failed");
+            }
+            return false;
+        }
+        $this->district_regno = $value['district_regno'];
+        $data_array = null;
+//        $this->district_regno = $db->Insert_ID();
+
+        foreach ($value['allergies'] as $name) {
+            $data_array['district_regno'] = $this->district_regno;
+            $data_array['allergy_description'] = $name;
+
+            $this->coretable = "care_tb_allergies";
+            if (!Core::insertDataFromArray($data_array)) {
+                $this->errors++;
+                $this->error_message['db'] = sprintf($this->msg_tpl, "Insert failed");
+                return false;
+            }
+            $data_array = null;
+        }
+
+//        $data_array['pid'] = $this->getValue('pid');
+//        $data_array['district_regno'] = $this->district_regno;
+//        $data_array['treatment_supporter_name'] = $value['treatment_supporter_name'];
+//        $data_array['treatment_supporter_address'] = $value['treatment_supporter_address'];
+//        $data_array['treatment_supporter_phone'] = $value['treatment_supporter_phone'];
+//
+//        $data_array['create_id'] = $value['signature'];
+//        $data_array['history'] = "Created " . date('Y-m-d H:i:s') . ": " . $value['signature'] . ";\n";
+//        $this->coretable = "care_tb_treatment_supporter";
+//        if (!Core::insertDataFromArray($data_array)) {
+//            return false;
+//        }
+//        $data_array = null;
+        return true;
+//        }
     }
 
-    function insertTBPatientFamilyInfo($data) {
+    function updateDRTBPatient($data) {
         global $db;
         $debug = false;
         ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
@@ -462,29 +624,96 @@ class TB_patient extends Person {
             echo "<pre>";
         }
 
-        $insertarray['relative_ctc_id'] = trim(str_replace('-', '', $value['relative_ctc_id']));
-        $insertarray['relative_name'] = $value['relative_name'];
-        $insertarray['care_tz_arv_relatives_code_id'] = $value['care_tz_arv_relatives_code_id'];
-        $insertarray['age'] = $value['age'];
-        $insertarray['hiv_status'] = $value['hiv_status'];
-        $insertarray['hiv_care_status'] = $value['hiv_care_status'];
-        $insertarray['facility_file_no'] = $value['facility_file_no'];
-        $insertarray['care_tz_arv_registration_id'] = $this->district_regno;
-        $insertarray['history'] = "Created " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n";
+        $data_array['district_regno'] = $value['district_regno'];
+        $data_array['drtb_regno'] = $value['drtb_regno'];
+        $data_array['pid'] = $this->getValue('pid');
+        $data_array['date_drtbreg'] = $value['date_drtbreg'];
+        $data_array['date_districttb_reg'] = $value['date_districttb_reg'];
+        $data_array['next_ofkin'] = $value['next_ofkin'];
+        $data_array['next_ofkin_add'] = $value['next_ofkin_add'];
+        $data_array['telephone'] = $value['telephone'];
+        $data_array['classification_bysiteid'] = $value['classification_bysiteid'];
+        $data_array['eptb_site'] = $value['eptb_site'];
+        $data_array['drtb_reg_groupid'] = $value['drtb_reg_groupid'];
+        $data_array['drtb_reg_group_other'] = $value['drtb_reg_group_other'];
+        
+        $data_array['used_second_line_drugs'] = $value['used_second_line_drugs'];
+        $data_array['second_line_drugs'] = $value['second_line_drugs'];
+        $data_array['hiv_status'] = $value['hiv_status'];
+        $data_array['hiv_regno'] = $value['hiv_regno'];
 
-        $this->setTable("care_tz_arv_relatives");
-        if (!Core::insertDataFromArray($insertarray)) {
-            if ($db->ErrorNo() == 1062) {
-                $this->errors++;
-                $this->error_message['db'] = sprintf($this->msg_tpl, "A relative with this ID is already registered");
-            } else {
-                $this->errors++;
-                $this->error_message['db'] = sprintf($this->msg_tpl, "Insert failed");
-            }
+        $data_array['cd4_cell_count'] = $value['cd4_cell_count'];
+        $data_array['cd4_cell_count_date'] = $value['cd4_cell_count_date'];
+        $data_array['on_cpt'] = $value['on_cpt'];
+        $data_array['date_start_cpt'] = $value['date_start_cpt'];
+        $data_array['on_art'] = $value['on_art'];
+        $data_array['date_start_art'] = $value['date_start_art'];
+
+        $data_array['modify_id'] = $value['signature'];
+
+        $data_array['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
+
+        $this->where = "drtb_regno='" . $value['drtb_regno'] . "'";
+        $this->setTable("care_tb_dr_patient");
+
+        if (!Core::updateDataFromArray($data_array, 100, false)) {
             return false;
         }
-        $insertarray = null;
+        $data_array = null;
+
+        //--------------------------------------------
+        if (!$this->Transact("Delete from care_tb_allergies WHERE district_regno='" . $this->district_regno . "'")) {
+            return false;
+        };
+        foreach ($value['allergies']as $name) {
+            $data_array['district_regno'] = $this->district_regno;
+            $data_array['allergy_description'] = $name;
+
+            $this->coretable = "care_tb_allergies";
+            if (!Core::insertDataFromArray($data_array)) {
+                $this->errors++;
+                $this->error_message['db'] = sprintf($this->msg_tpl, "Insert failed");
+                return false;
+            }
+            $data_array = null;
+        }
+
+        $data_array['pid'] = $this->getValue('pid');
+//        $updatearray['district_regno'] = $this->district_regno;
+        $data_array['treatment_supporter_name'] = $value['treatment_supporter_name'];
+        $data_array['treatment_supporter_address'] = $value['treatment_supporter_address'];
+        $data_array['treatment_supporter_phone'] = $value['treatment_supporter_phone'];
+        $this->coretable = "care_tb_treatment_supporter";
+        $this->where = "pid=" . $data_array['pid'] . ' AND is_current=1';
+        //Check if supporter exists, if not insert else update
+
+        if ($this->check_exists($this->coretable, $this->where)) {
+            if (!Core::updateDataFromArray($data_array, 100, false)) {
+                return false;
+            }
+        } else {
+            $this->coretable = "care_tb_treatment_supporter";
+            if (!Core::insertDataFromArray($data_array)) {
+                return false;
+            }
+        }
+
+        $data_array = null;
+        if ($debug == true)
+            echo "</pre>";
         return true;
+    }
+
+    function check_exists($table, $where) {
+        // check if an entry already exists in a table
+        global $db;
+
+        $debug = false;
+        ($debug) ? $db->debug = TRUE : $db->debug = FALSE;
+        $sql = "SELECT * from $table
+		WHERE $where";
+
+        return ($rs = $db->Execute($sql) AND $rs->FetchRow()) ? true : false;
     }
 
     function updateTBPatientTreatmentSupport($data) {
@@ -851,6 +1080,7 @@ class TB_patient extends Person {
         }
         $insertarray['outcome_date'] = $value['outcome_date'];
         $insertarray['create_id'] = $value['signature'];
+        $insertarray['remarks'] = $value['remarks'];
 //        $insertarray['history'] = "concat(history,'Update " . date('Y-m-d H:i:s') . " " . $value['signature'] . ";\n')";
 
         $this->coretable = "care_tb_patient_treatment_phases";
@@ -896,7 +1126,7 @@ class TB_patient extends Person {
             $updatearray['treatment_outcomeid'] = $value['treatment_outcomeid'];
         }
         $updatearray['outcome_date'] = $value['outcome_date'];
-        $updatearray['create_id'] = $value['signature'];
+        $updatearray['remarks'] = $value['remarks'];
 
         $this->where = "patient_treatment_phaseid=" . $value['patient_treatment_phaseid'];
 
@@ -1388,6 +1618,189 @@ class TB_patient extends Person {
         $replace = '/^\(?([0-9]{2})\)?[-. ]?([0-9]{2})[-. ]?([0-9]{4})[-. ]?([0-9]{6})$/';
         $return = '$1-$2-$3-$4';
         return preg_replace($replace, $return, $ctc_no);
+    }
+
+    function Display_Footer($Headline, $Headline_Tag, $Headline_phpTag, $Help_file, $Help_Tag) {
+        echo '</td></tr></table><table cellspacing="0" class="titlebar" border=0 height="35" width="100%>
+                                                                                           <tr valign=top  class="titlebar" >
+                                                                                           <td bgcolor="#99ccff" ><font color="#330066"> &nbsp;&nbsp;' . $Headline . ' ' . $Headline_Tag . ' ' . $Headline_phpTag . ' </font></td>
+                                                                <td bgcolor="#99ccff" align=right> <a href="javascript:window.history.back()"><img src="../../gui/img/control/default/en/en_back2.gif" border=0 width="110" height="24" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>';
+
+        if ($_SESSION['ispopup'] == "true")
+            $closelink = 'javascript:window.close()';
+        else
+            $closelink = 'insurance_tz.php?ntid=false&lang=$lang';
+
+        echo '<a href="javascript:gethelp(\' ' . $Help_file . '\', \'' . $Help_Tag . '\')"><img src="../../gui/img/control/default/en/en_hilfe-r.gif" border=0 width="75" height="24" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a><a href="billing_tz.php"><img src="../../gui/img/control/default/en/en_close2.gif" border=0 width="103" height="24" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a></td>
+                                                                </tr>
+                                                            </table>';
+        return TRUE;
+    }
+
+    function Display_Credits() {
+        echo '<table width="100%" border="0" cellspacing="0" cellpadding="1" bgcolor="#cfcfcf">
+                                                                <tr>
+                                                                    <td align="center">
+                                                                        <table width="100%" bgcolor="#ffffff" cellspacing=0 cellpadding=5>
+                                                                            <tr>
+                                                                                <td><div class="copyright">
+                                                                                        <script language="JavaScript">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            <!--
+                                                                                        function openCreditsWindow() {
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                            urlholder = "../../language/$lang/$lang_credits.php?lang=$lang";
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    creditswin = window.open(urlholder, "creditswin", "width=500,height=600,menubar=no,resizable=yes,scrollbars=yes");
+                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                                    // -->
+                                                                                        </script>
+
+
+                                                                                        <a href="http://www.care2x.org" target=_new>CARE2X 3rd Generation pre-deployment 3.3</a> :: <a href="../../legal_gnu_gpl.htm" target=_new> License</a> :: <a href=mailto:care2x@makiungu.co.tz>Contact</a>  :: <a href="../../language/en/en_privacy.htm" target="pp"> Our Privacy Policy </a> ::
+                                                                                        <a href="../../docs/show_legal.php?lang=$lang" target="lgl"> Legal </a> :: <a href="javascript:openCreditsWindow()"> Credits </a> ::.<br>
+                                                                                    </div></td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+
+                                                            </BODY>
+                                                        </HTML>';
+
+        return TRUE;
+    }
+
+    function Display_Header($Title = '', $Title_Tag = '', $URL_APPEND = '') {
+
+        global $URL_APPEND;
+
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
+                                                                        <HTML>
+                                                                            <HEAD>
+                                                                                <TITLE>' . $Title . ' ' . $Title_Tag . '</TITLE>
+                                                                                <meta name="Description" content="Hospital and Healthcare Integrated Information System - CARE2x">
+                                                                                <meta name="author" content="ABEL HAULE" >
+                                                                                <meta name="generator" content="Bluefish 2.0.2" >
+                                                                                <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+                                                                                <script language="javascript" >
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <!--
+                                                                                function gethelp(x, s, x1, x2, x3, x4)
+                                                                                                                                                                                                                                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                                                                                                                                                                                                                                    if (!x) x = "";
+                                                                                                                                                                                                                                                                                                                                                                                                                                            urlholder = "../../main/help-router.php' . URL_APPEND . '&helpidx=" + x + "&src=" + s + "&x1=" + x1 + "&x2=" + x2 + "&x3=" + x3 + "&x4=" + x4;
+                                                                                                                                                                                                                                                                                                                                                                                                                                            helpwin = window.open(urlholder, "helpwin", "width=790,height=540,menubar=no,resizable=yes,scrollbars=yes");
+                                                                                                                                                                                                                                                                                                                                                                                                                                            window.helpwin.moveTo(0, 0);
+                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                                                                            // -->
+                                                                                </script>
+                                                                                <script language="javascript" >
+                                                                                                                                                                                                                                                                                                                                                                                                                            <!--
+                                                                                function printOut()
+                                                                                                                                                                                                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                                                                                                                                                                                            urlholder = "<?php echo $root_path; ?>modules/registration_admission/show_prescription.php?externalcall=TRUE&printout=TRUE&pn=2005500002&sid=<?php echo $sid.; ?>&lang=<?php echo $lang; ?>";
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                testprintout = window.open(urlholder, "printout", "width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        // -->
+                                                                                </script>
+                                                                                <link rel="stylesheet" href="../../css/themes/default/default.css" type="text/css">
+                                                                                <script language="javascript" src="../../js/hilitebu.js"></script>
+
+                                                                                <style media="print">
+                                                                                    .noPrint{ display: none; }
+                                                                                    .yesPrint{ display: table !important;border:0px; }
+                                                                                </style>
+
+                                                                                <STYLE TYPE="text/css">
+
+                                                                                    .table_content {
+                                                                                        border: 1px solid #000000;
+                                                                                    }
+
+                                                                                    .tr_content {
+                                                                                        border: 1px solid #000000;
+                                                                                    }
+
+
+                                                                                    .td_content {
+                                                                                        font-family: Arial, Helvetica, sans-serif;
+                                                                                        font-size: 12px;
+                                                                                        font-style: normal;
+                                                                                        font-weight: normal;
+                                                                                        font-variant: normal;
+                                                                                        border-top-width: 1px;
+                                                                                        border-right-width: 1px;
+                                                                                        border-bottom-width: 1px;
+                                                                                        border-left-width: 1px;
+                                                                                        border-top-style: solid;
+                                                                                        border-right-style: dotted;
+                                                                                        border-bottom-style: solid;
+                                                                                        border-left-style: dotted;
+                                                                                        border-top-color: #000000;
+                                                                                        border-right-color: #000000;
+                                                                                        border-bottom-color: #000000;
+                                                                                        border-left-color: #000000;
+                                                                                    }
+                                                                                    p {
+                                                                                        font-family: Arial, Helvetica, sans-serif;
+                                                                                        font-size: 12px;
+                                                                                        font-style: normal;
+                                                                                        font-weight: normal;
+                                                                                        font-variant: normal;
+                                                                                    }
+
+                                                                                    .headline {
+                                                                                        background-color: #CC9933;
+                                                                                        border-top-width: 1px;
+                                                                                        border-right-width: 1px;
+                                                                                        border-bottom-width: 1px;
+                                                                                        border-left-width: 1px;
+                                                                                        border-top-style: solid;
+                                                                                        border-right-style: solid;
+                                                                                        border-bottom-style: solid;
+                                                                                        border-left-style: solid;
+                                                                                    }
+                                                                                    A:link  {color: #000066;}
+                                                                                    A:hover {color: #cc0033;}
+                                                                                    A:active {color: #cc0000;}
+                                                                                    A:visited {color: #000066;}
+                                                                                    A:visited:active {color: #cc0000;}
+                                                                                    A:visited:hover {color: #cc0033;}
+                                                                                    .lab {font-family: arial; font-size: 9; color:purple;}
+                                                                                    .lmargin {margin-left: 5;}
+                                                                                    .billing_topic {font-family: arial; font-size: 12; color:black;}
+
+                                                                                </style>
+
+
+                                                                                <script language="JavaScript" src="<?php echo $root_path; ?>js/cross.js"></script>
+                                                                                <script language="JavaScript" src="<?php echo $root_path; ?>js/tooltips.js"></script>
+                                                            <div id="BallonTip" style="POSITION:absolute; VISIBILITY:hidden; LEFT:-200px; Z-INDEX:100"></div>
+
+                                                            </HEAD>';
+        return TRUE;
+    }
+
+    function Display_Headline($Headline = 'TB', $Headline_Tag = '', $Headline_phpTag = '', $Help_file = '', $Help_Tag = '') {
+//         echo 'skss';
+        echo '<table cellspacing="0" class="titlebar" border=0 height="35" width="100%>
+                                                                         <tr valign=top  class="titlebar" >
+                                                                         <td bgcolor="#99ccff" ><font color="#330066"> &nbsp;&nbsp;' . $Headline . ' ' . $Headline_Tag . ' ' . $Headline_phpTag . ' </font></td>
+                                                                <td bgcolor="#99ccff" align=right> <a href="javascript:window.history.back()"><img src="../../gui/img/control/default/en/en_back2.gif" border=0 width="110" height="24" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)" ></a>';
+        $_SESSION['ispopup'] = (isset($_SESSION['ispopup']) ? $_SESSION['ispopup'] : null);
+        if ($_SESSION['ispopup'] == "true")
+            $closelink = 'javascript:window.close()';
+        else
+            $closelink = 'insurance_tz.php?ntid=false&lang=$lang';
+
+        echo '<a href="javascript:gethelp(\'' . $Help_file . '\',\'' . $Help_Tag . '\')"><img src="../../gui/img/control/default/en/en_hilfe-r.gif" border=0 width="75" height="24" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a><a href="tb_menu_main.php" ><img src="../../gui/img/control/default/en/en_close2.gif" border=0 width="103" height="24" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a></td>
+                                                                </tr>
+                                                            </table>
+                                                            <table width=100% border=0 cellspacing=0 height=80%>
+                                                                <tbody class="main">
+                                                                    <tr valign="middle" align="center">
+                                                                        <td>';
+        return TRUE;
     }
 
 }

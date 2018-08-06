@@ -75,8 +75,13 @@ $vct = $multi_obj->__genNumbers();
 require_once($root_path . 'include/inc_date_format_functions.php');
 require_once($root_path . 'global_conf/inc_remoteservers_conf.php');
 
+//initialize $dept_nr variable.
+$dept_nr = '';
 if (($mode == '') || ($mode == 'fresh')) {
     if ($ward_info = &$ward_obj->getWardInfo($ward_nr)) {
+//        print_r($ward_info['dept_nr']);
+        $dept_nr = $ward_info['dept_nr'];
+
         $room_obj = &$ward_obj->getRoomInfo($ward_nr, $ward_info['room_nr_start'], $ward_info['room_nr_end']);
         if (is_object($room_obj)) {
             $room_ok = true;
@@ -229,6 +234,18 @@ ob_start();
 ?>
 
     }
+
+    function getTB(pid, encounter_nr) {
+<?php
+echo '
+        urlholder="' . $root_path . 'modules/tb/tb_clinic_pass.php' . URL_REDIRECT_APPEND;
+echo '&target=menu&pid=" + pid + "';
+echo '&encounter_nr=" + encounter_nr + "';
+echo '";';
+?>
+        window.location.href = urlholder;
+    }
+
     function getrem(pn) {
         urlholder = "nursing-station-remarks.php<?php echo URL_REDIRECT_APPEND; ?>&pn=" + pn + "<?php echo "&dept_nr=$ward_nr&location_nr=$ward_nr&pday=$pday&pmonth=$pmonth&pyear=$pyear&station=$station"; ?>";
         patientwin = window.open(urlholder, pn, "width=700,height=500,menubar=no,resizable=yes,scrollbars=yes");
@@ -288,7 +305,6 @@ echo 'urlholder="nursing-station.php' . URL_REDIRECT_APPEND . '&mode=newdata&pn=
 <?php
 require($root_path . 'include/inc_checkdate_lang.php');
 ?>
-// -->
 </script>
 
 <script language="javascript" src="<?php echo $root_path; ?>js/setdatetime.js"></script>
@@ -430,6 +446,7 @@ if ($ward_ok) {
             $smarty->assign('sDischargeIcon', '');
             $smarty->assign('vitalSigns', '');
             $smarty->assign('sDrugSheet', '');
+            $smarty->assign('sTBIcon', '');
             $smarty->assign('sFlagDiag', '');
             $smarty->assign('sFlagDiag2', ' ');
             $smarty->assign('sNoDiag', '  ');
@@ -667,6 +684,19 @@ if ($ward_ok) {
                     $smarty->assign('sTransferIcon', '<a href="javascript:Transfer(\'' . $bed['encounter_nr'] . '\')"><img ' . createComIcon($root_path, 'xchange.gif', '0', '', TRUE) . ' alt="' . $LDTransferPatient . '"></a>');
 
                     $smarty->assign('vitalSigns', '<a href="' . $root_path . 'modules/registration_admission/show_weight_height.php' . URL_APPEND . '&target=search&pid=' . $bed['pid'] . '"><img ' . createComIcon($root_path, 'sheart-working.gif', '0', '', TRUE) . ' align="absmiddle" alt="" title="Vital Signs: Click to show Vital Signs"></a>');
+
+                    //Check if it is a TB ward and add a link to TB Clinic
+                    if ($dept_nr == 47) {
+                        require_once($root_path . 'include/care_api_classes/class_tz_tb_patient.php');
+                        $o_tb_patient = new TB_patient($bed['pid']);
+                        if ($o_tb_patient->is_tb_admitted() || $o_tb_patient->is_drtb_admitted()) {
+                            $temp_image = "<a href=\"javascript:getTB('" . $bed['pid'] . "','" . $bed['encounter_nr'] . "')\"><img " . createComIcon($root_path, 'ball_gray.png', '0', '', TRUE) . " alt=\"in TB Care\" title=\"Patient in TB Care: Click to Open\"></a>";
+                        } else {
+                            $temp_image = "<a href=\"javascript:getTB('" . $bed['pid'] . "','" . $bed['encounter_nr'] . "')\"><img " . createComIcon($root_path, 'green_dot.gif', '0', '', TRUE) . " alt=\"not in TB Care\" title=\"Patient NOT in TB Care: Click to Register\"></a>";
+                        }
+                    }
+
+                    $smarty->assign('sTBIcon', $temp_image);
 
                     $smarty->assign('sDrugSheet', '<a href="' . $root_path . 'modules/nursing/drugsheet_menu.php' . URL_APPEND . '&target=search&pid=' . $bed['pid'] . '&encounter_nr=' . $bed['encounter_nr'] . '&ward_nr=' . $ward_nr . '"><img ' . createComIcon($root_path, 'dawa.png', '0', '', TRUE) . ' align="absmiddle" alt="" title="Drug Sheet: Click to open Drug Sheet"></a>');
 

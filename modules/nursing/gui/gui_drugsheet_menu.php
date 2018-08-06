@@ -48,7 +48,9 @@ $claims_obj->Display_Header($LDPatientDrugsheet, '', '');
                 <td  valign="top" align="middle" height="35">
                     <table cellspacing="0"  class="titlebar" border=0>
                         <tr valign=top  class="titlebar" >
-                            <td bgcolor="#99ccff" >&nbsp;&nbsp;<font color="#330066">PATIENT TREATMENT MANAGEMENT - <?php echo '(' . $pid . ') ' . $pnames ?></font>
+                            <td bgcolor="#99ccff" >&nbsp;&nbsp;<font color="#330066">
+                                <?php echo (isset($_SESSION['sess_user_origin']) && $_SESSION['sess_user_origin'] == 'tbcare') ? 'NATIONAL TB AND LEPROSY PROGRAMME<br/>' : '' ?>
+                                &nbsp;&nbsp;&nbsp;Patient Treatment Management - <?php echo '(' . $pid . ') ' . $pnames ?></font>
                             </td>
                             <td bgcolor="#99ccff" align=right>
                                 <a href="javascript:gethelp('nursing.php','Treatment Sheet Menu','<?php echo $mode; ?>')"><img src="../../gui/img/control/blue_aqua/en/en_hilfe-r.gif" border=0 width="76" height="21" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>

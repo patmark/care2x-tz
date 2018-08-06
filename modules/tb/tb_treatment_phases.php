@@ -66,6 +66,8 @@ $sexmf = array('' => '--Select--', 'Male' => 'Male', 'Female' => 'Female');
 //print_r($facility_info);
 
 if (isset($_POST['submit'])) {
+//    print_r($_POST);
+//    exit;
     $o_val = new TBValidator($o_tb_patient->getDefaultData(), $_REQUEST);
 
     $o_val->set_rule('phase_id', 'rule_required');

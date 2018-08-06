@@ -86,31 +86,36 @@ $claims_obj->Display_Header($LDTBClinic, '', '');
                             </tr>
                             <TR> 
                                 <td height="26" align=center><img src="../../gui/img/common/default/yellowlist.gif" border=0 width="16" height="17"></td>
-                                <TD class="submenu_item"><nobr><a href="tb_admitted.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php // echo $_GET['pid']      ?>" >Admitted Patients</a></nobr></TD>
+                                <TD class="submenu_item"><nobr><a href="tb_admitted.php<?php echo URL_APPEND ?>&dept_nr=47&target=tbadmitted" >TB Admitted Patients</a></nobr></TD>
                             <TD>Registered TB Patients Currently Admitted to TB Clinic (In & Out Patients)</TD>
                             </tr>
-                            <TR  height=1> 
+                            <TR> 
+                                <td height="26" align=center><img src="../../gui/img/common/default/yellowlist.gif" border=0 width="16" height="17"></td>
+                                <TD class="submenu_item"><nobr><a href="tb_admitted.php<?php echo URL_APPEND ?>&dept_nr=47&target=drtbadmitted" >DR-TB Admitted Patients</a></nobr></TD>
+                            <TD>Registered Drug Resistant (DR-TB) Patients Currently Admitted to TB Clinic (In & Out Patients)</TD>
+                            </tr>
+                            <TR  height=1>
                                 <TD colSpan=3 class="vspace"><IMG height=1 src="../../gui/img/common/default/pixel.gif" width=5></TD>
                             </TR>
                             </TBODY>
 
                             <TBODY class="submenu">
-                                <TR> 
+                                <TR>
                                     <td align=center><img src="../../gui/img/common/default/persons.gif" border=0></td>
                                     <TD class="submenu_item"><nobr><a href="../../modules/ambulatory/amb_clinic_patients.php?lang=en&sid=<?php echo session_id(); ?>&origin=pass&target=list&dept_nr=47&checkintern=1">Patients</a></nobr></TD>
                             <TD>Back to Choosing Patients in TB Outpatient Clinic (Both Registered & Not Yet Registered to TB Care Programme)</TD>
                             </tr>
-                            <TR  height=1> 
+                            <TR  height=1>
                                 <TD colSpan=3 class="vspace"><IMG height=1 src="../../gui/img/common/default/pixel.gif" width=5></TD>
                             </TR>
                             </TBODY>
                             <TBODY class="submenu">
-                                <TR> 
+                                <TR>
                                     <td align=center><img src="../../gui/img/common/default/yellowlist.gif" border=0 width="16" height="17"></td>
 <!--                                    <TD class="submenu_item"><nobr><a href="../../modules/tb/#?lang=en&sid=<?php echo session_id(); ?>&origin=pass&target=list&dept_nr=47&checkintern=1">Reports</a></nobr></TD>-->
                                     <TD class="submenu_item"><nobr><a href="#">Reports</a></nobr></TD>
                             <TD>Reports</TD>
-                            </tr> 
+                            </tr>
                             </TBODY>
                         </TABLE>
                 </TD>

@@ -60,6 +60,8 @@
                 color: green;
                 font-weight: bold;
             }
+            
+            
 
         </style>
         <link rel="stylesheet" href="<?php echo $root_path; ?>assets/bootstrap/css/bootstrap.min.css" >
@@ -410,7 +412,7 @@
                         </tr>
                         <tr>
                             <td bgcolor="#F0F8FF"><strong>Ward: </strong> &nbsp;<?php echo $registration_data['ward']; ?></td>
-<!--                            <td bgcolor="#F0F8FF"><strong>Village: </strong>  <?php // echo $registration_data['street'];                                                                                                                                                                                                                                                                                                           ?></td>-->
+<!--                            <td bgcolor="#F0F8FF"><strong>Village: </strong>  <?php // echo $registration_data['street'];                                                                                                                                                                                                                                                                                                              ?></td>-->
                             <td bgcolor="#EAF4FF" colspan="2"><strong>Street/Village: </strong>  <?php echo $registration_data['village']; ?></td>
                             <td bgcolor="#F0F8FF" colspan="2"><strong>Telephone:</strong>  <?php echo $registration_data['telephone']; ?></td>
                         </tr>
@@ -423,11 +425,11 @@
                 <fieldset>
                     <legend onClick="toggle(this)"><img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
                         Treatment Phase Data</legend>
-                    <table border="0" style="border-collapse:collapse; padding: 5px; font-size: 14px">
+                    <table class="table-primary" style="border: #9c3619 dashed 1px; border-collapse:collapse; padding: 5px; font-size: 14px">
                         <?php
                         if ($treatment_phase_data) {
                             ?>
-                            <tr bgcolor="#DAF7A6" height="15">
+                            <tr bgcolor="#DAF7A6" height="15" style="border: #9c3619 dashed 1px;">
                                 <td>
                                     <strong>Phase Description</strong>
                                 </td>
@@ -463,7 +465,7 @@
                                     $bgcolor = "#F0F8FF";
                                 }
                                 ?>    
-                                <tr bgcolor="<?php echo $bgcolor; ?>">
+                                <tr bgcolor="<?php echo $bgcolor; ?>" style="border: #9c3619 dashed 1px;">
                                     <td>
                                         <?php echo $row['phase_description']; ?>
                                     </td>
@@ -493,7 +495,7 @@
                                             Edit</a>
                                     </td>
                                 </tr>
-                                <tr bgcolor="<?php echo $bgcolor; ?>">
+                                <tr bgcolor="<?php echo $bgcolor; ?>" style="border: #9c3619 dashed 1px;">
                                     <td>
                                         <strong>Outcome: </strong>
                                     </td>
@@ -519,7 +521,7 @@
                             }
                         } else {
                             ?>
-                            <tr>
+                            <tr style="border: #9c3619 dashed 1px;">
                                 <td width="550" colspan="3" bgcolor="#F0F8FF">
                                     <?php echo $error_messages['treatment_phases'] . "\n" ?>
                                 </td>
@@ -613,9 +615,7 @@
                             <tr>
                                 <td bgcolor="#F0F8FF"><strong>Remarks: </strong></td>
                                 <td bgcolor="#F0F8FF">
-                                    <textarea class="form-control" name="remarks" id="remarks" size="25" maxlength="255">
-                                        <?php echo $values['remarks']; ?>
-                                    </textarea>
+                                    <textarea class="form-control" name="remarks" id="remarks" rows="3" cols="50"><?php echo $values['remarks']; ?></textarea>
                                     <?php echo $messages['remarks'] . "\n" ?>
                                 </td>
                             </tr>

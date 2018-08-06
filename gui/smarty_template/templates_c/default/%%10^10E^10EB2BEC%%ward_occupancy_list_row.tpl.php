@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.22, created on 2018-07-16 17:12:34
+<?php /* Smarty version 2.6.22, created on 2018-08-03 09:13:43
          compiled from nursing/ward_occupancy_list_row.tpl */ ?>
 
 <?php if ($this->_tpl_vars['bToggleRowClass']): ?>
@@ -29,7 +29,8 @@
 </td>
     <td>&nbsp;<?php echo $this->_tpl_vars['sAdmitDataIcon']; ?>
  <?php echo $this->_tpl_vars['vitalSigns']; ?>
- <?php echo $this->_tpl_vars['sDrugSheet']; ?>
+ <?php echo $this->_tpl_vars['sTBIcon']; ?>
+<?php echo $this->_tpl_vars['sDrugSheet']; ?>
  <?php echo $this->_tpl_vars['sChartFolderIcon']; ?>
  <?php echo $this->_tpl_vars['sNotesIcon']; ?>
  <?php echo $this->_tpl_vars['sTransferIcon']; ?>

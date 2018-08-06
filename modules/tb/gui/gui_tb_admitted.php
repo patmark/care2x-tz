@@ -1,7 +1,7 @@
 
 <?php
 $bat_nr = (isset($bat_nr) ? $bat_nr : null);
-$tb_obj->Display_Header('TB', 'Registered Patients');
+$tb_obj->Display_Header('TB', 'Admitted Patients');
 ?>
 <style>
     /*###Desktops, big landscape tablets and laptops(Large, Extra large)####*/
@@ -92,11 +92,11 @@ $tb_obj->Display_Header('TB', 'Registered Patients');
                 <table width="100%"  id="example"  cellspacing=0  class="table table-striped table-bordered table-hover dt-responsive nowrap" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <?php if ($target_fnc == "drtbregistered") { ?>
+                            <?php if ($target_fnc == "drtbadmitted") { ?>
                                 <th>DR-TB Registration No</th>
                                 <th>DR-TB Registration Date</th>
                             <?php } ?>
-                            <th>TB Registration No</th>
+                            <th>District TB Registration #</th>
                             <th>First Name</th>
                             <th>Middle Name</th>
                             <th>Last Name</th>
@@ -111,21 +111,21 @@ $tb_obj->Display_Header('TB', 'Registered Patients');
                         <?php
                         require_once($root_path . 'include/inc_date_format_functions.php');
 
-                        while ($tb_registered_patient = $tb_registered_patients->FetchRow()) {
+                        while ($tb_admitted_patient = $tb_admitted_patients->FetchRow()) {
                             ?>
                             <tr>
-                                <?php if ($target_fnc == "drtbregistered") { ?>
-                                    <td ><?= strtoupper($tb_registered_patient['drtb_regno']) ?></td>
-                                    <td ><?= $tb_registered_patient['date_districttb_reg'] ?></td>
+                                <?php if ($target_fnc == "drtbadmitted") { ?>
+                                    <td ><?= strtoupper($tb_admitted_patient['drtb_regno']) ?></td>
+                                    <td ><?= $tb_admitted_patient['date_districttb_reg'] ?></td>
                                 <?php } ?>
-                                <td ><?= strtoupper($tb_registered_patient['district_regno']) ?></td>
-                                <td ><?= ucfirst(strtolower($tb_registered_patient['name_first'])) ?></td>
-                                <td ><?= ucfirst(strtolower($tb_registered_patient['name_middle'])) ?></td>
-                                <td ><?= ucfirst(strtolower($tb_registered_patient['name_last'])) ?></td>
-                                <td ><?= $tb_registered_patient['sex'] ?></td> 
-                                <td ><?= $tb_registered_patient['tb_date_registration'] ?></td>
+                                <td ><?= strtoupper($tb_admitted_patient['district_regno']) ?></td>
+                                <td ><?= ucfirst(strtolower($tb_admitted_patient['name_first'])) ?></td>
+                                <td ><?= ucfirst(strtolower($tb_admitted_patient['name_middle'])) ?></td>
+                                <td ><?= ucfirst(strtolower($tb_admitted_patient['name_last'])) ?></td>
+                                <td ><?= $tb_admitted_patient['sex'] ?></td> 
+                                <td ><?= $tb_admitted_patient['tb_date_registration'] ?></td>
                                 <td ><div align="center">
-                                        <a href="<?php echo $root_path; ?>modules/tb/tb_clinic_pass.php<?= URL_APPEND ?>&lang=en&target=menu&pid=<?= strtoupper($tb_registered_patient['pid']) ?>" title="TB Patient Details : Click to show"><button type="button">>></button></a>
+                                        <a href="<?php echo $root_path; ?>modules/tb/tb_clinic_pass.php<?= URL_APPEND ?>&lang=en&target=menu&pid=<?= strtoupper($tb_admitted_patient['pid']) ?>" title="TB Patient Details : Click to show"><button type="button">>></button></a>
                                     </div>
                                 </td>
 
@@ -162,9 +162,9 @@ $tb_obj->Display_Header('TB', 'Registered Patients');
     });
     </script>
 
-    <?php //$tb_obj->Display_Footer($LDCreatenewquotation, '', '', 'billing_create_2.php', 'Billing :: Create Quotation');    ?>
+    <?php $tb_obj->Display_Footer($LDCreatenewquotation, '', '', 'billing_create_2.php', 'Billing :: Create Quotation'); ?>
 
-    <?php //$tb_obj->Display_Credits();   ?>
+    <?php $tb_obj->Display_Credits(); ?>
 <?php
 
 /* 

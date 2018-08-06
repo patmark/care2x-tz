@@ -18,12 +18,19 @@ require_once($root_path . 'include/care_api_classes/class_tz_tb_patient.php');
 $breakfile = "modules/ambulatory/amb_clinic_patients.php";
 $add_breakfile = "&pid=" . $_REQUEST['pid'] . "&dept_nr=47";
 
-require_once($root_path.'include/care_api_classes/class_nhif_claims.php');
+require_once($root_path . 'include/care_api_classes/class_nhif_claims.php');
 
 $claims_obj = new Nhif_claims;
 
 $o_tb_patient = new TB_patient($_REQUEST['pid']);
-$o_arv_visit = new ARV_Visit($_REQUEST['encounter_nr'], $_REQUEST['visit_id'], $o_tb_patient->getRegistrationID());
+
+//Set Session user origin to tbcare
+$_SESSION['sess_user_origin'] = 'tbcare';
+
+//Check if encounter Number is not set and set
+if (empty($_GET['encounter_nr']) || !isset($_GET['encounter_nr'])) {
+    $_GET['encounter_nr'] = $claims_obj->GetEncounterFromBatchNumber($_REQUEST['pid']);
+}
 
 require ("gui/gui_tb_menu.php");
 ?>
