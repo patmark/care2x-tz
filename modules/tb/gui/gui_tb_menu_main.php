@@ -1,10 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
-<!--<HTML>
+<HTML>
     <HEAD>
         <TITLE>TB Menu</TITLE>
         <meta name="Description" content="Hospital and Healthcare Integrated Information System - CARE2x">
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
         <meta name="Author" content="Patrick Mark">
+        <!--
 -->        <script language="javascript">
 
 //    if (parent.frames.length >= 1) {

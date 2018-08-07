@@ -17,8 +17,9 @@
 
         <script>
             $(document).ready(function () {
-                var date_start_cpt = $('input[name="date_start_cpt"]'); //our date input has the name "date"
-                var date_start_art = $('input[name="date_start_art"]'); //our date input has the name "date"
+                var review_date = $('input[name="review_date"]'); //our date input has the name "date"
+                var next_date = $('input[name="next_date"]'); //our date input has the name "date"
+
                 var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
                 var options = {
                     format: 'yyyy-mm-dd',
@@ -27,8 +28,8 @@
                     autoclose: true,
                     showDropdowns: true,
                 };
-                date_start_cpt.datepicker(options);
-                date_start_art.datepicker(options);
+                review_date.datepicker(options);
+                next_date.datepicker(options);
             })
         </script>
         <script type="text/javascript"><?php require($root_path . 'include/inc_checkdate_lang.php'); ?>
@@ -48,7 +49,7 @@
                     image.src = '<?php echo $root_path ?>gui/img/common/default/minus.gif';
                 } else {
                     // wenn es bereits sichtbar ist
-                    content.style.display = 'none'; // unsichtbar machen
+//                    content.style.display = 'none'; // unsichtbar machen
                     image.src = '<?php echo $root_path ?>gui/img/common/default/plus.gif';
                 }
             }
@@ -262,12 +263,15 @@
         <title>TB Patient Registration</title>
         <link rel="stylesheet" href="<?php echo $root_path; ?>css/themes/default/default.css" type="text/css">
         <link rel="stylesheet" href="<?php echo $root_path; ?>css/themes/default/tbmod.css" type="text/css">
-
     </head>
     <body onload = "hide_element()">
         <table cellspacing="0"  class="titlebar" border=0>
             <tr valign=top  class="titlebar" >
-                <td bgcolor="#99ccff"><font color="#330066">&nbsp;&nbsp;TB Patient Treatment Support</font></td>
+                <td bgcolor="#99ccff">
+                    <font color="#330066">
+                        &nbsp;&nbsp; DR-TB Patient Treatment Review Panel Meetings: Dates and Decisions
+                    </font>
+                </td>
                 <td bgcolor="#99ccff" align=right>
                     <a href="javascript:gethelp('tb_registration.php','<?php echo $src; ?>')"><img src="../../gui/img/control/blue_aqua/en/en_hilfe-r.gif" border=0 width="76" height="21" alt="" style="filter:alpha(opacity=70)" onMouseover="hilite(this, 1)" onMouseOut="hilite(this, 0)"></a>
                     &nbsp;
@@ -276,7 +280,6 @@
         </table>
         <div class="container">
             <div class="row">
-
                 <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
                     <fieldset>
                         <legend class="legend" onClick="toggle(this)"><img src="<?php echo $root_path ?>gui/img/common/default/plus.gif" width="18" height="18" >
@@ -318,7 +321,7 @@
                             </tr>
                             <tr>
                                 <td bgcolor="#F0F8FF"><strong>Ward: </strong> &nbsp;<?php echo $registration_data['ward']; ?></td>
-    <!--                            <td bgcolor="#F0F8FF"><strong>Village: </strong>  <?php // echo $registration_data['street'];                                                                                                                                                                                                                                                          ?></td>-->
+    <!--                            <td bgcolor="#F0F8FF"><strong>Village: </strong>  <?php // echo $registration_data['street'];                                                                                                                                                                                                                                                                       ?></td>-->
                                 <td bgcolor="#EAF4FF" colspan="2"><strong>Street/Village: </strong>  <?php echo $registration_data['village']; ?></td>
                                 <td bgcolor="#F0F8FF" colspan="2"><strong>Telephone:</strong>  <?php echo $registration_data['telephone']; ?></td>
                             </tr>
@@ -332,24 +335,28 @@
 
             <fieldset>
                 <legend class="legend" onClick="toggle(this)"><img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
-                    Treatment Support Data</legend>
+                    DR-TB Patient Treatment Review Data</legend>
                 <div class="table-responsive">
-                    <table border="0" class="table table-condensed" style="border-collapse:collapse; padding: 5px; font-size: 14px">
+                    <table border="0" class="table table-condensed" style="border: #9c3619 dashed 1px; border-collapse:collapse; padding: 5px; font-size: 14px">
                         <?php
-                        if ($treatment_support_data) {
+                        if ($treatment_review_data) {
                             ?>
-                            <tr bgcolor="#DAF7A6" height="15">
+                            <tr bgcolor="#DAF7A6" height="15" style="border: #9c3619 dashed 1px;">
                                 <td>
-                                    <strong>Treatment Supporter Name</strong>
+                                    <strong>S/No</strong>
                                 </td>
                                 <td>
-                                    <strong>Treatment Supporter Address</strong>
+                                    <strong>Review Date</strong>
                                 </td>
                                 <td>
-                                    <strong>Treatment Supporter Phone</strong>
+                                    <strong>Visit Number</strong>
+                                </td>
+
+                                <td>
+                                    <strong>Issue and Decision</strong>
                                 </td>
                                 <td>
-                                    <strong>Is Current Treatment Supporter?</strong>
+                                    <strong>Next Date</strong>
                                 </td>
                                 <td>
                                     <strong>Options</strong>
@@ -357,57 +364,47 @@
                             </tr>
                             <?php
                             $i = 0;
-                            foreach ($treatment_support_data as $row) {
+                            foreach ($treatment_review_data as $row) {
                                 if ($i % 2 == 0) {
-                                    ?>
-                                    <tr bgcolor="#f5d688 ">
-                                    <?php } else { ?> 
-                                    <tr bgcolor="#F0F8FF">
-                                    <?php } ?>    
+                                    $bgcolor = "#f5d688";
+                                } else {
+                                    $bgcolor = "#F0F8FF";
+                                }
+                                ?>    
+                                <tr bgcolor="<?php echo $bgcolor; ?>" style="border: #9c3619 dashed 1px;">
+                                    <td>
+                                        <?php echo $i + 1; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['review_date']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $row['encounter_nr']; ?>
+                                    </td>
 
                                     <td>
-                                        <?php echo $row['treatment_supporter_name']; ?>
+                                        <?php echo $row['issue_decision']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['treatment_supporter_address']; ?>
+                                        <?php echo $row['next_date']; ?>
                                     </td>
-                                    <td>
-                                        <?php echo $row['treatment_supporter_phone']; ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        if ($row['is_current']) {
-                                            echo 'Yes';
-                                        } else {
-                                            echo 'No';
-                                        }
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <a href="tb_treatment_support.php<?php echo URL_APPEND ?>&treatment_supporterid=<?php echo $row['treatment_supporterid']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=edit" >
+                                    <td align="center">
+                                        <a href="tb_treatment_review_meetings.php<?php echo URL_APPEND ?>&treatment_review_id=<?php echo $row['treatment_review_id']; ?>&pid=<?php echo $_GET['pid'] ?>&mode=edit" >
                                             Edit</a>
                                     </td>
                                 </tr>
-
-
                                 <?php
                                 $i++;
                             }
                         } else {
                             ?>
-                            <tr>
+                            <tr style="border: #9c3619 dashed 1px;">
                                 <td width="550" colspan="3" bgcolor="#F0F8FF">
-                                    <?php echo $messages['treatment_support'] . "\n" ?>
+                                    <?php echo $error_messages['treatment_review'] . "\n" ?>
                                 </td>
                             </tr>
                         <?php } ?>
 
-
-<!--                        <tr>
-                            <td colspan="5" align="center" bgcolor="#F0F8FF">
-                                <br/>
-                            </td>
-                        </tr>-->
                     </table>
                 </div>
             </fieldset>
@@ -415,9 +412,9 @@
             <fieldset>
                 <legend class="legend" onClick="toggle(this)">
                     <img src="<?php echo $root_path; ?>gui/img/common/default/plus.gif" width="18" height="18">
-                    <?php echo ($mode == 'edit') ? 'Edit ' : 'New ' ?> Treatment Supporter Details
+                    <?php echo ($mode == 'edit') ? 'Edit ' : 'New ' ?> DR-TB Patient Treatment Review Data
                 </legend>
-                <form name="treatment_supporter" action="" method="post">
+                <form name="treatment_review" action="" method="post">
                     <div class="row">
                         <div class="col-md-6 col-lg-12 col-sm-12 col-xs-12">
                             <table border="0" class="table">
@@ -435,47 +432,38 @@
                     <div class="row">
                         <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
                             <table border="0" class="table">
+
                                 <tr>
-                                    <td bgcolor="#F0F8FF"><strong>Name of Treatment Supporter: </strong></td>
+                                    <td bgcolor="#F0F8FF"><strong>Date: </strong></td>
                                     <td bgcolor="#F0F8FF">
-                                        <input class="form-control" name="treatment_supporter_name" type="text" id="treatment_supporter_name" value="<?php echo $values['treatment_supporter_name']; ?>" size="25" maxlength="100" />
-                                        <?php echo $messages['treatment_supporter_name'] . "\n" ?></td>
+                                        <input class="form-control" name="review_date" placeholder="YYYY-MM-DD" type="text" id="review_date" value="<?php echo $values['review_date']; ?>" size="25" maxlength="255" />
+                                        <?php echo $messages['review_date'] . "\n" ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td bgcolor="#F0F8FF"><strong>Issue and Decision: </strong></td>
+                                    <td bgcolor="#F0F8FF">
+                                        <textarea class="form-control" name="issue_decision" id="issue_decision" rows="4" cols="50"><?php echo $values['issue_decision']; ?></textarea>
+                                        <?php echo $messages['issue_decision'] . "\n" ?>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td bgcolor="#F0F8FF"><strong>Physical Address: </strong></td>
+                                    <td bgcolor="#F0F8FF"><strong>Next Date: </strong></td>
                                     <td bgcolor="#F0F8FF">
-                                        <input class="form-control" name="treatment_supporter_address" type="text" id="treatment_supporter_address" value="<?php echo $values['treatment_supporter_address']; ?>" size="25" maxlength="255" />
-                                        <?php echo $messages['treatment_supporter_address'] . "\n" ?>
+                                        <input class="form-control" name="next_date" placeholder="YYYY-MM-DD" type="text" id="next_date" value="<?php echo $values['next_date']; ?>" size="25" />
+                                        <?php echo $messages['next_date'] . "\n" ?>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-                            <table border="0" class="table">
-                                <tr>
-                                    <td bgcolor="#F0F8FF"><strong>Telephone/Mobile Number of Tratment Supporter: </strong></td>
-                                    <td bgcolor="#F0F8FF">
-                                        <input class="form-control" name="treatment_supporter_phone" type="text" id="treatment_supporter_phone" value="<?php echo $values['treatment_supporter_phone']; ?>" size="25" maxlength="60" />
-                                        <?php echo $messages['treatment_supporter_phone'] . "\n" ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td bgcolor="#F0F8FF"><strong>Set as Current Supporter?:</strong></td>
-
-                                    <td colspan="2" bgcolor="#F0F8FF">
-                                        <?php echo $o_tb_patient->form_dropdown('is_current', $yesno, $values['is_current'], "id = \"is_current\" class=\"form-control\" "); ?>
-                                        <?php echo $messages['is_current'] . "\n" ?>
-                                    </td>
-
-                                </tr>
-
-                            </table></div>
                     </div>
                     <div class="row col-lg-12">
                         <table class="table">
                             <tr>
                                 <td width="95" bgcolor="#F0F8FF"><strong>Signature:</strong></td>
-                                <td width="643" bgcolor="#F0F8FF"><input class="form-control" name="signature" type="text" readonly id="signature" value="<?php echo $values['signature']; ?>" size="20" maxlength="60" />
+                                <td width="643" bgcolor="#F0F8FF">
+                                    <input class="form-control" name="signature" type="text" readonly id="signature" value="<?php echo $values['signature']; ?>" size="20" maxlength="60" />
                                     <?php echo $messages['signature'] . "\n" ?>
                                 </td>
                             </tr>
@@ -484,10 +472,11 @@
                             </tr>
                             <tr>
                                 <td colspan="2" bgcolor="#F0F8FF">
-                                    <input class="form-control" name="treatment_supporterid" type="hidden" value="<?php echo $values['treatment_supporterid'] ?>" />
+                                    <input class="form-control" name="treatment_review_id" type="hidden" value="<?php echo $values['treatment_review_id'] ?>" />
                                     <input class="form-control" name="mode" type="hidden" value="<?php echo isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'new'; ?>" />
                                     <input class="form-control" name="pid" type="hidden" value="<?php echo $_REQUEST['pid'] ?>" />
-                                    <input class="form-control" name="encounter_nr" type="hidden" value="<?php echo $_REQUEST['encounter_nr'] ?>" />
+                                    <input class="form-control" name="encounter_nr" type="hidden" value="<?php echo $values['encounter_nr'] ?>" />
+                                    <input class="form-control" name="start_encounter_nr" type="hidden" value="<?php echo $_REQUEST['encounter_nr'] ?>" />
                                 </td>
                             </tr>
                             <tr>
@@ -507,8 +496,8 @@
         </p>
         <p>&nbsp;</p></td>
 </tr>
-</div>
 
+</div>
 <table width="100%" border="0" cellspacing="0" cellpadding="1" bgcolor="#cfcfcf">
     <tr>
         <td>

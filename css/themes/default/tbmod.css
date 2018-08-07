@@ -1,0 +1,92 @@
+.wrapper{
+    line-height: 150%;
+    /*width: 277mm;*/ 
+    background-color: #59f7f2;
+}
+.center{
+    text-align: center;
+}
+.left{text-align: left;}
+.right{
+    text-align: right;
+}
+.logo{
+    width: 24mm;
+}
+.title1{
+    font-size: 20px;
+    font-weight: bold;
+}
+.title2{
+    font-size: 16px;
+    font-weight: bold;
+}
+.undeline_sapn{
+    border-bottom: 2px dotted;
+    padding-right: 10px;
+    padding-left: 10px;
+    width: 100%;
+}
+.shade-light{
+    height: 10mm;
+    background-color:  lightgray;
+}
+table {
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 98%;
+}
+.table-lebel{
+    padding-right: 10mm;
+}
+.table-lebel td{
+    white-space: nowrap;  /** added **/
+}
+.table-lebel td:last-child{
+    width:100%;
+    padding-left: 5mm;
+    border-bottom: 2px dotted;
+}
+.legend {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+body{
+    background: #deeef4;
+    /*font-size: 15px;*/
+}
+
+.content{
+    width: 800px;
+    margin: auto;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+fieldset {
+    /*                width:775px;*/
+    margin-top:15px;
+    margin-left:20px;
+    background-color:#E8F2FF;
+}
+
+.submit{
+    /*background-image: url(<?php echo gui/img/control/blue_aqua/en/en_savedisc.gif);*/
+    background-position:  0px 0px;
+    background-repeat: no-repeat;
+    background-image: url(../../../gui/img/control/blue_aqua/en/en_savedisc.gif);
+    width: 76px;
+    height: 21px;
+    border: 0px;
+}
+
+#facility_name{
+    /*border: 1px solid;*/
+    color:#9c3619;
+    text-align:center;
+}

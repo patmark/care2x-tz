@@ -24,7 +24,7 @@ $debug = FALSE;
 $host = $_SERVER['HTTP_HOST'];
 $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 $add_breakfile = "&pid=" . $_REQUEST['pid'] . "&encounter_nr=" . $_REQUEST['encounter_nr'];
-$filename = "tb_menu.php";
+$filename = "tb_treatment_review_meetings.php";
 $breakfile = "modules/tb/tb_menu.php";
 
 if ($debug) {
@@ -32,50 +32,47 @@ if ($debug) {
     print_r($_REQUEST);
 }
 //------------------------------------------------------------------------------------------------------------
-if (empty($_REQUEST['pid'])) {
-    $error_messages = "<div class=\"errorMessages\">No patient is selected! </div>";
-    require ("gui/gui_tb_drtb_registration.php");
-    die();
-}
+//if (empty($_REQUEST['pid']) OR empty($_REQUEST['encounter_nr'])) {
+//    $error_messages = "<div class=\"errorMessages\">No patient is selected! </div>";
+//    require ("gui/gui_tb_treatment_support.php");
+//    die();
+//}
 
-if (!$o_tb_patient = new TB_patient($_REQUEST['pid'], $_REQUEST['district_regno'])) {
-    require ("gui/gui_tb_drtb_registration.php");
+if (!$o_tb_patient = new TB_patient($_REQUEST['pid'])) {
+    require ("gui/gui_tb_treatment_review_meetings.php");
     die();
 }
 
 $facility_info = $o_tb_patient->getTBFacilityInfo();
 $registration_data = $o_tb_patient->getRegistrationData();
 
+$treatment_review_data = $o_tb_patient->getDRTBTreatmentReviewData();
+//print_r($treatment_support_data[1]['treatment_supporter_name']);exit;
+
+if ($debug) {
+    foreach ($treatment_review_data as $row) {
+        print_r($row);
+        echo '<br/>';
+    }
+}
+
 $yesno = array('' => '--Select--', '1' => 'Yes', '0' => 'No');
+
+$medication = array('' => '--Select--', 'TB Rx' => 'TB Rx', 'IPT' => 'IPT');
+
+$outcome = array('' => '--Select--', 'No TB' => 'No TB', 'TB' => 'TB');
+
+$sexmf = array('' => '--Select--', 'Male' => 'Male', 'Female' => 'Female');
 //print_r($facility_info);
 
 if (isset($_POST['submit'])) {
 //    print_r($_POST);
+//    exit;
     $o_val = new TBValidator($o_tb_patient->getDefaultData(), $_REQUEST);
-    $o_val->set_rule('drtb_regno', 'rule_required');
-    $o_val->set_rule('date_drtbreg', 'rule_required');
-    $o_val->set_rule('district_regno', 'rule_required');
-    $o_val->set_rule('next_ofkin', 'rule_required');
-    $o_val->set_rule('telephone', 'rule_required');
-    if ($mode == 'new') {
-        $o_val->set_rule('drtb_regno', 'unique_drtb_regno');
-    }
-    $o_val->set_rule('classification_bysiteid', 'rule_select_required');
-    $o_val->set_rule('drtb_reg_groupid', 'rule_select_required');
-    $o_val->set_rule('used_second_line_drugs', 'rule_select_required');
-    $o_val->set_rule('hiv_status', 'rule_select_required');
 
-
-    $o_val->set_rule('initial_weight', 'rule_required');
-    $o_val->set_rule('initial_weight', 'rule_numeric');
-    $o_val->set_rule('height', 'rule_required');
-    $o_val->set_rule('height', 'rule_numeric');
-//    $o_val->set_rule('treatment_supporter_phone', 'rule_required');
-//    
-//    $o_val->set_rule('classification_byhistoryid', 'rule_select_required');
-//    $o_val->set_rule('on_cpt', 'rule_select_required');
-//    $o_val->set_rule('on_art', 'rule_select_required');
-
+    $o_val->set_rule('review_date', 'rule_required');
+    $o_val->set_rule('encounter_nr', 'rule_numeric');
+    $o_val->set_rule('issue_decision', 'rule_required');
 
     $o_val->set_rule('signature', 'rule_required');
 
@@ -83,13 +80,15 @@ if (isset($_POST['submit'])) {
 
     if (($o_val->getErrors()) == 0) {
         if ($_REQUEST['mode'] == 'edit') {
-            if ($o_tb_patient->updateDRTBPatient($o_val->getValues())) {
+            if ($o_tb_patient->updateDRTBPatientTreatmentReview($o_val->getValues())) {
 //                header("Location: http://$host$uri/$filename" . URL_APPEND . "$add_breakfile");
+                $_SESSION['message'] = 'Data Updated Successfully!';
                 header('Location: ' . $root_path . 'modules/tb/' . $filename . URL_APPEND . $add_breakfile);
                 exit;
             }
         } else if ($_REQUEST['mode'] == 'new') {
-            if ($o_tb_patient->insertDRTBPatient($o_val->getValues())) {
+            if ($o_tb_patient->insertDRTBPatientTreatmentReview($o_val->getValues())) {
+                $_SESSION['message'] = 'Data Added Successfully!';
 //                $filename = 'modules/tb/tb_registered.php';
 //                header("Location: http://$host$uri/$filename" . URL_APPEND . "$add_breakfile");
                 header('Location: ' . $root_path . 'modules/tb/' . $filename . URL_APPEND . $add_breakfile);
@@ -101,15 +100,14 @@ if (isset($_POST['submit'])) {
         $values = $o_tb_patient->getFormData($o_val->getValues());
     }
 } else {
-    if ($_REQUEST['mode'] == "new") {
-        $values = $o_tb_patient->getDefaultData();
-        if ($debug) {
-            echo "<pre>";
-            print_r($values);
-        }
-    } else if ($_GET['mode'] == "edit") {
-        $values = $o_tb_patient->getFormData($o_tb_patient->getDRTBData());
-//        print_r($values);exit;
+
+    $values = $o_tb_patient->getDefaultData();
+    if ($mode == 'edit') {
+        $values = $o_tb_patient->getDRTBPatientTreatmentReview($_REQUEST['treatment_review_id']);
+    }
+    if ($debug) {
+        echo "<pre>";
+        print_r($values);
     }
 }
 
@@ -122,5 +120,4 @@ if ($errors != 0) {
     }
     $errorString .= "</div>";
 }
-require ("gui/gui_drtb_registration.php");
-?>
+require ("gui/gui_tb_treatment_review_meetings.php");

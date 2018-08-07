@@ -32,5 +32,12 @@ if (empty($_GET['encounter_nr']) || !isset($_GET['encounter_nr'])) {
     $_GET['encounter_nr'] = $claims_obj->GetEncounterFromBatchNumber($_REQUEST['pid']);
 }
 
-require ("gui/gui_tb_menu.php");
+//Check if a patient is currently admitted to the facility
+$is_patient_admitted = $o_tb_patient->is_patient_admitted();
+
+if ($o_tb_patient->is_drtb_admitted()) {
+    require ("gui/gui_drtb_menu.php");
+} else {
+    require ("gui/gui_tb_menu.php");
+}
 ?>

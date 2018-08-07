@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
-<!--<HTML>
+<HTML>
     <HEAD>
         <TITLE>TB Menu</TITLE>
         <meta name="Description" content="Hospital and Healthcare Integrated Information System - CARE2x">
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <meta name="Author" content="Dorothea Reichert">
--->        <script language="javascript">
+        <meta name="Author" content="Patrick Mark">
+        <script language="javascript">
 
 //    if (parent.frames.length >= 1) {
 //        window.top.location.href = document.location;
@@ -109,24 +109,29 @@ if ($o_tb_patient->is_tb_admitted() || $o_tb_patient->is_drtb_admitted()) {
                                 <TR  height=1> 
                                     <TD colSpan=3 class="vspace"><IMG height=1 src="../../gui/img/common/default/pixel.gif" width=5></TD>
                                 </TR>
-                                <TR> 
-                                    <td height="26" align=center><img src="../../gui/img/common/default/open.gif" border=0 width="16" height="16"></td>
-                                    <TD class="submenu_item"><nobr><a href="<?php echo $root_path; ?>modules/nursing/nursing-station-patientdaten.php<?php echo URL_REDIRECT_APPEND ?>&pn=<?php echo $_GET['encounter_nr'] ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid']; ?>&source=tbcare" >Patient's Folder</a></nobr></TD>
-                                <TD>Patient's Folder</TD>
-                                </tr>
-                                <TR> 
-                                    <td height="26" align=center><img src="../../gui/img/common/default/dawa.png" border=0 width="16" height="17"></td>
-                                    <TD class="submenu_item"><nobr><a href="<?php echo $root_path; ?>modules/nursing/drugsheet_menu.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" >Daily Medication</a></nobr></TD>
-                                <TD>Add/Edit Patient's Daily Medication Data</TD>
-                                </tr>
-                                <TR  height=1> 
-                                    <TD colSpan=3 class="vspace"><IMG height=1 src="../../gui/img/common/default/pixel.gif" width=5></TD>
-                                </TR>
-                                <TR> 
-                                    <td height="26" align=center><img src="../../gui/img/common/default/pdata.gif" border=0 width="16" height="16"></td>
-                                    <TD class="submenu_item"><nobr><a href="#<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" >Transfer to DR-TB</a></nobr></TD>
-                                <TD>Transfer Patient to Drug Resistant TB (DR-TB) Care</TD>
-                                </tr>
+                                <!-- If this patient is currently admitted to the 
+                                facility, show patients' folder and daily medication links-->
+
+                                <?php if ($is_patient_admitted) { ?>
+                                    <TR> 
+                                        <td height="26" align=center><img src="../../gui/img/common/default/open.gif" border=0 width="16" height="16"></td>
+                                        <TD class="submenu_item"><nobr><a href="<?php echo $root_path; ?>modules/nursing/nursing-station-patientdaten.php<?php echo URL_REDIRECT_APPEND ?>&pn=<?php echo $_GET['encounter_nr'] ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid']; ?>&source=tbcare" >Patient's Folder</a></nobr></TD>
+                                    <TD>Patient's Folder</TD>
+                                    </tr>
+                                    <TR> 
+                                        <td height="26" align=center><img src="../../gui/img/common/default/dawa.png" border=0 width="16" height="17"></td>
+                                        <TD class="submenu_item"><nobr><a href="<?php echo $root_path; ?>modules/nursing/drugsheet_menu.php<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" >Daily Medication</a></nobr></TD>
+                                    <TD>Add/Edit Patient's Daily Medication Data</TD>
+                                    </tr>
+                                    <TR  height=1> 
+                                        <TD colSpan=3 class="vspace"><IMG height=1 src="../../gui/img/common/default/pixel.gif" width=5></TD>
+                                    </TR>
+                                    <TR> 
+                                        <td height="26" align=center><img src="../../gui/img/common/default/pdata.gif" border=0 width="16" height="16"></td>
+                                        <TD class="submenu_item"><nobr><a href="#<?php echo URL_APPEND ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&pid=<?php echo $_GET['pid'] ?>" >Transfer to DR-TB</a></nobr></TD>
+                                    <TD>Transfer Patient to Drug Resistant TB (DR-TB) Care</TD>
+                                    </tr>
+                                <?php } ?>
                                 </TBODY>
                                 <?php
                             } else {
@@ -135,13 +140,13 @@ if ($o_tb_patient->is_tb_admitted() || $o_tb_patient->is_drtb_admitted()) {
                                     <TR> 
                                         <td align=center><img src="../../gui/img/common/default/showdata.gif" border=0></td>
                                         <TD class="submenu_item"><nobr><a href="tb_clinic_pass.php<?php echo URL_APPEND ?>&pid=<?php echo $_GET['pid'] ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&mode=new&target=new">New TB Patient</a></nobr></TD>
-                                <TD>Admit a New Patient to Normal TB Care Programme</TD>
+                                <TD>Register a New Patient to Normal TB Care Programme</TD>
                                 </tr>
                                 <?php if (!$o_tb_patient->is_drtb_admitted()) { ?>
                                     <TR> 
                                         <td align=center><img src="../../gui/img/common/default/showdata.gif" border=0></td>
                                         <TD class="submenu_item"><nobr><a href="tb_clinic_pass.php<?php echo URL_APPEND ?>&pid=<?php echo $_GET['pid'] ?>&encounter_nr=<?php echo $_GET['encounter_nr']; ?>&mode=new&target=newdrtb">New DR-TB Patient</a></nobr></TD>
-                                    <TD>Admit a New Patient to Drug Resistant (DR-TB) Care Programme</TD>
+                                    <TD>Register a New Patient to Drug Resistant (DR-TB) Care Programme</TD>
                                     </tr>
                                 <?php } ?>
                                 </TBODY>

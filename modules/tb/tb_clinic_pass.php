@@ -43,7 +43,7 @@ switch ($target) {
         break;
     case 'newdrtb':
         $allowedarea = $allow_area['tb_write'];
-        $fileforward = "tb_drtb_registration.php" . $append . "&sid=$sid&target=newdrtb&pid=$pid&patient=$patient&lang=$lang&encounter_nr=$encounter_nr";
+        $fileforward = "tb_drtb_registration.php" . $append . "&sid=$sid&target=newdrtb&pid=$pid&patient=$patient&lang=$lang&encounter_nr=$encounter_nr&mode=$mode";
         $lognow = 'TB login ok';
         break;
     case 'report':

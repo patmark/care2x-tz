@@ -33,7 +33,7 @@ $tb_obj->Display_Header('TB', 'Registered Patients');
 
     <?php
 //echo 'ajkajjajk';
-    $tb_obj->Display_Headline(' ' . $title, '', '', 'tb_menu_main.php', 'Claims :: Pending Claims');
+    $tb_obj->Display_Headline(' ' . $title, '', '', 'tb_menu_main.php', 'TB :: DR-TB Patients');
     ?>
     <!--Date starts here-->
 
@@ -122,7 +122,7 @@ $tb_obj->Display_Header('TB', 'Registered Patients');
                                 <td ><?= ucfirst(strtolower($tb_registered_patient['name_first'])) ?></td>
                                 <td ><?= ucfirst(strtolower($tb_registered_patient['name_middle'])) ?></td>
                                 <td ><?= ucfirst(strtolower($tb_registered_patient['name_last'])) ?></td>
-                                <td ><?= $tb_registered_patient['sex'] ?></td> 
+                                <td ><?= $tb_registered_patient['sex'] ?></td>
                                 <td ><?= $tb_registered_patient['tb_date_registration'] ?></td>
                                 <td ><div align="center">
                                         <a href="<?php echo $root_path; ?>modules/tb/tb_clinic_pass.php<?= URL_APPEND ?>&lang=en&target=menu&pid=<?= strtoupper($tb_registered_patient['pid']) ?>" title="TB Patient Details : Click to show"><button type="button">>></button></a>
@@ -162,14 +162,8 @@ $tb_obj->Display_Header('TB', 'Registered Patients');
     });
     </script>
 
-    <?php //$tb_obj->Display_Footer($LDCreatenewquotation, '', '', 'billing_create_2.php', 'Billing :: Create Quotation');    ?>
+    <?php $tb_obj->Display_Footer($LDCreatenewquotation, '', '', 'billing_create_2.php', 'Billing :: Create Quotation');    ?>
 
-    <?php //$tb_obj->Display_Credits();   ?>
+    <?php $tb_obj->Display_Credits();   ?>
 <?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
